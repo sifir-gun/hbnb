@@ -26,7 +26,7 @@ Role: This is where the data is stored (like a database).
 
 Data access and storage engine: These are used to save and retrieve information (such as adverts or users) in a database.  
 
-To conclude:  
+## Conclusion  
 The presentation (what the user sees) communicates with the front-end to access the business logic (the application rules), which then connects to the database to save or retrieve data  
  
 ![Diagram](https://github.com/sifir-gun/hbnb/blob/eeba3e5f449290f66c6564e47b415344677ab2e4/Diagram_task0.jpg?raw=true)
@@ -149,14 +149,71 @@ The Amenity class represents amenities that can be associated with a place. Exam
 
 Amenities help users refine their search for a place by specifying the features they are looking for in a rental.
 
-Design Decisions
+ Design Decisions
 
 	•	Inheritance: By using a common BaseModel, the design ensures that all entities (Users, Places, Reviews, etc.) have a consistent way of managing their lifecycle (creation, updates, etc.).
 	•	Encapsulation: Each class has its own methods to encapsulate its functionality, making the codebase modular and easy to maintain.
 	•	Scalability: The relationships between places, cities, countries, and amenities allow the system to scale, supporting the addition of new places, countries, or amenities without needing to modify existing code significantly.
 
-Conclusion
+## Conclusion
 
 The class diagram and the relationships between entities provide a well-structured foundation for the HBnB project. Each class has clearly defined responsibilities and attributes, and the use of inheritance and encapsulation ensures that the design is both scalable and maintainable.
 
 ![Class Diagram](https://github.com/sifir-gun/hbnb/blob/aa50198265c2c33e0ecd0a5e55800893924ae916/Diagramm_De_Class.png?raw=true)
+
+## **API Interaction Flow: Sequence Diagram for User Registration**
+
+The diagram illustrates the sequence of interactions that occur when a user registers through the API. This is a typical example of the user registration process in the HBnB project. The sequence involves multiple components: User, API, Business Logic, and the Database.
+
+---
+
+## **Sequence of Events**
+
+1. **User Interaction**:
+   - The user initiates a `POST /register` request to the API with their registration details (e.g., name, email, password).
+
+2. **API Layer**:
+   - Upon receiving the request, the API forwards the user data to the Business Logic layer for validation. The API acts as an intermediary between the user and the back-end services.
+
+3. **Business Logic Layer**:
+   - **Validate User Data**: The business logic is responsible for validating the registration data. It checks if the data meets the required criteria (e.g., valid email, strong password).
+   - **Save User Data**: Once validated, the business logic forwards the user data to the database for storage.
+
+4. **Database Layer**:
+   - The database stores the user data and returns a confirmation of the save operation back to the business logic.
+
+5. **Response Handling**:
+   - The business logic confirms the success or failure of the registration process and returns the appropriate response (e.g., success message, error message) to the API.
+
+6. **API Returns Final Response**:
+   - The API sends a response back to the user indicating whether the registration was successful or failed (e.g., due to validation errors).
+
+---
+
+## **Explanatory Notes**
+
+- **Purpose**: This sequence diagram demonstrates the flow of data during a user registration request. It highlights the interactions between the different components (User, API, Business Logic, Database) involved in this process.
+  
+- **Key Components**:
+  - **User**: The end-user making the registration request.
+  - **API**: Acts as the entry point for the user request, forwarding data to the business logic and sending the response back to the user.
+  - **Business Logic**: Handles the core logic of validating and processing user data.
+  - **Database**: Responsible for storing user data securely.
+
+- **Design Decisions**:
+  - **Data Flow**: The data flows in a logical sequence from the user input, through validation and processing, and finally to the database for storage.
+  - **Layered Architecture**: This design ensures separation of concerns. The API handles requests, the business logic processes the data, and the database stores the information.
+  - **Error Handling**: In case of validation failure or database issues, error messages can be returned to the user, maintaining the integrity of the registration process.
+
+- **How it Fits into the System**:
+  - The registration process is fundamental to any user-based system, ensuring that new users can sign up, and their data is stored correctly in the system for future authentication and use. This process is essential to the functioning of the HBnB platform.
+
+---
+
+## **Conclusion**
+
+This sequence diagram for user registration provides a clear representation of how the registration flow is managed within the HBnB project. By separating the responsibilities between the API, Business Logic, and Database, the design ensures scalability, maintainability, and reliability in handling user registrations.
+
+---
+
+![User Registration Diagram](https://github.com/sifir-gun/hbnb/blob/main/API%20POST%20register.jpeg?raw=true)
