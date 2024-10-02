@@ -1,10 +1,10 @@
-### Documentation Compilation  
+# Documentation Compilation  
 
 ## High-Level Package Diagram**  
 
 This diagram shows how the application is organised into different layers, each layer, three layer having a specific role in the operation of the system.  
 
-# 1-First layer  
+### 1-First layer  
 
 Role:  
 This is the part that is visible to the user, such as a website or an API. This layer receives user requests (for example, when a user wants to view or add an ad).  
@@ -18,10 +18,10 @@ This is an intermediary that simplifies communication between the presentation l
 
 But: To ensure that the presentation layer does not need to know all the internal details, it simply passes through this interface.  
 
-# 2-BusinessLogicLayer  
+### 2-BusinessLogicLayer  
 Rôle : C'est le cerveau de l'application. Elle contient toutes les règles de gestion des annonces, des utilisateurs, des avis, etc.  
 
-# 3-PersistenceLayer  
+### 3-PersistenceLayer  
 Role: This is where the data is stored (like a database).  
 
 Data access and storage engine: These are used to save and retrieve information (such as adverts or users) in a database.  
@@ -39,7 +39,7 @@ The class diagram provided illustrates the core components and relationships of 
 
 Classes and Relationships
 
-# 1. BaseModel
+### 1. BaseModel
 
 The BaseModel class acts as a foundation for all other entities in the system. It contains the following attributes and methods:
 
@@ -53,7 +53,7 @@ The BaseModel class acts as a foundation for all other entities in the system. I
 
 This class is inherited by all other classes in the diagram, providing a consistent way to track creation and modification times for objects.
 
-# 2. Class User
+### 2. Class User
 
 The User class represents individuals using the HBnB platform. Users can own places and leave reviews for places they visit.
 
@@ -69,7 +69,7 @@ The User class represents individuals using the HBnB platform. Users can own pla
 
 Each user can be associated with multiple places, as indicated by the relationship with the Place class.
 
-# 3. Class Place
+### 3. Class Place
 
 The Place class represents rental properties listed on the platform. Each place is associated with a specific user (the owner) and has numerous attributes detailing the property.
 
@@ -94,7 +94,7 @@ The Place class represents rental properties listed on the platform. Each place 
 
 Each place is linked to a User who owns it and can be reviewed by other users. Places also have relationships with amenities and reviews.
 
-# 4. Class Review
+### 4. Class Review
 
 The Review class allows users to leave feedback for places they have visited. Each review is associated with both a User and a Place.
 
@@ -110,7 +110,7 @@ The Review class allows users to leave feedback for places they have visited. Ea
 
 Reviews are critical for users to make informed decisions about places to stay. They contribute to the overall rating and reputation of a place.
 
-# 5. Class City
+### 5. Class City
 
 The City class provides information about cities that have places listed on the platform. Each city is associated with a country.
 
@@ -123,7 +123,7 @@ The City class provides information about cities that have places listed on the 
 
 Cities are a key entity, helping users locate places based on geographical preferences.
 
-# 6. Class Country
+### 6. Class Country
 
 The Country class represents different countries on the platform, each associated with one or more cities.
 
@@ -136,7 +136,7 @@ The Country class represents different countries on the platform, each associate
 
 The Country class allows users to filter places and cities based on the country they are interested in visiting.
 
-# 7. Class Amenity
+### 7. Class Amenity
 
 The Amenity class represents amenities that can be associated with a place. Examples include Wi-Fi, air conditioning, pool access, and more.
 
