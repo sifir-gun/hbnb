@@ -41,111 +41,111 @@ The class diagram provided illustrates the core components and relationships of 
 
 1. **BaseModel**
 
-The BaseModel class acts as a foundation for all other entities in the system. It contains the following attributes and methods:
+	The BaseModel class acts as a foundation for all other entities in the system. It contains the following attributes and methods:
 
-	•	Attributes:
-	•	UUID: A unique identifier for each instance.
-	•	datetime_created_at: The timestamp when the object is created.
-	•	datetime_update_at: The timestamp when the object is last updated.
-	•	Methods:
-	•	save(): Persists changes to the object.
-	•	update(): Updates the timestamp when changes are made.
+		•	Attributes:
+		•	UUID: A unique identifier for each instance.
+		•	datetime_created_at: The timestamp when the object is created.
+		•	datetime_update_at: The timestamp when the object is last updated.
+		•	Methods:
+		•	save(): Persists changes to the object.
+		•	update(): Updates the timestamp when changes are made.
 
 This class is inherited by all other classes in the diagram, providing a consistent way to track creation and modification times for objects.
 
 2. **Class User**
 
-The User class represents individuals using the HBnB platform. Users can own places and leave reviews for places they visit.
+	The User class represents individuals using the HBnB platform. Users can own places and leave reviews for places they visit.
 
-	•	Attributes:
-	•	FirstName: The user’s first name.
-	•	LastName: The user’s last name.
-	•	Email: The user’s email, used for authentication and communication.
-	•	Password: The user’s password, securely stored and used for authentication.
-	•	Methods:
-	•	create_user(first_name, last_name, email, password): A method to create a new user.
-	•	authenticate(email, password): Validates the user’s credentials during login.
-	•	list_owner_places(): Retrieves a list of places owned by the user.
+		•	Attributes:
+		•	FirstName: The user’s first name.
+		•	LastName: The user’s last name.
+		•	Email: The user’s email, used for authentication and communication.
+		•	Password: The user’s password, securely stored and used for authentication.
+		•	Methods:
+		•	create_user(first_name, last_name, email, password): A method to create a new user.
+		•	authenticate(email, password): Validates the user’s credentials during login.
+		•	list_owner_places(): Retrieves a list of places owned by the user.
 
 Each user can be associated with multiple places, as indicated by the relationship with the Place class.
 
 3. **Class Place**
 
-The Place class represents rental properties listed on the platform. Each place is associated with a specific user (the owner) and has numerous attributes detailing the property.
+	The Place class represents rental properties listed on the platform. Each place is associated with a specific user (the owner) and has numerous attributes detailing the property.
 
-	•	Attributes:
-	•	name: The name of the place.
-	•	description: A description of the place.
-	•	country: The country where the place is located.
-	•	address: The address of the place.
-	•	price: The price per night to rent the place.
-	•	latitude and longitude: The geographical coordinates of the place.
-	•	owner: The user who owns the place.
-	•	numRooms: The number of rooms in the place.
-	•	numBathroom: The number of bathrooms in the place.
-	•	max_guests: The maximum number of guests allowed.
-	•	reviews: Reviews left by users for this place.
-	•	amenities: The amenities available at the place, such as Wi-Fi, parking, or pool access.
-	•	Methods:
-	•	get_info(): Returns all the information about the place.
-	•	list_reviews(): Lists all reviews associated with the place.
-	•	list_amenities(): Lists all amenities available at the place.
-	•	create_place(): A method to create a new place listing.
+		•	Attributes:
+		•	name: The name of the place.
+		•	description: A description of the place.
+		•	country: The country where the place is located.
+		•	address: The address of the place.
+		•	price: The price per night to rent the place.
+		•	latitude and longitude: The geographical coordinates of the place.
+		•	owner: The user who owns the place.
+		•	numRooms: The number of rooms in the place.
+		•	numBathroom: The number of bathrooms in the place.
+		•	max_guests: The maximum number of guests allowed.
+		•	reviews: Reviews left by users for this place.
+		•	amenities: The amenities available at the place, such as Wi-Fi, parking, or pool access.
+		•	Methods:
+		•	get_info(): Returns all the information about the place.
+		•	list_reviews(): Lists all reviews associated with the place.
+		•	list_amenities(): Lists all amenities available at the place.
+		•	create_place(): A method to create a new place listing.
 
 Each place is linked to a User who owns it and can be reviewed by other users. Places also have relationships with amenities and reviews.
 
 4. **Class Review**
 
-The Review class allows users to leave feedback for places they have visited. Each review is associated with both a User and a Place.
+	The Review class allows users to leave feedback for places they have visited. Each review is associated with both a User and a Place.
 
-	•	Attributes:
-	•	User_id: The user who wrote the review.
-	•	Place_id: The place being reviewed.
-	•	Rating: An integer rating provided by the user.
-	•	Comment: A text comment left by the user as part of the review.
-	•	Methods:
-	•	get_user_review(): Retrieves the review written by a specific user.
-	•	get_place_review(): Retrieves all reviews for a particular place.
-	•	add_review(user, place, rating, comment): Adds a new review to a place.
+		•	Attributes:
+		•	User_id: The user who wrote the review.
+		•	Place_id: The place being reviewed.
+		•	Rating: An integer rating provided by the user.
+		•	Comment: A text comment left by the user as part of the review.
+		•	Methods:
+		•	get_user_review(): Retrieves the review written by a specific user.
+		•	get_place_review(): Retrieves all reviews for a particular place.
+		•	add_review(user, place, rating, comment): Adds a new review to a place.
 
 Reviews are critical for users to make informed decisions about places to stay. They contribute to the overall rating and reputation of a place.
 
 5. **Class City**
 
-The City class provides information about cities that have places listed on the platform. Each city is associated with a country.
+	The City class provides information about cities that have places listed on the platform. Each city is associated with a country.
 
-	•	Attributes:
-	•	Name: The name of the city.
-	•	Country_id: The identifier of the country to which the city belongs.
-	•	Methods:
-	•	get_city_info(): Returns detailed information about the city.
-	•	list_places(): Lists all places available in the city.
+		•	Attributes:
+		•	Name: The name of the city.
+		•	Country_id: The identifier of the country to which the city belongs.
+		•	Methods:
+		•	get_city_info(): Returns detailed information about the city.
+		•	list_places(): Lists all places available in the city.
 
 Cities are a key entity, helping users locate places based on geographical preferences.
 
 6. **Class Country**
 
-The Country class represents different countries on the platform, each associated with one or more cities.
+	The Country class represents different countries on the platform, each associated with one or more cities.
 
-	•	Attributes:
-	•	Name: The name of the country.
-	•	Code: The country code (e.g., “US” for the United States).
-	•	Methods:
-	•	get_country_info(): Provides detailed information about the country.
-	•	list_cities(): Lists all cities within the country.
+		•	Attributes:
+		•	Name: The name of the country.
+		•	Code: The country code (e.g., “US” for the United States).
+		•	Methods:
+		•	get_country_info(): Provides detailed information about the country.
+		•	list_cities(): Lists all cities within the country.
 
 The Country class allows users to filter places and cities based on the country they are interested in visiting.
 
 7. **Class Amenity**
 
-The Amenity class represents amenities that can be associated with a place. Examples include Wi-Fi, air conditioning, pool access, and more.
+	The Amenity class represents amenities that can be associated with a place. Examples include Wi-Fi, air conditioning, pool access, and more.
 
-	•	Attributes:
-	•	Amenity_id: The unique identifier for the amenity.
-	•	Amenity_Name: The name of the amenity.
-	•	Methods:
-	•	get_info(): Retrieves information about a specific amenity.
-	•	list_places(): Lists all places that offer the specific amenity.
+		•	Attributes:
+		•	Amenity_id: The unique identifier for the amenity.
+		•	Amenity_Name: The name of the amenity.
+		•	Methods:
+		•	get_info(): Retrieves information about a specific amenity.
+		•	list_places(): Lists all places that offer the specific amenity.
 
 Amenities help users refine their search for a place by specifying the features they are looking for in a rental.
 
