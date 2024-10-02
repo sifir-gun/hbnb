@@ -216,4 +216,4 @@ This sequence diagram for user registration provides a clear representation of h
 
 ---
 
-![User Registration Diagram](https://github.com/sifir-gun/hbnb/blob/main/API%20POST%20register.jpeg?raw=true)
+![User Registration Diagram](https://github.com/sifir-gun/hbnb/blob/e21bbe3ccef8088f068ec70323ced9a920109d21/API%20POST%20register.jpg)
