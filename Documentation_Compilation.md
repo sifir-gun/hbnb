@@ -217,3 +217,81 @@ This sequence diagram for user registration provides a clear representation of h
 ---
 
 ![User Registration Diagram](https://github.com/sifir-gun/hbnb/blob/e21bbe3ccef8088f068ec70323ced9a920109d21/API%20POST%20register.jpg)
+
+**API GET Place**
+
+Sequence diagram, which shows how the different entities (or components) interact in a certain order to accomplish a task. In this case, it illustrates a scenario where a user makes an API request to obtain a list of "places"
+
+User:
+	This is the person who uses the application and makes a request to obtain information about available ads. 
+
+API:
+This is the interface that allows the user to communicate with the application backend via HTTP requests (in this case, a GET /places request).
+	
+    BusinessLogic:
+This is the layer that contains all the application's logical rules and decisions. It takes the request from the API, applies filters or search criteria, and communicates with the database to obtain the information requested.
+
+Database:
+The database stores all the information about the ads. The business layer interacts with the database to retrieve the list of ads matching the criteria.
+
+Description of the interaction flow :
+
+GET /places request :
+The user sends an HTTP GET /places request to the API. This request asks the API to provide a list of available rental listings.
+
+
+
+Processing in the API :
+The API receives the request and forwards it to the Business Logic layer for processing. The API does not do the processing itself, it only acts as an intermediary.
+
+
+Filtering by business logic :
+The Business Logic layer takes the query criteria (for example, filters on location or price) and prepares a query for the database to find the ads that match these criteria.
+
+Answer 200 OK :
+Once the user has received the list of ads, the API sends an HTTP 200 OK response, which means that the request was successful.
+
+
+**API POST places**
+
+This diagram is a sequence diagram showing the communication flow between different entities for adding a new ad (place) to a system via a POST /places API request.
+
+Diagram components :
+
+User:
+It is the user who uses the application to submit a new ad. 2.
+
+API: 
+The interface that allows the user to communicate with the backend via HTTP requests (in this case, a POST /places request).
+
+BusinessLogic:
+This is the layer that contains the business logic, where validations and business rules are processed before the data is saved in the database.
+
+Database:
+The database is where the ad data is saved.
+
+Explanation of the interaction flow :
+
+POST request /places :
+The user sends an HTTP POST /places request to the API to create a new ad (place). This request contains the data for the advert to be added. 2.
+
+Validation and processing of data by the API :
+The API receives the request and forwards it to the Business Logic layer for processing. The API acts as an intermediary and does not process the data itself.
+
+Validation and processing of data by the business logic :
+Business Logic receives the ad data, validates it (checking that the information is correct, complete, etc.), then prepares it for saving.
+
+Backing up data in the database :
+Business Logic sends the validated data to the database for backup. This means that the advert will be saved in the system.
+
+Confirm backup :
+Once the database has saved the data, it sends a confirmation to the Business Logic, indicating that the operation has been carried out successfully.
+
+
+Return of the response to the API :
+The Business Logic returns a response to the API, confirming that the new advert has been added to the database
+
+
+Return response to user :
+
+The API returns a response to the user indicating whether the operation was successful or unsuccessful. If the backup was successful, the user receives a success confirmation, otherwise an error message.
