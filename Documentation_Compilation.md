@@ -6,25 +6,25 @@ This diagram shows how the application is organised into different layers, each 
 
 1. **First layer**  
 
-**Role:**  
-This is the part that is visible to the user, such as a website or an API. This layer receives user requests (for example, when a user wants to view or add an ad).  
+	**Role:**  
+	This is the part that is visible to the user, such as a website or an API. This layer receives user requests (for example, when a user wants to view or add an ad).  
 
-**Composant:**  
-Services and APIs: These are the functionalities that the application offers to the user or to other systems.  
+	**Composant:**  
+	Services and APIs: These are the functionalities that the application offers to the user or to other systems.  
 
-**Facade Interface**    
-**Role:**  
-This is an intermediary that simplifies communication between the presentation layer (which the user sees) and the business logic (which manages the application's rules).  
+	**Facade Interface**    
+	**Role:**  
+	This is an intermediary that simplifies communication between the presentation layer (which the user sees) and the business logic (which manages the application's rules).  
 
-**But:** To ensure that the presentation layer does not need to know all the internal details, it simply passes through this interface.  
+	**But:** To ensure that the presentation layer does not need to know all the internal details, it simply passes through this interface.  
 
 2. **BusinessLogicLayer**  
-Rôle : C'est le cerveau de l'application. Elle contient toutes les règles de gestion des annonces, des utilisateurs, des avis, etc.  
+	Rôle : C'est le cerveau de l'application. Elle contient toutes les règles de gestion des annonces, des utilisateurs, des avis, etc.  
 
 3. **PersistenceLayer**  
-Role: This is where the data is stored (like a database).  
+	Role: This is where the data is stored (like a database).  
 
-Data access and storage engine: These are used to save and retrieve information (such as adverts or users) in a database.  
+	Data access and storage engine: These are used to save and retrieve information (such as adverts or users) in a database.  
 
 ## **Conclusion**  
 The presentation (what the user sees) communicates with the front-end to access the business logic (the application rules), which then connects to the database to save or retrieve data  
