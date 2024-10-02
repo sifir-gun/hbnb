@@ -295,3 +295,5 @@ The Business Logic returns a response to the API, confirming that the new advert
 Return response to user :
 
 The API returns a response to the user indicating whether the operation was successful or unsuccessful. If the backup was successful, the user receives a success confirmation, otherwise an error message.
+
+
