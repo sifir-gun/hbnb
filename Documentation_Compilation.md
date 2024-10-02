@@ -251,6 +251,7 @@ The Business Logic layer takes the query criteria (for example, filters on locat
 Answer 200 OK :
 Once the user has received the list of ads, the API sends an HTTP 200 OK response, which means that the request was successful.
 
+![API GET place](https://github.com/sifir-gun/hbnb/blob/main/API%20GET%20place.jpg)  
 
 **API POST places**
 
@@ -294,6 +295,5 @@ The Business Logic returns a response to the API, confirming that the new advert
 
 Return response to user :
 
-The API returns a response to the user indicating whether the operation was successful or unsuccessful. If the backup was successful, the user receives a success confirmation, otherwise an error message.
-
-
+The API returns a response to the user indicating whether the operation was successful or unsuccessful. If the backup was successful, the user receives a success confirmation, otherwise an error message.  
+![API POST places](https://github.com/sifir-gun/hbnb/blob/main/API%20POST%20places.jpg)
