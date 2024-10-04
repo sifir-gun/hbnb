@@ -1,4 +1,24 @@
-# **Documentation Compilation**  
+# **HBnB - Project**
+
+## **Introduction**
+
+### **Purpose**
+
+This document serves as a comprehensive technical guide for the development and implementation of the HBnB project. It provides detailed technical specifications, architectural diagrams, API flows, and implementation guidelines to ensure that all stakeholders, developers, and collaborators are aligned throughout the project lifecycle.
+
+### **Scope**
+
+The document covers the core functionalities and technical workflows of the HBnB project, including user registration, place creation, review submission, and fetching a list of available places. It includes class diagrams, sequence diagrams, API flowcharts, and detailed explanations of each module to ensure clarity and consistency throughout the development process.
+
+### **Overview of the HBnB Project**
+
+The HBnB project is a simplified version of a vacation rental platform similar to Airbnb. It allows users to register, list properties, submit reviews, and browse available rentals. The platform emphasizes a seamless user experience for both property owners and travelers. Key functionalities include user management, property listings, booking management, and review systems, all integrated through a robust API architecture.
+
+### **Role of This Document**
+
+This document plays a crucial role in guiding the development process by offering a unified reference for the project's architecture and workflows. It provides detailed insights into the technical components, helping developers and stakeholders collaborate effectively. The document ensures that all team members understand the design principles, coding standards, and expected functionalities, minimizing misunderstandings and streamlining the implementation process.
+
+
 
 ## **High-Level Package Diagram**  
 
@@ -6,25 +26,25 @@ This diagram shows how the application is organised into different layers, each 
 
 1. **First layer**  
 
-	**Role:**  
-	This is the part that is visible to the user, such as a website or an API. This layer receives user requests (for example, when a user wants to view or add an ad).  
+    **Role:**  
+    This is the part that is visible to the user, such as a website or an API. This layer receives user requests (for example, when a user wants to view or add an ad).  
 
-	**Composant:**  
-	Services and APIs: These are the functionalities that the application offers to the user or to other systems.  
+    **Composant:**  
+    Services and APIs: These are the functionalities that the application offers to the user or to other systems.  
 
-	**Facade Interface**    
-	**Role:**  
-	This is an intermediary that simplifies communication between the presentation layer (which the user sees) and the business logic (which manages the application's rules).  
+    **Facade Interface**    
+    **Role:**  
+    This is an intermediary that simplifies communication between the presentation layer (which the user sees) and the business logic (which manages the application's rules).  
 
-	**But:** To ensure that the presentation layer does not need to know all the internal details, it simply passes through this interface.  
+    **But:** To ensure that the presentation layer does not need to know all the internal details, it simply passes through this interface.  
 
 2. **BusinessLogicLayer**  
-	Rôle : C'est le cerveau de l'application. Elle contient toutes les règles de gestion des annonces, des utilisateurs, des avis, etc.  
+    Rôle : C'est le cerveau de l'application. Elle contient toutes les règles de gestion des annonces, des utilisateurs, des avis, etc.  
 
 3. **PersistenceLayer**  
-	Role: This is where the data is stored (like a database).  
+    Role: This is where the data is stored (like a database).  
 
-	Data access and storage engine: These are used to save and retrieve information (such as adverts or users) in a database.  
+    Data access and storage engine: These are used to save and retrieve information (such as adverts or users) in a database.  
 
 ## **Conclusion**  
 The presentation (what the user sees) communicates with the front-end to access the business logic (the application rules), which then connects to the database to save or retrieve data  
@@ -41,119 +61,119 @@ The class diagram provided illustrates the core components and relationships of 
 
 1. **BaseModel**
 
-	The BaseModel class acts as a foundation for all other entities in the system. It contains the following attributes and methods:
+    The BaseModel class acts as a foundation for all other entities in the system. It contains the following attributes and methods:
 
-		•	Attributes:
-		•	UUID: A unique identifier for each instance.
-		•	datetime_created_at: The timestamp when the object is created.
-		•	datetime_update_at: The timestamp when the object is last updated.
-		•	Methods:
-		•	save(): Persists changes to the object.
-		•	update(): Updates the timestamp when changes are made.
+        •   Attributes:
+        •   UUID: A unique identifier for each instance.
+        •   datetime_created_at: The timestamp when the object is created.
+        •   datetime_update_at: The timestamp when the object is last updated.
+        •   Methods:
+        •   save(): Persists changes to the object.
+        •   update(): Updates the timestamp when changes are made.
 
 This class is inherited by all other classes in the diagram, providing a consistent way to track creation and modification times for objects.
 
 2. **Class User**
 
-	The User class represents individuals using the HBnB platform. Users can own places and leave reviews for places they visit.
+    The User class represents individuals using the HBnB platform. Users can own places and leave reviews for places they visit.
 
-		•	Attributes:
-		•	FirstName: The user’s first name.
-		•	LastName: The user’s last name.
-		•	Email: The user’s email, used for authentication and communication.
-		•	Password: The user’s password, securely stored and used for authentication.
-		•	Methods:
-		•	create_user(first_name, last_name, email, password): A method to create a new user.
-		•	authenticate(email, password): Validates the user’s credentials during login.
-		•	list_owner_places(): Retrieves a list of places owned by the user.
+        •   Attributes:
+        •   FirstName: The user’s first name.
+        •   LastName: The user’s last name.
+        •   Email: The user’s email, used for authentication and communication.
+        •   Password: The user’s password, securely stored and used for authentication.
+        •   Methods:
+        •   create_user(first_name, last_name, email, password): A method to create a new user.
+        •   authenticate(email, password): Validates the user’s credentials during login.
+        •   list_owner_places(): Retrieves a list of places owned by the user.
 
 Each user can be associated with multiple places, as indicated by the relationship with the Place class.
 
 3. **Class Place**
 
-	The Place class represents rental properties listed on the platform. Each place is associated with a specific user (the owner) and has numerous attributes detailing the property.
+    The Place class represents rental properties listed on the platform. Each place is associated with a specific user (the owner) and has numerous attributes detailing the property.
 
-		•	Attributes:
-		•	name: The name of the place.
-		•	description: A description of the place.
-		•	country: The country where the place is located.
-		•	address: The address of the place.
-		•	price: The price per night to rent the place.
-		•	latitude and longitude: The geographical coordinates of the place.
-		•	owner: The user who owns the place.
-		•	numRooms: The number of rooms in the place.
-		•	numBathroom: The number of bathrooms in the place.
-		•	max_guests: The maximum number of guests allowed.
-		•	reviews: Reviews left by users for this place.
-		•	amenities: The amenities available at the place, such as Wi-Fi, parking, or pool access.
-		•	Methods:
-		•	get_info(): Returns all the information about the place.
-		•	list_reviews(): Lists all reviews associated with the place.
-		•	list_amenities(): Lists all amenities available at the place.
-		•	create_place(): A method to create a new place listing.
+        •   Attributes:
+        •   name: The name of the place.
+        •   description: A description of the place.
+        •   country: The country where the place is located.
+        •   address: The address of the place.
+        •   price: The price per night to rent the place.
+        •   latitude and longitude: The geographical coordinates of the place.
+        •   owner: The user who owns the place.
+        •   numRooms: The number of rooms in the place.
+        •   numBathroom: The number of bathrooms in the place.
+        •   max_guests: The maximum number of guests allowed.
+        •   reviews: Reviews left by users for this place.
+        •   amenities: The amenities available at the place, such as Wi-Fi, parking, or pool access.
+        •   Methods:
+        •   get_info(): Returns all the information about the place.
+        •   list_reviews(): Lists all reviews associated with the place.
+        •   list_amenities(): Lists all amenities available at the place.
+        •   create_place(): A method to create a new place listing.
 
 Each place is linked to a User who owns it and can be reviewed by other users. Places also have relationships with amenities and reviews.
 
 4. **Class Review**
 
-	The Review class allows users to leave feedback for places they have visited. Each review is associated with both a User and a Place.
+    The Review class allows users to leave feedback for places they have visited. Each review is associated with both a User and a Place.
 
-		•	Attributes:
-		•	User_id: The user who wrote the review.
-		•	Place_id: The place being reviewed.
-		•	Rating: An integer rating provided by the user.
-		•	Comment: A text comment left by the user as part of the review.
-		•	Methods:
-		•	get_user_review(): Retrieves the review written by a specific user.
-		•	get_place_review(): Retrieves all reviews for a particular place.
-		•	add_review(user, place, rating, comment): Adds a new review to a place.
+        •   Attributes:
+        •   User_id: The user who wrote the review.
+        •   Place_id: The place being reviewed.
+        •   Rating: An integer rating provided by the user.
+        •   Comment: A text comment left by the user as part of the review.
+        •   Methods:
+        •   get_user_review(): Retrieves the review written by a specific user.
+        •   get_place_review(): Retrieves all reviews for a particular place.
+        •   add_review(user, place, rating, comment): Adds a new review to a place.
 
 Reviews are critical for users to make informed decisions about places to stay. They contribute to the overall rating and reputation of a place.
 
 5. **Class City**
 
-	The City class provides information about cities that have places listed on the platform. Each city is associated with a country.
+    The City class provides information about cities that have places listed on the platform. Each city is associated with a country.
 
-		•	Attributes:
-		•	Name: The name of the city.
-		•	Country_id: The identifier of the country to which the city belongs.
-		•	Methods:
-		•	get_city_info(): Returns detailed information about the city.
-		•	list_places(): Lists all places available in the city.
+        •   Attributes:
+        •   Name: The name of the city.
+        •   Country_id: The identifier of the country to which the city belongs.
+        •   Methods:
+        •   get_city_info(): Returns detailed information about the city.
+        •   list_places(): Lists all places available in the city.
 
 Cities are a key entity, helping users locate places based on geographical preferences.
 
 6. **Class Country**
 
-	The Country class represents different countries on the platform, each associated with one or more cities.
+    The Country class represents different countries on the platform, each associated with one or more cities.
 
-		•	Attributes:
-		•	Name: The name of the country.
-		•	Code: The country code (e.g., “US” for the United States).
-		•	Methods:
-		•	get_country_info(): Provides detailed information about the country.
-		•	list_cities(): Lists all cities within the country.
+        •   Attributes:
+        •   Name: The name of the country.
+        •   Code: The country code (e.g., “US” for the United States).
+        •   Methods:
+        •   get_country_info(): Provides detailed information about the country.
+        •   list_cities(): Lists all cities within the country.
 
 The Country class allows users to filter places and cities based on the country they are interested in visiting.
 
 7. **Class Amenity**
 
-	The Amenity class represents amenities that can be associated with a place. Examples include Wi-Fi, air conditioning, pool access, and more.
+    The Amenity class represents amenities that can be associated with a place. Examples include Wi-Fi, air conditioning, pool access, and more.
 
-		•	Attributes:
-		•	Amenity_id: The unique identifier for the amenity.
-		•	Amenity_Name: The name of the amenity.
-		•	Methods:
-		•	get_info(): Retrieves information about a specific amenity.
-		•	list_places(): Lists all places that offer the specific amenity.
+        •   Attributes:
+        •   Amenity_id: The unique identifier for the amenity.
+        •   Amenity_Name: The name of the amenity.
+        •   Methods:
+        •   get_info(): Retrieves information about a specific amenity.
+        •   list_places(): Lists all places that offer the specific amenity.
 
 Amenities help users refine their search for a place by specifying the features they are looking for in a rental.
 
  **Design Decisions**
 
-	•	Inheritance: By using a common BaseModel, the design ensures that all entities (Users, Places, Reviews, etc.) have a consistent way of managing their lifecycle (creation, updates, etc.).
-	•	Encapsulation: Each class has its own methods to encapsulate its functionality, making the codebase modular and easy to maintain.
-	•	Scalability: The relationships between places, cities, countries, and amenities allow the system to scale, supporting the addition of new places, countries, or amenities without needing to modify existing code significantly.
+    •   Inheritance: By using a common BaseModel, the design ensures that all entities (Users, Places, Reviews, etc.) have a consistent way of managing their lifecycle (creation, updates, etc.).
+    •   Encapsulation: Each class has its own methods to encapsulate its functionality, making the codebase modular and easy to maintain.
+    •   Scalability: The relationships between places, cities, countries, and amenities allow the system to scale, supporting the addition of new places, countries, or amenities without needing to modify existing code significantly.
 
 ## **Conclusion**
 
@@ -218,82 +238,82 @@ This sequence diagram for user registration provides a clear representation of h
 
 ![User Registration Diagram](https://github.com/sifir-gun/hbnb/blob/e21bbe3ccef8088f068ec70323ced9a920109d21/API%20POST%20register.jpg)
 
-**API GET Place**
+## **API GET Place**
 
 Sequence diagram, which shows how the different entities (or components) interact in a certain order to accomplish a task. In this case, it illustrates a scenario where a user makes an API request to obtain a list of "places"
 
-User:
-	This is the person who uses the application and makes a request to obtain information about available ads. 
+**User:**
+    This is the person who uses the application and makes a request to obtain information about available ads. 
 
-API:
+**API:**
 This is the interface that allows the user to communicate with the application backend via HTTP requests (in this case, a GET /places request).
-	
-    BusinessLogic:
+
+**BusinessLogic:**
 This is the layer that contains all the application's logical rules and decisions. It takes the request from the API, applies filters or search criteria, and communicates with the database to obtain the information requested.
 
-Database:
+**Database:**
 The database stores all the information about the ads. The business layer interacts with the database to retrieve the list of ads matching the criteria.
 
-Description of the interaction flow :
+### **Description of the interaction flow:**
 
-GET /places request :
+**GET /places request:**
 The user sends an HTTP GET /places request to the API. This request asks the API to provide a list of available rental listings.
 
 
 
-Processing in the API :
+**Processing in the API:**
 The API receives the request and forwards it to the Business Logic layer for processing. The API does not do the processing itself, it only acts as an intermediary.
 
 
-Filtering by business logic :
+**Filtering by business logic:**
 The Business Logic layer takes the query criteria (for example, filters on location or price) and prepares a query for the database to find the ads that match these criteria.
 
-Answer 200 OK :
+**Answer 200 OK:**
 Once the user has received the list of ads, the API sends an HTTP 200 OK response, which means that the request was successful.
 
 ![API GET place](https://github.com/sifir-gun/hbnb/blob/main/API%20GET%20place.jpg)  
 
-**API POST places**
+## **API POST places**
 
 This diagram is a sequence diagram showing the communication flow between different entities for adding a new ad (place) to a system via a POST /places API request.
 
-Diagram components :
+### **Diagram components:**
 
-User:
+**User:**
 It is the user who uses the application to submit a new ad. 2.
 
-API: 
+**API:**
 The interface that allows the user to communicate with the backend via HTTP requests (in this case, a POST /places request).
 
-BusinessLogic:
+**BusinessLogic:**
 This is the layer that contains the business logic, where validations and business rules are processed before the data is saved in the database.
 
-Database:
+**Database:**
 The database is where the ad data is saved.
 
-Explanation of the interaction flow :
+### **Explanation of the interaction flow:**
 
-POST request /places :
+**POST request /places:**
 The user sends an HTTP POST /places request to the API to create a new ad (place). This request contains the data for the advert to be added. 2.
 
-Validation and processing of data by the API :
+**Validation and processing of data by the API:**
 The API receives the request and forwards it to the Business Logic layer for processing. The API acts as an intermediary and does not process the data itself.
 
-Validation and processing of data by the business logic :
+**Validation and processing of data by the business logic :**
 Business Logic receives the ad data, validates it (checking that the information is correct, complete, etc.), then prepares it for saving.
 
-Backing up data in the database :
+**Backing up data in the database:**
 Business Logic sends the validated data to the database for backup. This means that the advert will be saved in the system.
 
-Confirm backup :
+**Confirm backup:**
 Once the database has saved the data, it sends a confirmation to the Business Logic, indicating that the operation has been carried out successfully.
 
 
-Return of the response to the API :
+**Return of the response to the API:**
 The Business Logic returns a response to the API, confirming that the new advert has been added to the database
 
 
-Return response to user :
+**Return response to user:**
 
 The API returns a response to the user indicating whether the operation was successful or unsuccessful. If the backup was successful, the user receives a success confirmation, otherwise an error message.  
 ![API POST places](https://github.com/sifir-gun/hbnb/blob/main/API%20POST%20places.jpg)
