@@ -76,4 +76,3 @@ The Business Logic queries the Database for matching places.
 The Database returns the list of places, and the response is sent back to the user.
 Sequence Diagrams
 
-(Insert sequence diagrams here for each API interaction, with step-by-step explanations.)
