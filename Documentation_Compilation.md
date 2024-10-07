@@ -359,7 +359,7 @@ Once the review data is saved, the database sends a confirmation back to the Bus
 ### Returning Response to the API
 The BusinessLogic layer sends a response to the API, indicating whether the review submission was successful or if there was an issue (e.g., validation failure or database error).
 
-### Returning Response to the User
+### Returning Response to the User.
 The API sends a final response back to the user, informing them of the outcome. If successful, the response might be something like "Review submitted successfully"; otherwise, the user may receive an error message.
 
 ![API POST reviews](./home/neia/HOLBERTON_PROJECTS/hbnb/API_POST_reviews.jpg)
