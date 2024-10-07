@@ -179,7 +179,7 @@ Amenities help users refine their search for a place by specifying the features 
 
 The class diagram and the relationships between entities provide a well-structured foundation for the HBnB project. Each class has clearly defined responsibilities and attributes, and the use of inheritance and encapsulation ensures that the design is both scalable and maintainable.
 
-![Class Diagram](https://github.com/sifir-gun/hbnb/blob/aa50198265c2c33e0ecd0a5e55800893924ae916/Diagramm_De_Class.png?raw=true)
+![Class Diagram](https://github.com/sifir-gun/hbnb/blob/main/Diagram_de_Class_HBnB.png)
 
 ## **API Interaction Flow: Sequence Diagram for User Registration**
 
