@@ -362,4 +362,4 @@ The BusinessLogic layer sends a response to the API, indicating whether the revi
 ### Returning Response to the User.
 The API sends a final response back to the user, informing them of the outcome. If successful, the response might be something like "Review submitted successfully"; otherwise, the user may receive an error message.
 
-![API POST reviews](./home/neia/HOLBERTON_PROJECTS/hbnb/API_POST_reviews.jpg)
+![API POST reviews](https://github.com/sifir-gun/hbnb/blob/main/API_POST_reviews.jpg)
