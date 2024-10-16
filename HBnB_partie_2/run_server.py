@@ -1,5 +1,5 @@
 """Fichier pour lancer le serveur Flask."""
-from app_HBnB import create_app
+from app import create_app
 
 
 """Crée une instance de l'application Flask en appelant la fonction create_app()"""
