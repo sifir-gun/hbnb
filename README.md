@@ -1,129 +1,117 @@
+# HBnB Evolution - Technical Documentation
 
-# **HBnB Project**
+## Table of Contents
 
-Welcome to the **HBnB Project**, a simplified version of a vacation rental platform inspired by Airbnb. This project focuses on developing the key functionalities of such platforms, helping you explore how similar applications are built and understand the architecture behind them.
+- [Introduction](#introduction)
+- [Project Overview](#project-overview)
+- [Architecture and Design](#architecture-and-design)
+  - [High-Level Package Diagram](#high-level-package-diagram)
+  - [Business Logic Layer Class Diagram](#business-logic-layer-class-diagram)
+  - [Sequence Diagrams for API Calls](#sequence-diagrams-for-api-calls)
+- [Documentation Compilation](#documentation-compilation)
+- [Team Members](#team-members)
+- [Usage](#usage)
+- [Acknowledgments](#acknowledgments)
 
-## **Table of Contents**
+---
 
-1. [Project Overview](#project-overview)
-2. [Features](#features)
-3. [Project Architecture](#project-architecture)
-4. [API Workflow](#api-workflow)
-    - [User Registration](#user-registration)
-    - [Place Creation](#place-creation)
-    - [Review Submission](#review-submission)
-    - [Fetching Places](#fetching-places)
-5. [How to Run the Project](#how-to-run-the-project)
-6. [Contributing](#contributing)
-7. [License](#license)
+## Introduction
 
-## **Project Overview**
+Welcome to the **HBnB Evolution** project! This repository contains the comprehensive technical documentation for the development of the HBnB application, a simplified version of an Airbnb-like platform. This documentation serves as the foundation for the project's implementation phases, providing clear insights into the application's architecture, design, and interaction flows.
 
-The **HBnB Project** is a web-based platform that replicates the core functionality of a vacation rental service. Users can:
+---
 
-- Register and create accounts.
-- List properties (places) for rent.
-- Submit and manage reviews for places they've stayed at.
-- Search for and browse through available rental places based on specific filters.
+## Project Overview
 
-This project is designed with a modular approach, separating different components to ensure scalability and ease of maintenance, with a focus on user management, property management, and review submissions.
+**HBnB Evolution** is a web application that allows users to:
 
-## **Features**
+- **User Management**: Register, update profiles, and be identified as regular users or administrators.
+- **Place Management**: List properties with details such as name, description, price, and location, along with associated amenities.
+- **Review Management**: Leave reviews for places, including ratings and comments.
+- **Amenity Management**: Manage amenities that can be associated with places.
 
-- **User Management**: Allows users to register, update profiles, and manage account roles (regular users, admins).
-- **Place Management**: Property owners can list places with details such as name, description, price, and location. The system also supports listing amenities like Wi-Fi, parking, etc.
-- **Review System**: Users can submit reviews for rented places, rate them, and share comments.
-- **Amenity Management**: Provides functionality for managing property amenities like internet, pool, etc.
+The project follows a layered architecture divided into:
 
-## **Project Architecture**
+- **Presentation Layer**: Services and APIs for user interaction.
+- **Business Logic Layer**: Core logic and models of the application.
+- **Persistence Layer**: Data storage and retrieval from the database.
 
-The architecture of the HBnB platform is organized into three main layers, following a **Layered Architecture Pattern**:
+---
 
-1. **Presentation Layer**: Contains the API endpoints and services that handle user interaction and input.
-2. **Business Logic Layer**: Contains the core logic that processes user requests, handles validation, and applies business rules.
-3. **Persistence Layer**: Responsible for managing database operations, including data storage, retrieval, and updates.
+## Architecture and Design
 
-These layers are connected using the **Facade Pattern**, ensuring a clean separation of concerns while facilitating communication between the layers.
+### High-Level Package Diagram
 
-## **API Workflow**
+The high-level package diagram illustrates the three-layer architecture of the HBnB application and the communication between these layers via the facade pattern. It provides a conceptual overview of how the components are organized and interact.
 
-This section outlines the workflows for key API operations:
+- **Presentation Layer**: Handles user interactions, including services and API endpoints.
+- **Business Logic Layer**: Contains core business logic and models (User, Place, Review, Amenity).
+- **Persistence Layer**: Responsible for data storage and retrieval, interacting with the database.
 
-### **User Registration**
+**[View High-Level Package Diagram](Documentation_Compilation.md#high-level-package-diagram)**
 
-1. User sends a `POST` request to `/register` with necessary details (e.g., email, password).
-2. The API forwards the request to the Business Logic Layer for validation.
-3. After successful validation, the user details are saved to the database.
-4. A confirmation is returned to the user.
+### Business Logic Layer Class Diagram
 
-### **Place Creation**
+The detailed class diagram represents the internal structure of the Business Logic layer, focusing on the key entities: User, Place, Review, and Amenity. It includes their attributes, methods, and relationships such as associations, inheritance, and dependencies.
 
-1. User sends a `POST` request to `/places` with property details (e.g., name, price, description).
-2. The API processes and validates the request.
-3. Upon successful validation, the property is stored in the database.
-4. The system responds with a success message.
+**[View Class Diagram and Explanation](Documentation_Compilation.md#business-logic-layer-class-diagram-explanation)**
 
-### **Review Submission**
+### Sequence Diagrams for API Calls
 
-1. User sends a `POST` request to `/reviews` with review content and rating.
-2. The API validates the review data.
-3. The validated review is saved to the database, and a confirmation is sent back to the user.
+Sequence diagrams have been developed for four different API calls to illustrate the interaction between the layers and the flow of information within the application:
 
-### **Fetching Places**
+1. **User Registration**: A user signs up for a new account.
+2. **Place Creation**: A user creates a new place listing.
+3. **Review Submission**: A user submits a review for a place.
+4. **Fetching a List of Places**: A user requests a list of places based on certain criteria.
 
-1. User sends a `GET` request to `/places` with optional filters (e.g., price, location).
-2. The API queries the database for matching places.
-3. The list of places is returned as a response.
+These diagrams help visualize how different components interact to fulfill specific use cases, showing the step-by-step process of handling API requests.
 
-## **How to Run the Project**
+**[View Sequence Diagrams](Documentation_Compilation.md#api-interaction-flow-sequence-diagram-for-user-registration)**
 
-To run the HBnB project locally, follow these steps:
+---
 
-1. **Clone the repository**:
+## Documentation Compilation
 
+All diagrams and explanatory notes have been compiled into a comprehensive technical document. This document serves as a detailed blueprint for the HBnB project, guiding the implementation phases and providing a clear reference for the system’s architecture and design.
+
+**[Access the Full Documentation](Documentation_Compilation.md)**
+
+---
+
+## Team Members
+
+This project is a collaborative effort by:
+
+- **Guney TASDELEN**
+- **Xavier PIEDALLU**
+- **Neia SANTOS**
+
+---
+
+## Usage
+
+Since this phase of the project focuses on technical documentation, there is currently no executable code in the repository. To utilize the documentation:
+
+1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/HBnB.git
+   git clone https://github.com/yourusername/hbnb-evolution.git
    ```
+2. **Navigate to the Documentation**:
+   - Open `Documentation_Compilation.md` to access all diagrams and explanations.
+   - Diagrams are available in image format within the document for easy reference.
 
-2. **Set up the database**:
+3. **Review the Diagrams**:
+   - Use the high-level package diagram to understand the overall architecture.
+   - Study the class diagrams to grasp the structure of the business logic layer.
+   - Examine the sequence diagrams to follow the interaction flows for various API calls.
 
-   ```bash
-   python manage.py migrate
-   ```
+---
 
-3. **Run the development server**:
+## Acknowledgments
 
-   ```bash
-   python manage.py runserver
-   ```
+We would like to thank our institution and mentors for providing the guidance and resources necessary to complete this phase of the HBnB Evolution project. The collaborative effort and collective learning have been invaluable.
 
-## **Contributing**
+---
 
-Contributions are welcome! Here's how you can get involved:
-
-1. **Fork the repository** to your GitHub account.
-2. **Create a new feature branch**:
-
-   ```bash
-   git checkout -b feature/new-feature
-   ```
-
-3. **Make your changes** and commit them:
-
-   ```bash
-   git commit -m "Add new feature"
-   ```
-
-4. **Push your changes** to your feature branch:
-
-   ```bash
-   git push origin feature/new-feature
-   ```
-
-5. **Submit a pull request** for review.
-
-Please make sure to follow the project's coding guidelines and style recommendations.
-
-## **License**
-
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
+**Note**: This README will be updated in future phases to include implementation details, setup instructions, and usage examples as the project progresses into development stages.

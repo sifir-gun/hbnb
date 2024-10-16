@@ -1,0 +1,1 @@
+"""Fichier de configuration pour définir les variables d'environnement, le mode debug, etc."""
