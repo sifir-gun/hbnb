@@ -1,15 +1,31 @@
+"""
+Module de tests unitaires pour la classe Amenity.
+
+Ce module contient des tests pour vérifier le bon fonctionnement de la
+classe Amenity, notamment la création et la mise à jour des objets Amenity.
+"""
 import unittest
 from datetime import datetime
-
-
 import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app_HBnB.models.amenity import Amenity
+try:
+    from app.models.amenity import Amenity
+except ImportError as e:
+    print(f"Erreur d'importation : {e}")
+    raise
+
 
 class TestAmenity(unittest.TestCase):
+    """
+    Classe de test pour la classe Amenity.
+
+    Cette classe contient des tests unitaires pour vérifier le bon
+    fonctionnement de la classe Amenity, notamment la création et la mise
+    à jour des objets Amenity.
+    """
     def test_amenity_creation(self):
         """Test la création d'un objet Amenity."""
         amenity = Amenity(name="Wi-Fi")
