@@ -1,6 +1,7 @@
 """Initialise Flask et configure l'API Flask-RESTx"""
 from flask import Flask
 from flask_restx import Api
+
 """pip install flask-restx. Facilite la création d'API RESTful en Python """
 
 
