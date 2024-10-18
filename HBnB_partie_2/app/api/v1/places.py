@@ -3,8 +3,9 @@ Fournit des routes pour créer, modifier, récupérer et supprimer des places vi
 
 
 from flask import Flask, jsonify, request
-from models.place import Place
-from models import storage              # Pour accéder au stockage de données.
+from app.models.place import Place
+from app.models import storage          # Pour accéder au stockage de données.
+
 app = Flask(__name__)
 
 
