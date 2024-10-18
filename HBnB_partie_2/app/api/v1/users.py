@@ -13,7 +13,7 @@ facade = HBnBFacade()
 
 
 @api.route('/')
-class UserList(Ressource):
+class UserList(Resource):
     def get(self):
         """Récupère tous les utilisateurs  .   Retourne la liste de tous les utilisateurs"""
         return facade.user_repo.get_all(), 200
