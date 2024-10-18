@@ -1,4 +1,3 @@
-from app_HBnB.models.amenity import Amenity
 import unittest
 from datetime import datetime
 
@@ -8,6 +7,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from app_HBnB.models.amenity import Amenity
 
 class TestAmenity(unittest.TestCase):
     def test_amenity_creation(self):
