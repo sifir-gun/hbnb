@@ -1,8 +1,12 @@
-"""Endpoints API pour gérer les reviews (avis)."""
-"""Fournit des routes pour créer, modifier, récupérer et supprimer des reviews via l'API."""
-
-from flask import Flask, request
+from flask import Flask
 from flask_restx import Api, Resource, fields
+from app.services.facade import HBnBFacade
+
+
+"""Endpoints API pour gérer les reviews (avis)."""
+"""Fournit des routes pour créer, modifier, récupérer
+ et supprimer des reviews via l'API."""
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -12,17 +16,24 @@ facade = None
 
 
 user_model = api.model('User', {
-    'first_name': fields.String(required=True, description='First name of the user'),
-    'last_name': fields.String(required=True, description='Last name of the user'),
-    'email': fields.String(required=True, description='Email of the user')
+    'first_name': fields.String(
+        required=True, description='First name of the user'),
+    'last_name': fields.String(
+        required=True, description='Last name of the user'),
+    'email': fields.String(
+        required=True, description='Email of the user')
 })
 
 
 review_model = api.model('Review', {
-    'review_text': fields.String(required=True, description='Text of the review'),
-    'rating': fields.Integer(required=True, description='Rating (1-5)', min=1, max=5),
-    'user_id': fields.Integer(required=True, description='ID of the user writing the review'),
-    'place_id': fields.Integer(required=True, description='ID of the place being reviewed')
+    'review_text': fields.String(
+        required=True, description='Text of the review'),
+    'rating': fields.Integer(
+        required=True, description='Rating (1-5)', min=1, max=5),
+    'user_id': fields.Integer(
+        required=True, description='ID of the user writing the review'),
+    'place_id': fields.Integer(
+        required=True, description='ID of the place being reviewed')
 })
 
 
