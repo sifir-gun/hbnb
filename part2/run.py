@@ -1,10 +1,13 @@
-"""Fichier pour lancer le serveur Flask."""
+import sys
+import os
+
+# Ajoutez le chemin du répertoire parent pour accéder au module 'app'
+sys.path.append(os.path.abspath(
+    os.path.join(os.path.dirname(__file__), 'app')))
+
 from app import create_app
 
-
-"""Crée une instance de l'application Flask en appelant la fonction create_app()"""
 app = create_app()
 
 if __name__ == '__main__':
-    """Lancer l'application en mode debug pour faciliter le développement"""
     app.run(debug=True)
