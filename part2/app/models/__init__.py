@@ -1,8 +1,8 @@
-"""initialise la couche de logique métier pour l'application HBnB."""
+"""initialise la couche de logique métier pour l'application HBnB.
 # Cette couche de logique métier définit les entités principales de
 # l'application
 
-from app.models.engine.file_storage import FileStorage
-
+from app.models.file_storage import FileStorage
 storage = FileStorage()
-storage.reload()
+storage.reload()"""
+storage = {}
