@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+from abc import ABC, abstractmethod
+
+class Repository(ABC):
+    @abstractmethod
+    def add(self, obj):
+=======
 """Référentiel en mémoire pour gérer les objets.
 Fournit des méthodes pour ajouter, récupérer, mettre à jour,
 et supprimer des objets."""
@@ -18,38 +25,80 @@ class Repository(ABC):
         """
         Ajoute un objet au dépôt.
         """
+>>>>>>> main
         pass
 
     @abstractmethod
     def get(self, obj_id):
+<<<<<<< HEAD
+=======
         """
         Récupère un objet du dépôt par son identifiant.
         """
+>>>>>>> main
         pass
 
     @abstractmethod
     def get_all(self):
+<<<<<<< HEAD
+=======
         """
         Récupère tous les objets du dépôt.
         """
+>>>>>>> main
         pass
 
     @abstractmethod
     def update(self, obj_id, data):
+<<<<<<< HEAD
+=======
         """
         Met à jour un objet dans le dépôt.
         """
+>>>>>>> main
         pass
 
     @abstractmethod
     def delete(self, obj_id):
+<<<<<<< HEAD
+=======
         """
         Supprime un objet du dépôt par son identifiant.
         """
+>>>>>>> main
         pass
 
     @abstractmethod
     def get_by_attribute(self, attr_name, attr_value):
+<<<<<<< HEAD
+        pass
+
+
+class InMemoryRepository(Repository):
+    def __init__(self):
+        self._storage = {}
+
+    def add(self, obj):
+        self._storage[obj.id] = obj
+
+    def get(self, obj_id):
+        return self._storage.get(obj_id)
+
+    def get_all(self):
+        return list(self._storage.values())
+
+    def update(self, obj_id, data):
+        obj = self.get(obj_id)
+        if obj:
+            obj.update(data)
+
+    def delete(self, obj_id):
+        if obj_id in self._storage:
+            del self._storage[obj_id]
+
+    def get_by_attribute(self, attr_name, attr_value):
+        return next((obj for obj in self._storage.values() if getattr(obj, attr_name) == attr_value), None)
+=======
         """
         Récupère des objets du dépôt par un attribut spécifique.
         """
@@ -102,3 +151,4 @@ class InMemoryRepository:
             ),
             None
         )
+>>>>>>> main
