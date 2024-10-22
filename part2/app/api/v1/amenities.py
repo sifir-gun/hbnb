@@ -1,11 +1,12 @@
+from flask import Flask, jsonify, request
+from app.models.amenity import Amenity
+from app.models import storage          # Pour accéder au stockage de données.
+
+
 """Endpoints API pour gérer les amenities (commodités).
 Fournit des routes pour créer, modifier, récupérer et
 supprimer des amenities via l'API.
 """
-
-from flask import Flask, jsonify, request
-from app.models.amenity import Amenity
-from app.models import storage          # Pour accéder au stockage de données.
 
 app = Flask(__name__)
 

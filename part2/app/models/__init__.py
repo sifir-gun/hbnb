@@ -2,7 +2,9 @@
 # Cette couche de logique métier définit les entités principales de
 # l'application
 
-from app.models.engine.file_storage import FileStorage
+"""from app.models.engine.file_storage import FileStorage
 
 storage = FileStorage()
-storage.reload()
+storage.reload()"""
+
+storage = {}
