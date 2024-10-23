@@ -1,90 +1,231 @@
-"""Endpoints API pour gérer les places (logements).
-Fournit des routes pour créer, modifier, récupérer et supprimer des places via l'API."""
+"""Référentiel en mémoire pour gérer les objets.
+Fournit des méthodes pour ajouter, récupérer, mettre à jour,
+et supprimer des objets."""
+
+from abc import ABC, abstractmethod
 
 
-from flask import Flask, jsonify, request
-from models.place import Place
-from models import storage              # Pour accéder au stockage de données.
-app = Flask(__name__)
+class Repository(ABC):
+    """
+    Classe abstraite représentant un dépôt générique.
+
+    Cette classe définit les méthodes de base que tout dépôt doit implémenter
+    pour gérer des objets de manière générique. Elle impose des méthodes
+    abstraites qui doivent être implémentées dans toute classe dérivée.
+    """
+
+    @abstractmethod
+    def add(self, obj):
+        """
+        Ajoute un objet au dépôt.
+        Cette méthode doit être implémentée dans les classes dérivées.
+        
+        Args:
+            obj: L'objet à ajouter au dépôt.
+        """
+        pass
+
+    @abstractmethod
+    def get(self, obj_id):
+        """
+        Récupère un objet du dépôt par son identifiant.
+        Cette méthode doit être implémentée dans les classes dérivées.
+
+        Args:
+            obj_id: L'identifiant de l'objet à récupérer.
+        
+        Returns:
+            L'objet correspondant à l'identifiant donné, ou None s'il n'existe pas.
+        """
+        pass
+
+    @abstractmethod
+    def get_all(self):
+        """
+        Récupère tous les objets du dépôt.
+        Cette méthode doit être implémentée dans les classes dérivées.
+
+        Returns:
+            Une liste contenant tous les objets du dépôt.
+        """
+        pass
+
+    @abstractmethod
+    def update(self, obj_id, data):
+        """
+        Met à jour un objet dans le dépôt avec de nouvelles données.
+        Cette méthode doit être implémentée dans les classes dérivées.
+
+        Args:
+            obj_id: L'identifiant de l'objet à mettre à jour.
+            data: Dictionnaire contenant les nouvelles valeurs à attribuer à l'objet.
+        """
+        pass
+
+    @abstractmethod
+    def delete(self, obj_id):
+        """
+        Supprime un objet du dépôt par son identifiant.
+        Cette méthode doit être implémentée dans les classes dérivées.
+
+        Args:
+            obj_id: L'identifiant de l'objet à supprimer.
+        """
+        pass
+
+    @abstractmethod
+    def get_by_attribute(self, attr_name, attr_value):
+        """
+        Récupère un objet en fonction d'un attribut spécifique.
+        Cette méthode doit être implémentée dans les classes dérivées.
+
+        Args:
+            attr_name: Nom de l'attribut sur lequel effectuer la recherche.
+            attr_value: Valeur de l'attribut pour laquelle chercher un objet.
+        
+        Returns:
+            L'objet correspondant à la recherche, ou None s'il n'existe pas.
+        """
+        pass
 
 
-"""Route pour obtenir des places"""
+class InMemoryRepository:
+    """
+    Classe représentant un dépôt en mémoire.
 
+    Cette classe implémente les méthodes de base pour gérer des objets
+    en mémoire, en stockant les objets dans un dictionnaire.
+    """
 
-@app.route('/places', methods=['GET'])
-def get_places():
+    def __init__(self):
+        """
+        Initialise le dépôt avec un dictionnaire vide pour stocker les objets.
+        Les objets sont stockés avec leurs ID comme clé.
+        """
+        self.storage = {}
 
-    # Récupère toutes les instances de Place
-    all_places = storage.all(Place).values()
-    places_list = [place.to_dict()
-                   for place in all_places]     # Convertir en JSON
-    return jsonify(places_list), 200
+    def add(self, obj):
+        """
+        Ajoute un objet au dépôt en utilisant son ID comme clé.
 
+        Args:
+            obj: L'objet à ajouter.
+        """
+        self.storage[obj.id] = obj
 
-"""Route pour obtenir une place spécifique par son ID"""
+    def get(self, obj_id):
+        """
+        Récupère un objet par son ID depuis le dépôt.
 
+        Args:
+            obj_id: L'identifiant de l'objet à récupérer.
 
-@app.route('/places/<place_id>', methods=['GET'])
-def get_place(place_id):
-    # Récupère la place de son ID
-    place = storage.get(Place, place_id)
-    if place is None:
-        # Gestion des erreurs
-        return jsonify({"error": "Place not found"}), 404
-    return jsonify(place.to_dict()), 200
+        Returns:
+            L'objet correspondant à l'ID fourni, ou None s'il n'existe pas.
+        """
+        return self.storage.get(obj_id)
 
+    def get_all(self, cls=None):
+        """
+        Récupère tous les objets ou tous les objets d'un type spécifique.
 
-"""Route pour créer une nouvelle place"""
+        Args:
+            cls: Classe des objets à récupérer (facultatif). Si ce paramètre est fourni,
+                 seuls les objets de ce type seront retournés.
 
+        Returns:
+            Une liste de tous les objets, ou une liste d'objets d'un certain type.
+        """
+        if cls is None:
+            return list(self.storage.values())
+        else:
+            return [obj for obj in self.storage.values() if isinstance(obj, cls)]
 
-@app.route('/places', methods=['POST'])
-def create_place():
-    if not request.json or 'name' not in request.json:
-        return jsonify({"error": "Name is required"}), 400
+    def update(self, obj_id, data):
+        """
+        Met à jour un objet existant dans le dépôt avec de nouvelles données.
 
-    """Créer une nouvelle instance de place"""
-    new_place = Place(name=request.json['name'],
-                      description=request.json.get('description', ""))
-    """ajoute une nouvelle place au storage"""
-    storage.new(new_place)
-    """Sauvegarde la nouvelle place"""
-    storage.save()
-    return jsonify(new_place.to_dict()), 201
+        Args:
+            obj_id: L'identifiant de l'objet à mettre à jour.
+            data: Un dictionnaire contenant les nouvelles données pour l'objet.
+        """
+        obj = self.get(obj_id)
+        if obj:
+            for key, value in data.items():
+                setattr(obj, key, value)
+            self.storage[obj_id] = obj
 
+    def delete(self, obj_or_id):
+        """
+        Supprime un objet par son ID ou l'objet lui-même.
 
-"""Route pour mettre à jour une place"""
+        Args:
+            obj_or_id: L'ID de l'objet ou l'objet lui-même à supprimer.
+        """
+        if isinstance(obj_or_id, str):
+            obj_id = obj_or_id
+        elif hasattr(obj_or_id, 'id'):
+            obj_id = obj_or_id.id
+        else:
+            raise ValueError("delete() requires a valid object or object ID")
 
+        if obj_id in self.storage:
+            del self.storage[obj_id]
 
-@app.route('/places/<place_id>', methods=['PUT'])
-def update_place(place_id):
-    place = storage.get(Place, place_id)
-    if place is None:
-        return jsonify({"error": " Place not found"}), 404
+    def clear_all(self, cls=None):
+        """
+        Supprime tous les objets, ou tous les objets d'un certain type.
 
-    if not request.json:
-        return jsonify({"error": "Request body must be JSON"}), 400
+        Args:
+            cls: Classe des objets à supprimer (facultatif). Si ce paramètre est fourni,
+                 seuls les objets de ce type seront supprimés.
+        """
+        if cls is None:
+            self.storage.clear()
+        else:
+            self.storage = {
+                k: v for k, v in self.storage.items() if not isinstance(v, cls)
+            }
 
-    """Mise à jour des champs modifiés"""
-    place.name = request.json.get('name', place.name)
-    place.description = request.json.get('description', place.description)
+    def get_by_attribute(self, attr_name, attr_value):
+        """
+        Récupère un objet en fonction d'un attribut spécifique.
 
-    storage.save()
-    return jsonify(place.to_dict()), 200
+        Args:
+            attr_name: Le nom de l'attribut à rechercher.
+            attr_value: La valeur de l'attribut à rechercher.
 
+        Returns:
+            L'objet qui correspond à la recherche, ou None si aucun objet ne correspond.
+        """
+        return next(
+            (
+                obj for obj in self.storage.values()
+                if getattr(obj, attr_name, None) == attr_value
+            ),
+            None
+        )
 
-"""Route pour supprimer une place"""
+    def get_all_by_attribute(self, attr_name, attr_value):
+        """
+        Récupère tous les objets qui ont un certain attribut avec une valeur donnée.
 
+        Args:
+            attr_name: Le nom de l'attribut à rechercher.
+            attr_value: La valeur de l'attribut à rechercher.
 
-@app.route('/places/<place_id>', methods=['DELETE'])
-def delete_place(place_id):
-    place = storage.get(Place, place_id)
-    if place is None:
-        return jsonify({"error": "Place not found"}), 404
+        Returns:
+            Une liste d'objets qui correspondent aux critères de recherche.
+        """
+        return [
+            obj for obj in self.storage.values()
+            if getattr(obj, attr_name, None) == attr_value
+        ]
 
-    storage.delete(place)                       # Supprime la place
-    storage.save()                              # Sauvegarde les changements
-    return jsonify({"message": "Place deleted"}), 200
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    def save(self):
+        """
+        Enregistre les changements dans le dépôt.
+        Dans cette implémentation, la méthode est vide car le stockage est en mémoire,
+        donc les changements sont immédiatement reflétés.
+        """
+        pass
