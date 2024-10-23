@@ -1,41 +1,85 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+
 import unittest
-from datetime import datetime
+from flask import Flask
+from flask_restx import Api
+from app.api.v1.places import api as places_api  # L'API des places
 from app.models.place import Place
+from app.models import storage
 
+class TestPlaceAPI(unittest.TestCase):
+    def setUp(self):
+        """
+        Cette méthode est appelée avant chaque test.
+        Elle configure l'application Flask, l'API et un client de test.
+        """
+        self.app = Flask(__name__)
+        self.api = Api(self.app)  # Initialiser l'API
+        self.api.add_namespace(places_api, path='/api/v1')  # Ajouter le namespace
 
-class TestPlace(unittest.TestCase):
+        self.client = self.app.test_client()
+        self.app.testing = True
 
-    def test_place_creation(self):
-        owner = {"id": "123", "name": "John Doe"}
-        place = Place(title="Beautiful House", description="A lovely house to rent",
-                      price=120.5, latitude=40.7128, longitude=-74.0060, owner=owner)
+        # Simuler quelques données dans le stockage
+        self.place = Place(title="Maison", price=1000, owner="Xa")
+        storage.add(self.place)
+        storage.save()
 
-        # Vérification des attributs de base
-        self.assertEqual(place.title, "Beautiful House")
-        self.assertEqual(place.description, "A lovely house to rent")
-        self.assertEqual(place.price, 120.5)
-        self.assertEqual(place.latitude, 40.7128)
-        self.assertEqual(place.longitude, -74.0060)
-        self.assertEqual(place.owner, owner)
-        self.assertIsInstance(place.created_at, datetime)
-        self.assertIsInstance(place.updated_at, datetime)
+    def tearDown(self):
+        """
+        Cette méthode est appelée après chaque test pour nettoyer les données.
+        """
+        storage.clear_all(Place)
 
-        # Ajout d'un avis et vérification
-        review = {"id": "001", "text": "Great place!"}
-        place.add_review(review)
-        self.assertEqual(len(place.reviews), 1)
-        self.assertEqual(place.reviews[0]["text"], "Great place!")
+    def test_get_places(self):
+        """
+        Test pour vérifier si la récupération des lieux fonctionne.
+        """
+        response = self.client.get('/api/v1/places')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Maison', str(response.data))
 
-        # Ajout d'un équipement et vérification
-        amenity = {"id": "001", "name": "Wi-Fi"}
-        place.add_amenity(amenity)
-        self.assertEqual(len(place.amenities), 1)
-        self.assertEqual(place.amenities[0]["name"], "Wi-Fi")
+    def test_post_place(self):
+        """
+        Test pour vérifier si la création d'un lieu fonctionne.
+        """
+        new_place_data = {
+            'title': 'Villa',
+            'price': 2000,
+            'owner': 'John Doe'
+        }
+        response = self.client.post('/api/v1/places', json=new_place_data)
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('Villa', str(response.data))
 
-        # Mise à jour d'un attribut et vérification
-        place.update({"price": 130.0})
-        self.assertEqual(place.price, 130.0)
+    def test_get_place_by_id(self):
+        """
+        Test pour vérifier la récupération d'un lieu par son ID.
+        """
+        response = self.client.get(f'/api/v1/places/{self.place.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Maison', str(response.data))
 
+    def test_update_place(self):
+        """
+        Test pour vérifier si la mise à jour d'un lieu fonctionne.
+        """
+        update_data = {
+            'title': 'Appartement'
+        }
+        response = self.client.put(f'/api/v1/places/{self.place.id}', json=update_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Appartement', str(response.data))
 
-if __name__ == "__main__":
+    def test_delete_place(self):
+        """
+        Test pour vérifier si la suppression d'un lieu fonctionne.
+        """
+        response = self.client.delete(f'/api/v1/places/{self.place.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Place deleted successfully', str(response.data))
+
+if __name__ == '__main__':
     unittest.main()
