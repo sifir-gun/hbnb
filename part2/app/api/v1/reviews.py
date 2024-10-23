@@ -1,5 +1,3 @@
-# api/v1/reviews.py
-
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import HBnBFacade
 
@@ -8,9 +6,12 @@ api = Namespace('reviews', description='Review operations')
 # Define the review model for input validation and documentation
 review_model = api.model('Review', {
     'text': fields.String(required=True, description='Text of the review'),
-    'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
-    'user_id': fields.String(required=True, description='ID of the user'),
-    'place_id': fields.String(required=True, description='ID of the place')
+    'rating': fields.Integer(
+        required=True, description='Rating of the place (1-5)'),
+    'user_id': fields.String(
+        required=True, description='ID of the user'),
+    'place_id': fields.String(
+        required=True, description='ID of the place')
 })
 
 facade = HBnBFacade()
@@ -75,7 +76,9 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review's information"""
         review_data = api.payload
-        review = facade.update_review(review_id, review_data)
+        review, error = facade.update_review(review_id, review_data)
+        if error:
+            return {'error': error}, 400
         if not review:
             return {'error': 'Review not found'}, 404
         return {
@@ -102,8 +105,8 @@ class PlaceReviewList(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get all reviews for a specific place"""
-        # Verify that the place exists
-        place = facade.place_repo.get(place_id)
+        # Use the facade to check if the place exists
+        place = facade.get_place(place_id)
         if not place:
             return {'error': 'Place not found'}, 404
 
