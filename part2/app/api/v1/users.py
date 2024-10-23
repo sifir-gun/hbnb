@@ -74,7 +74,7 @@ class UserList(Resource):
         }, 201
 
 
-@api.route('/<int:user_id>')
+@api.route('/<string:user_id>')
 class UserResource(Resource):
     """
     Classe gérant les opérations sur un utilisateur spécifique (via son ID).
@@ -122,7 +122,10 @@ class UserResource(Resource):
 
         # Récupération des nouvelles données de l'utilisateur
         user_data = api.payload
-        updated_user = facade.update_user(user_id, user_data)
+        updated_user, error = facade.update_user(user_id, user_data)
+
+        if error:
+            return {'error': error}, 400
 
         # Retourne les détails de l'utilisateur mis à jour
         return {
