@@ -1,13 +1,14 @@
+from app.models import storage
+from app.models.place import Place
+from app.api.v1.places import api as places_api  # L'API des places
+from flask_restx import Api
+from flask import Flask
+import unittest
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+sys.path.append(os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../')))
 
-import unittest
-from flask import Flask
-from flask_restx import Api
-from app.api.v1.places import api as places_api  # L'API des places
-from app.models.place import Place
-from app.models import storage
 
 class TestPlaceAPI(unittest.TestCase):
     def setUp(self):
@@ -17,7 +18,7 @@ class TestPlaceAPI(unittest.TestCase):
         """
         self.app = Flask(__name__)
         self.api = Api(self.app)  # Initialiser l'API
-        self.api.add_namespace(places_api, path='/api/v1')  # Ajouter le namespace
+        self.api.add_namespace(places_api, path='/api/v1/places/')
 
         self.client = self.app.test_client()
         self.app.testing = True
@@ -37,7 +38,7 @@ class TestPlaceAPI(unittest.TestCase):
         """
         Test pour vérifier si la récupération des lieux fonctionne.
         """
-        response = self.client.get('/api/v1/places')
+        response = self.client.get('/api/v1/places/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Maison', str(response.data))
 
@@ -50,7 +51,7 @@ class TestPlaceAPI(unittest.TestCase):
             'price': 2000,
             'owner': 'John Doe'
         }
-        response = self.client.post('/api/v1/places', json=new_place_data)
+        response = self.client.post('/api/v1/places/', json=new_place_data)
         self.assertEqual(response.status_code, 201)
         self.assertIn('Villa', str(response.data))
 
@@ -69,7 +70,8 @@ class TestPlaceAPI(unittest.TestCase):
         update_data = {
             'title': 'Appartement'
         }
-        response = self.client.put(f'/api/v1/places/{self.place.id}', json=update_data)
+        response = self.client.put(
+            f'/api/v1/places/{self.place.id}', json=update_data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Appartement', str(response.data))
 
@@ -80,6 +82,7 @@ class TestPlaceAPI(unittest.TestCase):
         response = self.client.delete(f'/api/v1/places/{self.place.id}')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Place deleted successfully', str(response.data))
+
 
 if __name__ == '__main__':
     unittest.main()
