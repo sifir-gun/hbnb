@@ -1,77 +1,70 @@
-"""Endpoints API pour gérer les amenities (commodités).
-Fournit des routes pour créer, modifier, récupérer et
-supprimer des amenities via l'API.
-"""
+# app/api/v1/amenities.py
+from flask_restx import Namespace, Resource, fields
+from app.services.facade import HBnBFacade
 
-from flask import Flask, jsonify, request
-from app.models.amenity import Amenity
-from app.models import storage          # Pour accéder au stockage de données.
+api = Namespace('amenities', description='Amenity operations')
 
-app = Flask(__name__)
+# Define the Amenity model for input validation and documentation
+amenity_model = api.model('Amenity', {
+    'name': fields.String(required=True, description='Name of the amenity')
+})
 
-
-# Route pour récupérer toutes les amenities (GET)
-
-
-@app.route('/amenities', methods=['GET'])
-def get_amenities():
-    # On récupère toutes les instances de Amenity
-    all_amenities = storage.all(Amenity).values()
-    # On récupère toutes les instances de 'Amenity'
-    amenities_list = [amenities.to_dict() for amenities in all_amenities]
-    return jsonify(amenities_list), 200
+facade = HBnBFacade()
 
 
-# Route pour obtenir une amenity par ID (GET)
+@api.route('/')
+class AmenityList(Resource):
+    @api.expect(amenity_model, validate=True)
+    @api.response(201, 'Amenity successfully created')
+    @api.response(400, 'Invalid input data')
+    def post(self):
+        """Create a new amenity"""
+        amenity_data = api.payload
+        amenity, error = facade.create_amenity(amenity_data)
+        if error:
+            return {'error': error}, 400
+        return {
+            'id': amenity.id,
+            'name': amenity.name
+        }, 201
+
+    @api.response(200, 'List of amenities retrieved successfully')
+    def get(self):
+        """Retrieve all amenities"""
+        amenities = facade.get_all_amenities()
+        return [{'id': a.id, 'name': a.name} for a in amenities], 200
 
 
-@app.route('/amenities/<amenity_id>', methods=['GET'])
-def get_amenity(amenity_id):
-    # Permet d'identifier une commodité spécifique
-    amenity = storage.get(Amenity, amenity_id)
-    if amenity is None:
-        return jsonify({"error": "Amenity not found"}), 404
-    return jsonify(amenity.to_dict()), 200
+@api.route('/<amenity_id>')
+class AmenityResource(Resource):
+    @api.response(200, 'Amenity retrieved successfully')
+    @api.response(404, 'Amenity not found')
+    def get(self, amenity_id):
+        """Retrieve an amenity by ID"""
+        amenity = facade.get_amenity(amenity_id)
+        if not amenity:
+            return {'error': 'Amenity not found'}, 404
+        return {'id': amenity.id, 'name': amenity.name}, 200
 
+    @api.expect(amenity_model, validate=True)
+    @api.response(200, 'Amenity updated successfully')
+    @api.response(400, 'Invalid input data')
+    @api.response(404, 'Amenity not found')
+    def put(self, amenity_id):
+        """Update an amenity by ID"""
+        amenity_data = api.payload
+        amenity, error = facade.update_amenity(amenity_id, amenity_data)
+        if error:
+            return {'error': error}, 400
+        if not amenity:
+            return {'error': 'Amenity not found'}, 404
+        return {'message': 'Amenity updated sucessfully'}, 200
 
-# Route pour créer une nouvelle amenity (POST)
-
-
-@app.route('/amenities', methods=['POST'])
-def create_amenity():
-    # Vérifie si la requête contient du JSON et si le champ 'name' est présent
-    if not request.json or 'name' not in request.json:
-        return jsonify({"error": "Name is required"}), 400
-
-    # Vérifie si la valeur de 'name' est bien une chaîne de caractères
-    if not isinstance(request.json.get('name'), str):
-        return jsonify({"error": " Name must be string"}), 400
-
-    # Créer une nouvelle instance Amenity
-    new_amenity = Amenity(name=request.json['name'])
-    # On ajoute la nouvelle amenity au stockage
-    storage.new(new_amenity)
-    # Sauvegarde la nouvelle amenity
-    storage.save()
-    return jsonify(new_amenity.to_dict()), 201
-
-
-# Route pour mettre à jour une amenity (PUT)
-
-
-@app.route('/amenities/<amenity_id>', methods=['PUT'])
-def update_amenity(amenity_id):
-    # Récupère l'instance d'Amenity
-    amenity = storage.get(Amenity, amenity_id)
-    if amenity is None:
-        return jsonify({"error": "Amenity not found"}), 404
-
-    if not request.json:
-        # Vérifie si le corps de la requête est bien en format JSON
-        return jsonify({"error": "Resquest must be json"}), 400
-
-    # Met à jour le nom de la commodité
-    amenity.name = request.json.get('name', amenity.name)
-
-    storage.save()
-    return jsonify(amenity.to_dict()), 200
+    @api.response(200, 'Amenity deleted successfully')
+    @api.response(404, 'Amenity not found')
+    def delete(self, amenity_id):
+        """Delete an amenity by ID"""
+        success = facade.delete_amenity(amenity_id)
+        if not success:
+            return {'error': 'Amenity not found'}, 404
+        return {'message': 'Amenity deleted successfully'}, 200

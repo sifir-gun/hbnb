@@ -56,16 +56,17 @@ class UserList(Resource):
         """
         user_data = api.payload
 
-        # Vérification de l'unicité de l'email (à remplacer par une validation)
+        # Vérification de l'unicité de l'email
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
             return {'error': 'Email already registered'}, 400
 
         # Création d'un nouvel utilisateur via le service facade
-        new_user, error = facade.create_user(user_data)
-        if error:
+        try:
+            new_user = facade.create_user(user_data)
+        except Exception as error:
             # Gestion des erreurs lors de la création de l'utilisateur
-            return {'error': error}, 400
+            return {'error': str(error)}, 400
 
         # Retourne les détails de l'utilisateur créé
         return {
@@ -124,10 +125,10 @@ class UserResource(Resource):
 
         # Récupération des nouvelles données de l'utilisateur
         user_data = api.payload
-        updated_user, error = facade.update_user(user_id, user_data)
-
-        if error:
-            return {'error': error}, 400
+        try:
+            updated_user = facade.update_user(user_id, user_data)
+        except Exception as error:
+            return {'error': str(error)}, 400
 
         # Retourne les détails de l'utilisateur mis à jour
         return {

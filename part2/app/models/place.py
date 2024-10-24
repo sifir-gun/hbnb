@@ -55,7 +55,7 @@ class Place(BaseModel):
             "longitude": self.longitude,
             # Sérialisation du propriétaire (soit ID, soit instance de
             # BaseModel)
-            "owner": self.owner.id if isinstance(self.owner, BaseModel)
+            "owner_id": self.owner.id if isinstance(self.owner, BaseModel)
             else self.owner,
             # Sérialisation des reviews
             "reviews": [review.to_dict() if hasattr(review, 'to_dict')
