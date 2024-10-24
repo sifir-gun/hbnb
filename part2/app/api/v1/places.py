@@ -1,90 +1,97 @@
-"""Endpoints API pour gérer les places (logements).
-Fournit des routes pour créer, modifier, récupérer et supprimer des places via l'API."""
+from flask import request
+from flask_restx import Namespace, Resource
+from app.models.place import Place
+from app.models import storage
+
+# Création de l'API Namespace
+api = Namespace('places', description="Operations related to places")
 
 
-from flask import Flask, jsonify, request
-from models.place import Place
-from models import storage              # Pour accéder au stockage de données.
-app = Flask(__name__)
+@api.route('/')
+class PlaceList(Resource):
+    def get(self):
+        """
+        Récupérer tous les lieux depuis le stockage.
+        """
+        places = storage.get_all(Place)
+        places_list = [place.to_dict() for place in places]
+        return places_list, 200
+
+    def post(self):
+        """
+        Créer un nouveau lieu.
+        """
+        if not request.json or 'title' not in request.json:
+            return {"error": "Title is required"}, 400
+        if 'price' not in request.json:
+            return {"error": "Price is required"}, 400
+        if 'owner' not in request.json:
+            return {"error": "Owner is required"}, 400
+
+        try:
+            new_place = Place(
+                title=request.json['title'],
+                price=request.json['price'],
+                owner=request.json['owner'],
+                description=request.json.get('description', ""),
+                latitude=request.json.get('latitude', None),
+                longitude=request.json.get('longitude', None)
+            )
+            storage.add(new_place)
+            storage.save()
+
+            return new_place.to_dict(), 201
+        except ValueError as e:
+            return {"error": str(e)}, 400
+
+    def delete(self):
+        """
+        Supprimer tous les lieux.
+        """
+        storage.clear_all(Place)
+        storage.save()
+        return {"message": "All places deleted successfully"}, 200
 
 
-"""Route pour obtenir des places"""
+@api.route('/<string:place_id>')
+class PlaceDetail(Resource):
+    def get(self, place_id):
+        """
+        Récupérer les détails d'un lieu par ID.
+        """
+        place = storage.get(place_id)
+        if place is None:
+            return {"error": "Place not found"}, 404
+        return place.to_dict(), 200
 
+    def put(self, place_id):
+        """
+        Mettre à jour un lieu spécifique par ID.
+        """
+        place = storage.get(place_id)
+        if place is None:
+            return {"error": "Place not found"}, 404
 
-@app.route('/places', methods=['GET'])
-def get_places():
+        if not request.json:
+            return {"error": "Request body must be JSON"}, 400
 
-    # Récupère toutes les instances de Place
-    all_places = storage.all(Place).values()
-    places_list = [place.to_dict()
-                   for place in all_places]     # Convertir en JSON
-    return jsonify(places_list), 200
+        updatable_fields = ['title', 'price', 'owner',
+                            'description', 'latitude', 'longitude']
+        for field in updatable_fields:
+            if field in request.json:
+                setattr(place, field, request.json[field])
 
+        storage.save()
+        return place.to_dict(), 200
 
-"""Route pour obtenir une place spécifique par son ID"""
+    def delete(self, place_id):
+        """
+        Supprimer un lieu par ID.
+        """
+        place = storage.get(place_id)
+        if place is None:
+            return {"error": "Place not found"}, 404
 
-
-@app.route('/places/<place_id>', methods=['GET'])
-def get_place(place_id):
-    # Récupère la place de son ID
-    place = storage.get(Place, place_id)
-    if place is None:
-        # Gestion des erreurs
-        return jsonify({"error": "Place not found"}), 404
-    return jsonify(place.to_dict()), 200
-
-
-"""Route pour créer une nouvelle place"""
-
-
-@app.route('/places', methods=['POST'])
-def create_place():
-    if not request.json or 'name' not in request.json:
-        return jsonify({"error": "Name is required"}), 400
-
-    """Créer une nouvelle instance de place"""
-    new_place = Place(name=request.json['name'],
-                      description=request.json.get('description', ""))
-    """ajoute une nouvelle place au storage"""
-    storage.new(new_place)
-    """Sauvegarde la nouvelle place"""
-    storage.save()
-    return jsonify(new_place.to_dict()), 201
-
-
-"""Route pour mettre à jour une place"""
-
-
-@app.route('/places/<place_id>', methods=['PUT'])
-def update_place(place_id):
-    place = storage.get(Place, place_id)
-    if place is None:
-        return jsonify({"error": " Place not found"}), 404
-
-    if not request.json:
-        return jsonify({"error": "Request body must be JSON"}), 400
-
-    """Mise à jour des champs modifiés"""
-    place.name = request.json.get('name', place.name)
-    place.description = request.json.get('description', place.description)
-
-    storage.save()
-    return jsonify(place.to_dict()), 200
-
-
-"""Route pour supprimer une place"""
-
-
-@app.route('/places/<place_id>', methods=['DELETE'])
-def delete_place(place_id):
-    place = storage.get(Place, place_id)
-    if place is None:
-        return jsonify({"error": "Place not found"}), 404
-
-    storage.delete(place)                       # Supprime la place
-    storage.save()                              # Sauvegarde les changements
-    return jsonify({"message": "Place deleted"}), 200
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+        storage.delete(place)
+        storage.save()
+        return {"message": "Place deleted successfully"}, 200
