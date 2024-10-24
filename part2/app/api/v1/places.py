@@ -118,7 +118,7 @@ class PlaceDetail(Resource):
             return {"error": "Request body must be JSON"}, 400
 
         # Liste des champs qui peuvent être mis à jour
-        updatable_fields = ['title', 'price', 'owner',
+        updatable_fields = ['title', 'price', 'owner_id',  # Remplace 'owner' par 'owner_id'
                             'description', 'latitude', 'longitude']
 
         # Mettre à jour les champs du lieu avec les nouvelles valeurs fournies
