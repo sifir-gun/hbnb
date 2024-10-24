@@ -2,6 +2,7 @@ from app import create_app
 import sys
 import os
 
+
 # Ajoute le chemin du répertoire parent pour accéder au module 'app'
 # Cela permet d'importer le module 'app' même si ce fichier est exécuté depuis un autre répertoire.
 sys.path.append(os.path.abspath(
