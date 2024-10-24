@@ -33,7 +33,7 @@ class PlaceList(Resource):
         """
         Créer un nouveau lieu.
 
-        Reçoit des données JSON avec les champs 'title', 'price', et 'owner'.
+        Reçoit des données JSON avec les champs 'title', 'price', et 'owner_id'.
         Retourne le lieu créé avec le statut HTTP 201 ou une erreur 400 si une donnée est manquante.
         """
         # Vérifier si le corps de la requête est bien en JSON et contient les champs obligatoires
@@ -41,15 +41,17 @@ class PlaceList(Resource):
             return {"error": "Title is required"}, 400
         if 'price' not in request.json:
             return {"error": "Price is required"}, 400
-        if 'owner' not in request.json:
-            return {"error": "Owner is required"}, 400
+        if 'owner_id' not in request.json:
+            # Remplace 'owner' par 'owner_id'
+            return {"error": "Owner ID is required"}, 400
 
         try:
             # Créer un nouveau lieu avec les données fournies
             new_place = Place(
                 title=request.json['title'],
                 price=request.json['price'],
-                owner=request.json['owner'],
+                # Remplace 'owner' par 'owner_id'
+                owner_id=request.json['owner_id'],
                 description=request.json.get('description', ""),  # Optionnel
                 latitude=request.json.get('latitude', None),  # Optionnel
                 longitude=request.json.get('longitude', None)  # Optionnel

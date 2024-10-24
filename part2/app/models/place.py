@@ -10,7 +10,7 @@ class Place(BaseModel):
     reviews et des amenities associées à ce lieu.
     """
 
-    def __init__(self, title, price, owner, description='',
+    def __init__(self, title, price, owner_id, description='',
                  latitude=None, longitude=None):
         """
         Initialise un objet Place avec les attributs fournis.
@@ -32,7 +32,7 @@ class Place(BaseModel):
         self.longitude = self.validate_longitude(
             longitude)  # Valide et assigne la longitude
         # Valide et assigne le propriétaire
-        self.owner = self.validate_owner(owner)
+        self.owner_id = self.validate_owner(owner_id)
         self.reviews = []  # Liste pour stocker les reviews associées
         self.amenities = []  # Liste pour stocker les amenities associées
 
@@ -51,7 +51,7 @@ class Place(BaseModel):
             "latitude": self.latitude,
             "longitude": self.longitude,
             # Sérialisation du propriétaire (soit ID, soit instance de BaseModel)
-            "owner": self.owner.id if isinstance(self.owner, BaseModel) else self.owner,
+            "owner_id": self.owner_id,
             # Sérialisation des reviews
             "reviews": [review.to_dict() if hasattr(review, 'to_dict') else review for review in self.reviews],
             # Sérialisation des amenities
@@ -130,7 +130,7 @@ class Place(BaseModel):
                 "La longitude doit être comprise entre -180.0 et 180.0.")
         return longitude
 
-    def validate_owner(self, owner):
+    def validate_owner(self, owner_id):
         """
         Valide le propriétaire du lieu.
         
@@ -143,10 +143,10 @@ class Place(BaseModel):
         Raises:
             ValueError: Si le propriétaire n'est pas un ID valide ou une instance de BaseModel.
         """
-        if isinstance(owner, BaseModel):
-            return owner
-        elif isinstance(owner, (int, str)):  # Si le propriétaire est un ID
-            return owner
+        if isinstance(owner_id, BaseModel):
+            return owner_id
+        elif isinstance(owner_id, (int, str)):  # Si le propriétaire est un ID
+            return owner_id
         else:
             raise ValueError(
                 "Le propriétaire doit être un ID ou une instance de BaseModel.")
