@@ -1,151 +1,160 @@
 from flask import request
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
+from app.services.facade import HBnBFacade
 from app.models.place import Place
 from app.models import storage
+
 
 # Création de l'API Namespace pour les opérations liées aux places
 api = Namespace('places', description="Operations related to places")
 
+place_model = api.model('Place', {
+    'id': fields.String(required=False, description='Title of the place'),
+    'title': fields.String(required=True, description='Title of the place', example="Macao"),
+    'description': fields.String(description='Description of the place', example="very good"),
+    'price': fields.Float(required=True, description='Price per night', example="120.23"),
+    'latitude': fields.Float(
+        required=True, description='Latitude of the place', example="33.33"),
+    'longitude': fields.Float(
+        required=True, description='Longitude of the place', example="44.44"),
+    'owner_id': fields.String(required=True, description='ID of the owner'),
+    'amenities': fields.List(
+        fields.String, required=True, description="List of amenities ID's", example=["BBQ"])
+})
+
+facade = HBnBFacade()
+
+
+def validate_place_data(data, is_update=False):
+    """
+    Valide les données reçues pour la création ou mise à jour d'un lieu.
+    """
+    required_fields = ['title', 'price', 'owner_id', 'amenities']
+
+    if not is_update:
+        # Pour la création, on vérifie que tous les champs obligatoires sont
+        # présents
+        for field in required_fields:
+            if field not in data:
+                return {"error": f"{field.capitalize()} is required"}, 400
+
+    if 'price' in data and not isinstance(data['price'], (int, float)):
+        return {"error": "Price must be a number"}, 400
+
+    if 'amenities' in data and not isinstance(data['amenities'], list):
+        return {"error": "Amenities must be a list"}, 400
+
+    return None  # Pas d'erreur
+
 
 @api.route('/')
 class PlaceList(Resource):
-    """
-    Ressource pour gérer la collection de lieux (places).
-    Cette ressource permet de récupérer tous les lieux et d'en créer de nouveaux.
-    """
-
+    @api.doc('create_place')
+    @api.response(201, 'Place successfully created')
+    @api.response(400, 'Invalid input data')
     def get(self):
-        """
-        Récupérer tous les lieux depuis le stockage.
+        """ Récupérer tous les lieux depuis le stockage. """
+        try:
+            # Récupération de tous les lieux depuis le stockage
+            places = storage.get_all(Place)
+            # Vérification s'il y a des lieux
+            if not places:
+                return {"message": "Aucun lieu trouvé"}, 404
 
-        Retourne une liste de tous les lieux avec un statut HTTP 200.
-        """
-        # Récupérer tous les objets 'Place' depuis le stockage
-        places = storage.get_all(Place)
+            # Sérialisation des lieux sous forme de dictionnaire
+            places_list = [place.to_dict() for place in places]
+            return places_list, 200
+        except Exception as e:
+            return {"error": f"Erreur serveur : {str(e)}"}, 500
 
-        # Convertir chaque objet 'Place' en dictionnaire pour la réponse JSON
-        places_list = [place.to_dict() for place in places]
-
-        # Retourner la liste des lieux et le code HTTP 200
-        return places_list, 200
-
+    @api.doc('create_place')
+    @api.expect(place_model)
+    @api.marshal_with(place_model, code=201)
+    @api.response(201, 'Place successfully created')
+    @api.response(400, 'Invalid input data')
     def post(self):
-        """
-        Créer un nouveau lieu.
+        """ Créer un nouveau lieu. """
+        place_data = api.payload
 
-        Reçoit des données JSON avec les champs 'title', 'price', et 'owner_id'.
-        Retourne le lieu créé avec le statut HTTP 201 ou une erreur 400 si une donnée est manquante.
-        """
-        # Vérifier si le corps de la requête est bien en JSON et contient les champs obligatoires
-        if not request.json or 'title' not in request.json:
-            return {"error": "Title is required"}, 400
-        if 'price' not in request.json:
-            return {"error": "Price is required"}, 400
-        if 'owner_id' not in request.json:
-            # Remplace 'owner' par 'owner_id'
-            return {"error": "Owner ID is required"}, 400
+        # Appeler la fonction de validation pour vérifier les champs
+        validation_error = validate_place_data(place_data)
+        if validation_error:
+            return validation_error
 
         try:
-            # Créer un nouveau lieu avec les données fournies
-            new_place = Place(
-                title=request.json['title'],
-                price=request.json['price'],
-                # Remplace 'owner' par 'owner_id'
-                owner_id=request.json['owner_id'],
-                description=request.json.get('description', ""),  # Optionnel
-                latitude=request.json.get('latitude', None),  # Optionnel
-                longitude=request.json.get('longitude', None)  # Optionnel
-            )
-            # Ajouter le lieu au stockage
-            storage.add(new_place)
-            storage.save()
+            # Création du lieu via la façade
+            new_place = facade.create_place(place_data)
+        except ValidationError as error:
+            # Gestion des erreurs de validation
+            return {'error': str(error)}, 400
+        except Exception as e:
+            # Gestion des erreurs générales
+            return {'error': f"Erreur serveur : {str(e)}"}, 500
 
-            # Retourner les détails du lieu créé avec le code HTTP 201
-            return new_place.to_dict(), 201
-        except ValueError as e:
-            # Gérer les erreurs de validation
-            return {"error": str(e)}, 400
+        # Retourne les détails du lieu créé
+        return {
+            'id': new_place.id,
+            'title': new_place.title,
+            'description': new_place.description,
+            'price': new_place.price,
+            'latitude': new_place.latitude,
+            'longitude': new_place.longitude,
+            'owner_id': new_place.owner_id,
+            'amenities': [],
+        }, 201
 
+    @api.response(200, 'All places deleted successfully')
     def delete(self):
-        """
-        Supprimer tous les lieux.
-
-        Retourne un message de confirmation avec le statut HTTP 200 après avoir supprimé tous les lieux.
-        """
-        # Supprimer tous les objets 'Place' du stockage
+        """ Supprimer tous les lieux. """
         storage.clear_all(Place)
         storage.save()
-
-        # Retourner un message de confirmation et le code HTTP 200
         return {"message": "All places deleted successfully"}, 200
 
 
 @api.route('/<string:place_id>')
+@api.param('place_id', 'The place identifier')
 class PlaceDetail(Resource):
-    """
-    Ressource pour gérer un lieu spécifique par son ID.
-    Cette ressource permet de récupérer, mettre à jour ou supprimer un lieu spécifique.
-    """
-
+    @api.doc('get_place')
+    @api.expect(place_model, validate=True)
+    @api.marshal_with(place_model)
+    @api.response(200, 'Place details retrieved successfully')
+    @api.response(404, 'Place not found')
     def get(self, place_id):
-        """
-        Récupérer les détails d'un lieu par son ID.
-
-        Retourne les détails du lieu avec le statut HTTP 200 ou une erreur 404 si le lieu n'est pas trouvé.
-        """
-        # Récupérer le lieu spécifique à partir de son ID
+        """ Récupérer les détails d'un lieu par son ID. """
         place = storage.get(place_id)
-        if place is None:
+        if not place:
             return {"error": "Place not found"}, 404
-
-        # Retourner les détails du lieu et le code HTTP 200
         return place.to_dict(), 200
 
+    @api.doc('update_place')
+    @api.expect(place_model, validate=True)
     def put(self, place_id):
-        """
-        Mettre à jour les informations d'un lieu spécifique par son ID.
-
-        Reçoit des données JSON avec les champs à mettre à jour.
-        Retourne les détails du lieu mis à jour avec le statut HTTP 200 ou une erreur 404 si le lieu n'est pas trouvé.
-        """
-        # Récupérer le lieu spécifique à partir de son ID
+        """ Mettre à jour les informations d'un lieu. """
         place = storage.get(place_id)
-        if place is None:
+        if not place:
             return {"error": "Place not found"}, 404
 
-        # Vérifier que le corps de la requête est bien en JSON
-        if not request.json:
-            return {"error": "Request body must be JSON"}, 400
+        data = request.json
+        validation_error = validate_place_data(data, is_update=True)
+        if validation_error:
+            return validation_error
 
-        # Liste des champs qui peuvent être mis à jour
-        updatable_fields = ['title', 'price', 'owner_id',  # Remplace 'owner' par 'owner_id'
-                            'description', 'latitude', 'longitude']
-
-        # Mettre à jour les champs du lieu avec les nouvelles valeurs fournies
+        updatable_fields = [
+            'title', 'price', 'owner_id', 'description', 'latitude', 'longitude'
+        ]
         for field in updatable_fields:
-            if field in request.json:
-                setattr(place, field, request.json[field])
+            if field in data:
+                setattr(place, field, data[field])
 
-        # Sauvegarder les modifications dans le stockage
         storage.save()
-
-        # Retourner les détails du lieu mis à jour avec le code HTTP 200
         return place.to_dict(), 200
 
     def delete(self, place_id):
-        """
-        Supprimer un lieu par son ID.
-
-        Retourne un message de confirmation avec un statut HTTP 200 ou une erreur 404 si le lieu n'est pas trouvé.
-        """
-        # Récupérer le lieu spécifique à partir de son ID
+        """ Supprimer un lieu par son ID. """
         place = storage.get(place_id)
-        if place is None:
+        if not place:
             return {"error": "Place not found"}, 404
 
-        # Supprimer le lieu du stockage
         storage.delete(place)
         storage.save()
-
-        # Retourner un message de confirmation avec le code HTTP 200
         return {"message": "Place deleted successfully"}, 200

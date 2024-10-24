@@ -1,10 +1,10 @@
-from flask import request, jsonify
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import HBnBFacade
 
 """
-Ce module gère les endpoints CRUD (Create, Read, Update, Delete) pour les utilisateurs via l'API.
-Il permet la création, la modification, la récupération et la suppression des utilisateurs.
+Ce module gère les endpoints CRUD (Create, Read, Update, Delete) pour les
+utilisateurs via l'API. Il permet la création, la modification, la
+récupération et la suppression des utilisateurs.
 
 Les routes gérées incluent :
 - POST pour créer un nouvel utilisateur
@@ -13,7 +13,7 @@ Les routes gérées incluent :
 - DELETE pour supprimer un utilisateur via son ID
 """
 
-# Création de l'espace de noms (namespace) pour les opérations sur les utilisateurs
+# Création de l'espace de noms pour les opérations sur les utilisateurs
 api = Namespace('users', description='User operations')
 
 # Modèle utilisateur pour la validation des entrées et la documentation
@@ -33,7 +33,8 @@ facade = HBnBFacade()
 @api.route('/')
 class UserList(Resource):
     """
-    Classe gérant les opérations sur la collection d'utilisateurs (liste d'utilisateurs).
+    Classe gérant les opérations sur la collection d'utilisateurs
+    (liste d'utilisateurs).
     """
 
     @api.expect(user_model, validate=True)
@@ -43,27 +44,29 @@ class UserList(Resource):
     def post(self):
         """
         Crée un nouvel utilisateur.
-        
+
         Cette méthode vérifie d'abord si l'email fourni est déjà enregistré.
         Si c'est le cas, elle retourne une erreur 400. Si l'email est unique,
         l'utilisateur est créé et ses détails sont renvoyés.
 
         Retourne :
             - 201 : Si l'utilisateur a été créé avec succès
-            - 400 : Si l'email est déjà enregistré ou si les données sont invalides
+            - 400 : Si l'email est déjà enregistré ou
+            si les données sont invalides
         """
         user_data = api.payload
 
-        # Vérification de l'unicité de l'email (à remplacer par une validation réelle)
+        # Vérification de l'unicité de l'email
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
             return {'error': 'Email already registered'}, 400
 
         # Création d'un nouvel utilisateur via le service facade
-        new_user, error = facade.create_user(user_data)
-        if error:
+        try:
+            new_user = facade.create_user(user_data)
+        except Exception as error:
             # Gestion des erreurs lors de la création de l'utilisateur
-            return {'error': error}, 400
+            return {'error': str(error)}, 400
 
         # Retourne les détails de l'utilisateur créé
         return {
@@ -108,10 +111,10 @@ class UserResource(Resource):
     def put(self, user_id):
         """
         Met à jour les détails d'un utilisateur en fonction de son ID.
-        
+
         Cette méthode vérifie d'abord si l'utilisateur existe.
         Si c'est le cas, elle met à jour les informations de l'utilisateur.
-        
+
         Retourne :
             - 200 : Si l'utilisateur a été mis à jour avec succès
             - 404 : Si l'utilisateur n'existe pas
@@ -122,10 +125,10 @@ class UserResource(Resource):
 
         # Récupération des nouvelles données de l'utilisateur
         user_data = api.payload
-        updated_user, error = facade.update_user(user_id, user_data)
-
-        if error:
-            return {'error': error}, 400
+        try:
+            updated_user = facade.update_user(user_id, user_data)
+        except Exception as error:
+            return {'error': str(error)}, 400
 
         # Retourne les détails de l'utilisateur mis à jour
         return {
@@ -152,3 +155,4 @@ class UserResource(Resource):
         # Suppression de l'utilisateur
         facade.delete_user(user_id)
         return {'message': 'User deleted successfully'}, 200
+    
