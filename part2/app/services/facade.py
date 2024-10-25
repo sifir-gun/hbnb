@@ -12,6 +12,12 @@ class ValidationError(Exception):
     pass
 
 
+user_repo = InMemoryRepository()  # Instance partagée pour les utilisateurs
+place_repo = InMemoryRepository()  # Instance partagée pour les lieux
+review_repo = InMemoryRepository()  # Instance partagée pour les avis
+amenity_repo = InMemoryRepository()  # Instance partagée pour les commodités
+
+
 class HBnBFacade:
     """
     La façade HBnB permet d'interagir avec les dépôts d'objets (utilisateurs,
@@ -20,10 +26,10 @@ class HBnBFacade:
     """
 
     def __init__(self):
-        self.user_repo = InMemoryRepository()
-        self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
-        self.amenity_repo = InMemoryRepository()
+        self.user_repo = user_repo
+        self.place_repo = place_repo
+        self.review_repo = review_repo
+        self.amenity_repo = amenity_repo
 
     # ---------------------------- Gestion des Utilisateurs ----------------------------
 
@@ -70,22 +76,28 @@ class HBnBFacade:
     def get_all_users(self):
         return self.user_repo.get_all()
 
-    # ---------------------------- Gestion des Reviews ----------------------------
+    # ---------------------------- Gestion des Reviews ------------------------
 
     def create_review(self, review_data):
-        user = self.user_repo.get(review_data['user_id'])
-        if not user:
-            raise ValidationError('User not found')
+        user_id = review_data.get('user_id')
+        place_id = review_data.get('place_id')
+        print(f"Debug: User ID = {user_id}, Place ID = {place_id}")
 
-        place = self.place_repo.get(review_data['place_id'])
+        user = self.user_repo.get(user_id)
+        if not user:
+            print(f"Error: User {user_id} not found.")
+            raise ValidationError(f"User with ID {user_id} not found")
+
+        place = self.place_repo.get(place_id)
         if not place:
-            raise ValidationError('Place not found')
+            print(f"Error: Place {place_id} not found.")
+            raise ValidationError(f"Place with ID {place_id} not found")
 
         review = Review(
             text=review_data['text'],
             rating=review_data['rating'],
-            place=place,
-            user=user
+            place_id=place_id,
+            user_id=user_id
         )
         self.review_repo.add(review)
         return review
@@ -170,8 +182,8 @@ class HBnBFacade:
         )
 
         # Ajoute le lieu au stockage
-        storage.add(new_place)
-        storage.save()
+        self.place_repo.add(new_place)
+        print(f"Debug: Place with ID {new_place.id} added to place_repo.")
         return new_place
 
     def validate_place_data(self, place_data):

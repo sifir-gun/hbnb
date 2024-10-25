@@ -17,11 +17,13 @@ class Review(BaseModel):
     Méthodes :
         validate_text(text)   : Valide que le texte n'est pas vide.
         validate_rating(rating) : Valide que la note est comprise entre 1 et 5.
-        validate_place(place) : Valide que le lieu est une instance valide de Place.
-        validate_user(user)   : Valide que l'utilisateur est une instance valide de User.
+        validate_place(place) : Valide que le lieu est une instance valide de 
+        Place.
+        validate_user(user)   : Valide que l'utilisateur est une instance
+        valide de User.
     """
 
-    def __init__(self, text, rating, place, user):
+    def __init__(self, text, rating, place_id, user_id):
         """
         Initialise un nouvel avis avec les attributs spécifiés.
 
@@ -32,17 +34,15 @@ class Review(BaseModel):
             user (User): L'utilisateur ayant rédigé l'avis.
         
         Raises:
-            ValueError: Si l'un des champs 'text', 'rating', 'place' ou 'user' est invalide.
+            ValueError: Si l'un des champs 'text', 'rating', 'place' ou 'user'
+            est invalide.
         """
-        super().__init__()  # Appel au constructeur de BaseModel pour initialiser l'ID et autres
-        # Validation et assignation du texte de l'avis
+        # Appel au constructeur de BaseModel pour initialiser l'ID et autres
+        super().__init__()
         self.text = self.validate_text(text)
-        # Validation et assignation de la note
         self.rating = self.validate_rating(rating)
-        # Validation et assignation du lieu
-        self.place = self.validate_place(place)
-        # Validation et assignation de l'utilisateur
-        self.user = self.validate_user(user)
+        self.place_id = place_id
+        self.user_id = user_id
 
     def validate_text(self, text):
         """
