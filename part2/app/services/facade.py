@@ -32,19 +32,23 @@ class HBnBFacade:
         if existing_user:
             raise ValidationError("Email already in use")
 
+        # Création de l'utilisateur
         user = User(
             first_name=user_data["first_name"],
             last_name=user_data["last_name"],
             email=user_data["email"],
         )
-        self.user_repo.add(user)
+        storage.add(user)  # Utilisation de storage pour ajouter l'utilisateur
+        storage.save()
         return user
 
     def update_user(self, user_id, user_data):
-        user = self.user_repo.get(user_id)
+        # Récupération de l'utilisateur
+        user = storage.get(user_id)
         if not user:
             raise ValidationError("User not found")
 
+        # Mise à jour des champs de l'utilisateur
         if 'first_name' in user_data:
             user.first_name = user_data['first_name']
         if 'last_name' in user_data:
@@ -52,23 +56,30 @@ class HBnBFacade:
         if 'email' in user_data:
             user.email = user_data['email']
 
-        self.user_repo.update(user_id, user.__dict__)
+        storage.save()  # Sauvegarde des changements
         return user
 
     def delete_user(self, user_id):
-        user = self.user_repo.get(user_id)
+        # Récupération de l'utilisateur
+        user = storage.get(user_id)
         if not user:
             raise ValidationError("User not found")
-        self.user_repo.delete(user_id)
+        storage.delete(user)  # Suppression de l'utilisateur
+        storage.save()
 
     def get_user(self, user_id):
-        return self.user_repo.get(user_id)
+        return storage.get(user_id)  # Récupération de l'utilisateur depuis storage
 
     def get_user_by_email(self, email):
-        return self.user_repo.get_by_attribute('email', email)
+        # Rechercher l'utilisateur par email dans tous les objets
+        users = storage.get_all(User)
+        for user in users:
+            if user.email == email:
+                return user
+        return None
 
     def get_all_users(self):
-        return self.user_repo.get_all()
+        return storage.get_all(User)  # Récupération de tous les utilisateur
 
     # ---------------------------- Gestion des Reviews ----------------------------
 
@@ -194,7 +205,7 @@ class HBnBFacade:
                 'Description must be between 1 and 500 characters')
 
     def get_place(self, place_id):
-        return self.place_repo.get(place_id)
+        return self.place_repo(place_id)
 
     def get_all_places(self):
         return self.place_repo.get_all()
@@ -202,17 +213,19 @@ class HBnBFacade:
     def update_place(self, place_id, place_data):
         place = self.place_repo.get(place_id)
         if not place:
-            raise ValidationError("Place not found")
+            return {"error": "Place not found"}, 404
 
-        self._validate_place_data(place_data)
         for key, value in place_data.items():
             setattr(place, key, value)
 
-        self.place_repo.update(place_id, place.__dict__)
+        storage.save()
         return place
 
     def delete_place(self, place_id):
-        place = self.place_repo.get(place_id)
+        place = storage.get(place_id)
         if not place:
-            raise ValidationError("Place not found")
-        self.place_repo.delete(place_id)
+            return {"error": "Place not found"}, 404
+        storage.delete(place)
+        storage.save()
+        return {"message": "Place deleted successfully"}, 200
+    
