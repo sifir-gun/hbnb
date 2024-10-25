@@ -84,14 +84,16 @@ class HBnBFacade:
     # ---------------------------- Gestion des Reviews ----------------------------
 
     def create_review(self, review_data):
+        """Creates a new review after validating user and place."""
         user = self.user_repo.get(review_data['user_id'])
         if not user:
-            raise ValidationError('User not found')
+            return None, 'User not found'  # Gestion de l'erreur pour utilisateur non trouvé
 
         place = self.place_repo.get(review_data['place_id'])
         if not place:
-            raise ValidationError('Place not found')
+            return None, 'Place not found'  # Gestion de l'erreur pour lieu non trouvé
 
+        # Crée un nouvel avis si l'utilisateur et le lieu existent
         review = Review(
             text=review_data['text'],
             rating=review_data['rating'],
@@ -99,21 +101,25 @@ class HBnBFacade:
             user=user
         )
         self.review_repo.add(review)
-        return review
+        return review, None  # Aucun message d'erreur car la création est réussie
 
     def get_review(self, review_id):
+        """Retrieves a review by ID."""
         return self.review_repo.get(review_id)
 
     def get_all_reviews(self):
+        """Retrieves all reviews."""
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
+        """Retrieves all reviews associated with a specific place."""
         return self.review_repo.get_all_by_attribute('place_id', place_id)
 
     def update_review(self, review_id, review_data):
+        """Updates a review by ID."""
         review = self.review_repo.get(review_id)
         if not review:
-            raise ValidationError("Review not found")
+            return None, "Review not found"
 
         if 'text' in review_data:
             review.text = review_data['text']
@@ -121,29 +127,35 @@ class HBnBFacade:
             review.rating = review_data['rating']
 
         self.review_repo.update(review_id, review.__dict__)
-        return review
+        return review, None
 
     def delete_review(self, review_id):
+        """Deletes a review by ID."""
         review = self.review_repo.get(review_id)
         if not review:
-            raise ValidationError("Review not found")
+            return False, "Review not found"
         self.review_repo.delete(review_id)
+        return True, None
 
     # ---------------------------- Gestion des Amenities ----------------------------
 
     def create_amenity(self, amenity_data):
         name = amenity_data.get('name')
         if not name:
-            raise ValidationError("Name is required")
+            return None, "Name is required"
 
+        # Create new Amenity object and save to storage
         new_amenity = Amenity(name=name)
         self.amenity_repo.add(new_amenity)
-        return new_amenity
+        return new_amenity, None
 
     def get_amenity(self, amenity_id):
+        """
+        Retrieves an amenity by ID from the repository.
+        """
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
-            raise ValidationError("Amenity not found")
+            return None, "amenity not found" # Get the amenity by ID
         return amenity
 
     def get_all_amenities(self):
@@ -152,16 +164,17 @@ class HBnBFacade:
     def update_amenity(self, amenity_id, amenity_data):
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
-            raise ValidationError("Amenity not found")
+            return None, "Amenity not found"
 
+        # Update the name if provided
         amenity.name = amenity_data.get('name', amenity.name)
-        self.amenity_repo.update(amenity_id, amenity.__dict__)
-        return amenity
+        self.amenity_repo.update(amenity_id, amenity.__dict__)  # Update the amenity data
+        return amenity, None
 
     def delete_amenity(self, amenity_id):
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
-            raise ValidationError("Amenity not found")
+            return False, "Amenity not found"
         self.amenity_repo.delete(amenity_id)
         return True
 
