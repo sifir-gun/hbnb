@@ -3,6 +3,8 @@ Fournit des routes pour créer, modifier, récupérer et
 supprimer des amenities via l'API.
 """
 
+
+# app/api/v1/amenities.py
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import HBnBFacade
 
