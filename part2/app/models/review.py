@@ -5,19 +5,21 @@ class Review(BaseModel):
     """
     Classe Review représentant un avis laissé par un utilisateur pour un lieu.
 
-    Hérite de BaseModel pour bénéficier des fonctionnalités de base comme l'ID et les méthodes 
-    de gestion des objets dans le système de stockage.
+    Hérite de BaseModel pour bénéficier des fonctionnalités de base comme l'ID
+    et les méthodes de gestion des objets dans le système de stockage.
 
     Attributs :
         text (str)   : Le texte de l'avis, requis.
         rating (int) : La note de l'avis (entre 1 et 5).
-        place (obj)  : Le lieu auquel l'avis est associé, doit être une instance de Place.
-        user (obj)   : L'utilisateur ayant rédigé l'avis, doit être une instance de User.
+        place (obj)  : Le lieu auquel l'avis est associé, doit être une
+        instance de Place.
+        user (obj)   : L'utilisateur ayant rédigé l'avis, doit être une
+        instance de User.
 
     Méthodes :
         validate_text(text)   : Valide que le texte n'est pas vide.
         validate_rating(rating) : Valide que la note est comprise entre 1 et 5.
-        validate_place(place) : Valide que le lieu est une instance valide de 
+        validate_place(place) : Valide que le lieu est une instance valide de
         Place.
         validate_user(user)   : Valide que l'utilisateur est une instance
         valide de User.
@@ -32,7 +34,7 @@ class Review(BaseModel):
             rating (int): La note de l'avis (1-5).
             place (Place): Le lieu auquel l'avis est associé.
             user (User): L'utilisateur ayant rédigé l'avis.
-        
+
         Raises:
             ValueError: Si l'un des champs 'text', 'rating', 'place' ou 'user'
             est invalide.
