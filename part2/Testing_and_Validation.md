@@ -202,3 +202,8 @@ Example with the Amenities class:
         215 B
         123
         {    "message": "Amenity updated sucessfully"}
+
+        127.0.0.1 - - [27/Oct/2024 13:08:00] "POST /api/v1/amenities/ HTTP/1.1" 201 -
+        127.0.0.1 - - [27/Oct/2024 13:08:16] "GET /api/v1/amenities/b2444ecd-bf3a-4785-9b2d-ac8f71e87c18 HTTP/1.1" 200 -
+        127.0.0.1 - - [27/Oct/2024 13:08:24] "PUT /api/v1/amenities/b2444ecd-bf3a-4785-9b2d-ac8f71e87c18 HTTP/1.1" 200 -
+        127.0.0.1 - - [27/Oct/2024 13:08:30] "DELETE /api/v1/amenities/b2444ecd-bf3a-4785-9b2d-ac8f71e87c18 HTTP/1.1" 200 -
