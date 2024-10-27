@@ -201,3 +201,8 @@ Example with the Amenities class:
         215 B
         123
         {    "message": "Amenity updated sucessfully"}
+
+
+- Ubuntu 22.04 LTS (of compatible version)
+
+- **Softwares**:
