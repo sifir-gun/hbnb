@@ -32,9 +32,7 @@ python3 run.py
         * Debugger PIN: 823-870-797
 
 Example with the Users class:
-
-**POST**
-
+**POST**  
 http://127.0.0.1:5000/api/v1/users/
         
         {  
