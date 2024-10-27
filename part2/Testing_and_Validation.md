@@ -33,9 +33,9 @@ python3 run.py
 
 Example with the Users class:
 
-**POST**
+## POST
 
-http://127.0.0.1:5000/api/v1/users/
+        http://127.0.0.1:5000/api/v1/users/
         
         {  
             "first_name": "John",  
@@ -60,7 +60,7 @@ http://127.0.0.1:5000/api/v1/users/
             ····"email":·"john.doe@example.com"  
         }
 
-        **GET**
+## GET
 
         http://127.0.0.1:5000/api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b  
         
@@ -88,7 +88,7 @@ http://127.0.0.1:5000/api/v1/users/
         }
 
 
-        ### PUT
+## PUT
 
         http://127.0.0.1:5000/api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b
 
@@ -115,7 +115,7 @@ http://127.0.0.1:5000/api/v1/users/
         }
 
 
-        ### DELETE
+## DELETE
 
         http://127.0.0.1:5000/api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b
         
@@ -146,7 +146,7 @@ http://127.0.0.1:5000/api/v1/users/
 
 Example with the Amenities class:  
 
-        ### POST
+## POST
         http://127.0.0.1:5000/api/v1/amenities/
         
         {    "name": "wifi"}
@@ -160,7 +160,7 @@ Example with the Amenities class:
         1234
         {····"id":·"279c8831-a7c6-4c93-8ed1-d7ad56cfa29a",····"name":·"wifi"}
 
-        ### GET
+## GET
         http://127.0.0.1:5000/api/v1/amenities/279c8831-a7c6-4c93-8ed1-d7ad56cfa29a
         
         {    "name": "wifi"}
@@ -174,7 +174,7 @@ Example with the Amenities class:
         1234
         {    "id": "279c8831-a7c6-4c93-8ed1-d7ad56cfa29a",    "name": "wifi"}
 
-        ### PUT
+## PUT
         http://127.0.0.1:5000/api/v1/amenities/279c8831-a7c6-4c93-8ed1-d7ad56cfa29a
         
         {    "name": "wifi"}
@@ -188,7 +188,7 @@ Example with the Amenities class:
         123
         {    "message": "Amenity updated sucessfully"}
 
-        ### DELETE
+## DELETE
         http://127.0.0.1:5000/api/v1/amenities/279c8831-a7c6-4c93-8ed1-d7ad56cfa29a
         
         {    "name": "wifi"}
@@ -201,8 +201,3 @@ Example with the Amenities class:
         215 B
         123
         {    "message": "Amenity updated sucessfully"}
-
-
-- Ubuntu 22.04 LTS (of compatible version)
-
-- **Softwares**:
