@@ -54,8 +54,10 @@ def test_post_place(client):
         'longitude': -74.0060,
         'amenities': ["BBQ"]
     }
-    response = client.post('/api/v1/places/', json=new_place_data,
-                           headers={"Content-Type": "application/json"})
+    response = client.post(
+        '/api/v1/places/', json=new_place_data, headers={"Content-Type": "application/json"}
+    )
+
     assert response.status_code == 201
     assert 'Villa' in response.get_data(as_text=True)
 
