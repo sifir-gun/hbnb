@@ -33,7 +33,7 @@ python3 run.py
 
 Example with the Users class:  
 
-        ### POST
+**POST**
 
         http://127.0.0.1:5000/api/v1/users/
         
@@ -60,7 +60,7 @@ Example with the Users class:
             ····"email":·"john.doe@example.com"  
         }
 
-        ### GET
+        **GET**
 
         http://127.0.0.1:5000/api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b  
         
@@ -150,7 +150,7 @@ Example with the Amenities class:
         http://127.0.0.1:5000/api/v1/amenities/
         
         {    "name": "wifi"}
-        
+
         {
             "name": "wifi"
         }
