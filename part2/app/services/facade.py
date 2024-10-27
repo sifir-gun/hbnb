@@ -68,7 +68,8 @@ class HBnBFacade:
         storage.save()
 
     def get_user(self, user_id):
-        return storage.get(user_id)  # Récupération de l'utilisateur depuis storage
+        # Récupération de l'utilisateur depuis storage
+        return storage.get(user_id)
 
     def get_user_by_email(self, email):
         # Rechercher l'utilisateur par email dans tous les objets
@@ -84,58 +85,63 @@ class HBnBFacade:
     # ---------------------------- Gestion des Reviews ----------------------------
 
     def create_review(self, review_data):
-        """Creates a new review after validating user and place."""
-        user = self.user_repo.get(review_data['user_id'])
+        user_id = review_data.get('user_id')
+        place_id = review_data.get('place_id')
+        print(f"Debug: User ID = {user_id}, Place ID = {place_id}")
+
+        user = storage.get(user_id)
         if not user:
-            return None, 'User not found'  # Gestion de l'erreur pour utilisateur non trouvé
+            print(f"Error: User {user_id} not found.")
+            raise ValidationError(f"User with ID {user_id} not found")
 
-        place = self.place_repo.get(review_data['place_id'])
+        place = storage.get(place_id)
         if not place:
-            return None, 'Place not found'  # Gestion de l'erreur pour lieu non trouvé
+            print(f"Error: Place {place_id} not found.")
+            raise ValidationError(f"Place with ID {place_id} not found")
 
-        # Crée un nouvel avis si l'utilisateur et le lieu existent
         review = Review(
             text=review_data['text'],
             rating=review_data['rating'],
-            place=place,
-            user=user
+            user_id=user_id,
+            place_id=place_id
         )
-        self.review_repo.add(review)
-        return review, None  # Aucun message d'erreur car la création est réussie
+        storage.add(review)
+        storage.save()
+        print(f"Review created with ID: {review.id}")
+        return review
 
     def get_review(self, review_id):
-        """Retrieves a review by ID."""
-        return self.review_repo.get(review_id)
+        return storage.get(review_id)
 
     def get_all_reviews(self):
-        """Retrieves all reviews."""
-        return self.review_repo.get_all()
-
-    def get_reviews_by_place(self, place_id):
-        """Retrieves all reviews associated with a specific place."""
-        return self.review_repo.get_all_by_attribute('place_id', place_id)
+        return storage.get_all(Review)
 
     def update_review(self, review_id, review_data):
-        """Updates a review by ID."""
-        review = self.review_repo.get(review_id)
+        review = storage.get(review_id)
         if not review:
-            return None, "Review not found"
+            raise ValidationError("Review not found")
 
         if 'text' in review_data:
             review.text = review_data['text']
         if 'rating' in review_data:
             review.rating = review_data['rating']
 
-        self.review_repo.update(review_id, review.__dict__)
-        return review, None
+        storage.save()
+        return review
 
     def delete_review(self, review_id):
-        """Deletes a review by ID."""
-        review = self.review_repo.get(review_id)
+        print(f"Attempting to delete review with ID: {review_id}")
+        review = storage.get(review_id)
         if not review:
-            return False, "Review not found"
-        self.review_repo.delete(review_id)
-        return True, None
+            print(f"Error: Review with ID {review_id} not found.")
+            return {
+                "message": "Review not found. It might have already been deleted."
+            }, 200
+
+        storage.delete(review)
+        storage.save()
+        print(f"Review with ID {review_id} successfully deleted.")
+        return {"message": "Review deleted successfully"}, 200
 
     # ---------------------------- Gestion des Amenities ----------------------------
 
@@ -155,7 +161,7 @@ class HBnBFacade:
         """
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
-            return None, "amenity not found" # Get the amenity by ID
+            return None, "amenity not found"  # Get the amenity by ID
         return amenity
 
     def get_all_amenities(self):
@@ -168,7 +174,8 @@ class HBnBFacade:
 
         # Update the name if provided
         amenity.name = amenity_data.get('name', amenity.name)
-        self.amenity_repo.update(amenity_id, amenity.__dict__)  # Update the amenity data
+        # Update the amenity data
+        self.amenity_repo.update(amenity_id, amenity.__dict__)
         return amenity, None
 
     def delete_amenity(self, amenity_id):
@@ -241,4 +248,3 @@ class HBnBFacade:
         storage.delete(place)
         storage.save()
         return {"message": "Place deleted successfully"}, 200
-    
