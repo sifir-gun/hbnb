@@ -1,6 +1,6 @@
-#Testing and Validation  
+# Testing and Validation  
 
-##Codes de retour HTTP  
+## HTTP return codes 
 200 OK: The request has been processed successfully (used for successful GET and PUT requests).  
 201 Created : A new element has been successfully created (used for successful POST requests).  
 400 Bad Request : The request sent is incorrect (for example, a mandatory field is missing).  
@@ -29,4 +29,114 @@ To run a test with postman, we must first launch the local server with the pytho
         * Debugger is active!
         * Debugger PIN: 823-870-797
 
+Example with the Users class:  
+
+        **POST**  
+
+        http://127.0.0.1:5000/api/v1/users/
         
+        {  
+            "first_name": "John",  
+            "last_name": "Doe",  
+            "email": "john.doe@example.com"
+        } 
+        
+        {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com"
+        }
+
+        201CREATED
+        313 ms
+        312 B
+        
+        {
+            ····"id":·"cfaa0359-f8f2-45e6-9333-b790ade56d6b",  
+            ····"first_name":·"John",  
+            ····"last_name":·"Doe",  
+            ····"email":·"john.doe@example.com"  
+        }
+
+        **GET**
+
+        http://127.0.0.1:5000/api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b  
+        
+        {  
+            "first_name": "John",  
+            "last_name": "Doe",  
+            "email": "john.doe@example.com"
+        } 
+
+        {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com"
+        }
+
+        200OK
+        156 ms
+        307 B
+        
+        {    
+            "id": "cfaa0359-f8f2-45e6-9333-b790ade56d6b",    
+            "first_name": "John",    
+            "last_name": "Doe",    
+            "email": "john.doe@example.com"  
+        }
+
+
+        **PUT**
+
+        http://127.0.0.1:5000/api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b
+
+        {  
+            "first_name": "John",  
+            "last_name": "Doe",  
+            "email": "john.doe@example.com"
+        } 
+
+        {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com"
+        }
+
+        200OK
+        53 ms
+        307 B
+        
+        {   "id": "cfaa0359-f8f2-45e6-9333-b790ade56d6b",    
+            "first_name": "John",    
+            "last_name": "Doe",    
+            "email": "john.doe@example.com"  
+        }
+
+
+        **DELETE**
+
+        http://127.0.0.1:5000/api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b
+        
+        {  
+            "first_name": "John",  
+            "last_name": "Doe",  
+            "email": "john.doe@example.com"
+        }
+
+        {
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com"
+        }
+
+        200OK
+        9 ms
+        213 B
+        
+        {    "message": "User deleted successfully"}
+
+
+        127.0.0.1 - - [26/Oct/2024 16:14:40] "POST /api/v1/users/ HTTP/1.1" 201 -
+        127.0.0.1 - - [26/Oct/2024 16:17:57] "GET /api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b HTTP/1.1" 200 -
+        127.0.0.1 - - [26/Oct/2024 16:19:15] "PUT /api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b HTTP/1.1" 200 -
+        127.0.0.1 - - [26/Oct/2024 16:22:00] "DELETE /api/v1/users/cfaa0359-f8f2-45e6-9333-b790ade56d6b HTTP/1.1" 200 -
