@@ -31,7 +31,7 @@ python3 run.py
         * Debugger is active!
         * Debugger PIN: 823-870-797
 
-Example with the Users class:  
+Example with the Users class:
 
 **POST**
 
