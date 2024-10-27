@@ -1,7 +1,8 @@
 # HBnB - Location Management Platform
 
-![Python Version](https://img.shields.io/badge/python-3.x-blue.svg)
+![Python Version](https://img.shields.io/badge/python-3.12.2-blue.svg)
 ![Flask Version](https://img.shields.io/badge/flask-3.0.0-green.svg)
+![Flask-restx Version](https://img.shields.io/badge/flask-restx-1.3.0-red.svg)
 ![Status](https://img.shields.io/badge/status-development-yellow.svg)
 
 ## 📋 Table of Contents
@@ -67,7 +68,7 @@ The application follows a layered architecture pattern:
 - **API Documentation**: Flask-RESTx 1.3.0
 - **Security**: bcrypt 3.2.0
 - **Development Tools**:
-  - Python 3.12
+  - Python 3.12.2
   - Git for version control
 
 ## 📁 Project Structure
