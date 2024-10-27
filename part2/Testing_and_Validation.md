@@ -29,8 +29,7 @@ To run a test with Postman, first launch the local server with the following com
         Press CTRL+C to quit
         * Restarting with stat
         * Debugger is active!
-        * Debugger PIN: 823-870-797  
-
+        * Debugger PIN: 823-870-79
 Example with the Users class:
 
 ## POST  
