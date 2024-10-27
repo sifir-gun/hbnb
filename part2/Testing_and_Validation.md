@@ -34,7 +34,7 @@ python3 run.py
 Example with the Users class:  
 
 **POST**
-        http://127.0.0.1:5000/api/v1/users/
+http://127.0.0.1:5000/api/v1/users/
         
         {  
             "first_name": "John",  
