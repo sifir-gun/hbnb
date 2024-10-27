@@ -19,17 +19,17 @@ Postman is a tool that makes it easy to test APIs by sending HTTP requests and v
 ### Running a Test with Postman  
 To run a test with Postman, first launch the local server with the following command:
 ```bash
-    python3 run.py
+python3 run.py
 
-        root@hey-coucou-xav:~/hbnb/part2# python3 run.py 
-        * Serving Flask app 'app'
-        * Debug mode: on
-        WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
-        * Running on http://127.0.0.1:5000
-        Press CTRL+C to quit
-        * Restarting with stat
-        * Debugger is active!
-        * Debugger PIN: 823-870-79
+root@hey-coucou-xav:~/hbnb/part2# python3 run.py 
+* Serving Flask app 'app'
+* Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+* Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+* Restarting with stat
+* Debugger is active!
+* Debugger PIN: 823-870-79
 Example with the Users class:
 
 ## POST  
