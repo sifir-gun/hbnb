@@ -69,8 +69,8 @@ class PlaceList(Resource):
             return {"error": f"Erreur serveur : {str(e)}"}, 500
 
     @api.doc('create_place')
-    @api.expect(place_model)
-    @api.marshal_with(place_model, code=201)
+    @api.expect(place_model)                    # Valide automatiquement les données de la requête entrante
+    @api.marshal_with(place_model, code=201)    # Structurer et formater la réponse de l’API
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
@@ -115,8 +115,8 @@ class PlaceDetail(Resource):
     """
 
     @api.doc('get_place')
-    @api.expect(place_model, validate=True)
-    @api.marshal_with(place_model)
+    @api.expect(place_model, validate=True) # Valide automatiquement les données de la requête entrante
+    @api.marshal_with(place_model)          # Structurer et formater la réponse de l’API
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
     def get(self, place_id):
