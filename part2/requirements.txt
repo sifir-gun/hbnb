@@ -1,3 +1,9 @@
-Flask==3.0.0
-Flask-RESTx==1.3.0
-bcrypt==3.2.0
+"""
+Dependencies file listing required Python packages for the project.
+
+Each dependency includes a specific version number and a brief description of its purpose in the project.
+"""
+
+Flask==3.0.0         # Flask is a micro-framework for web application development
+Flask-RESTx==1.3.0   # Flask-RESTx is an extension for Flask that simplifies creating RESTful APIs
+bcrypt==3.2.0        # Used for password hashing and security

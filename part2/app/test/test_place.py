@@ -1,41 +1,101 @@
-import unittest
-from datetime import datetime
+import pytest
+from flask import Flask
+from flask_restx import Api
+from app.models import storage
 from app.models.place import Place
+from app.api.v1.places import api as places_api  # L'API des places
 
 
-class TestPlace(unittest.TestCase):
-
-    def test_place_creation(self):
-        owner = {"id": "123", "name": "John Doe"}
-        place = Place(title="Beautiful House", description="A lovely house to rent",
-                      price=120.5, latitude=40.7128, longitude=-74.0060, owner=owner)
-
-        # Vérification des attributs de base
-        self.assertEqual(place.title, "Beautiful House")
-        self.assertEqual(place.description, "A lovely house to rent")
-        self.assertEqual(place.price, 120.5)
-        self.assertEqual(place.latitude, 40.7128)
-        self.assertEqual(place.longitude, -74.0060)
-        self.assertEqual(place.owner, owner)
-        self.assertIsInstance(place.created_at, datetime)
-        self.assertIsInstance(place.updated_at, datetime)
-
-        # Ajout d'un avis et vérification
-        review = {"id": "001", "text": "Great place!"}
-        place.add_review(review)
-        self.assertEqual(len(place.reviews), 1)
-        self.assertEqual(place.reviews[0]["text"], "Great place!")
-
-        # Ajout d'un équipement et vérification
-        amenity = {"id": "001", "name": "Wi-Fi"}
-        place.add_amenity(amenity)
-        self.assertEqual(len(place.amenities), 1)
-        self.assertEqual(place.amenities[0]["name"], "Wi-Fi")
-
-        # Mise à jour d'un attribut et vérification
-        place.update({"price": 130.0})
-        self.assertEqual(place.price, 130.0)
+@pytest.fixture
+def client():
+    """
+    Initialise l'application Flask pour les tests.
+    """
+    app = Flask(__name__)
+    api = Api(app)
+    api.add_namespace(places_api, path='/api/v1/places/')
+    app.testing = True
+    with app.test_client() as client:
+        yield client
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.fixture(autouse=True)
+def setup_data():
+    """
+    Ajoute des données de test avant chaque test et nettoie après.
+    """
+    # Ajouter un lieu dans le stockage
+    place = Place(title="Maison", price=1000, owner_id="Xa",
+                  latitude=40.7128, longitude=-74.0060)
+    storage.add(place)
+    storage.save()
+    yield place
+    storage.clear_all(Place)
+
+
+def test_get_places(client, setup_data):
+    """
+    Test pour vérifier la récupération des lieux.
+    """
+    response = client.get('/api/v1/places/')
+    assert response.status_code == 200
+    assert 'Maison' in response.get_data(as_text=True)
+
+
+def test_post_place(client):
+    """
+    Test pour vérifier la création d'un lieu.
+    """
+    new_place_data = {
+        'title': 'Villa',
+        'price': 2000,
+        'owner_id': 'John Doe',
+        'latitude': 40.7128,
+        'longitude': -74.0060,
+        'amenities': ["BBQ"]
+    }
+    response = client.post(
+        '/api/v1/places/', json=new_place_data, headers={"Content-Type": "application/json"}
+    )
+
+    assert response.status_code == 201
+    assert 'Villa' in response.get_data(as_text=True)
+
+
+def test_get_place_by_id(client, setup_data):
+    """
+    Test pour vérifier la récupération d'un lieu par ID.
+    """
+    place_id = setup_data.id
+    response = client.get(f'/api/v1/places/{place_id}')
+    assert response.status_code == 200
+    assert 'Maison' in response.get_data(as_text=True)
+
+
+def test_update_place(client, setup_data):
+    """
+    Test pour vérifier la mise à jour d'un lieu.
+    """
+    place_id = setup_data.id
+    update_data = {
+        'title': 'Appartement',
+        'price': 1500,
+        'latitude': 40.7128,
+        'longitude': -74.0060,
+        'owner_id': 'Xa',
+        'amenities': ["WiFi"]
+    }
+    response = client.put(
+        f'/api/v1/places/{place_id}', json=update_data, headers={"Content-Type": "application/json"})
+    assert response.status_code == 200
+    assert 'Appartement' in response.get_data(as_text=True)
+
+
+def test_delete_place(client, setup_data):
+    """
+    Test pour vérifier la suppression d'un lieu.
+    """
+    place_id = setup_data.id
+    response = client.delete(f'/api/v1/places/{place_id}')
+    assert response.status_code == 200
+    assert 'Place deleted successfully' in response.get_data(as_text=True)

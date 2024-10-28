@@ -1,29 +1,28 @@
 import sys
 import os
+
 from app import create_app
 
 
-# Ajoute le chemin du répertoire parent pour accéder au module 'app'
-# Cela permet d'importer le module 'app' même si ce fichier est exécuté
-# depuis un autre répertoire.
+# Adds the parent directory to the path to access the 'app' module
+# This allows importing the 'app' module even if this file is executed
+# from another directory.
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), 'app')))
 
-# Importe la fonction 'create_app' depuis le module 'app'
-# Cette fonction est utilisée pour créer une instance de l'application Flask.
+# Imports the 'create_app' function from the 'app' module
+# This function is used to create an instance of the Flask application.
 
-# Crée une instance de l'application Flask en appelant la fonction 'create_app'
+# Creates an instance of the Flask application by calling 'create_app'
 app = create_app()
 
 if __name__ == '__main__':
     """
-    Ce bloc vérifie si le script est exécuté directement (et non importé
-    en tant que module).
-    Si c'est le cas, il lance l'application Flask avec l'option 'debug'
-    activée.
+    This block checks if the script is executed directly
+    (not imported as a module).
+    If so, it starts the Flask application with the 'debug' option enabled.
 
-    L'option 'debug=True' permet de relancer l'application automatiquement
-    lors des changements de code et fournit des informations de débogage en
-    cas d'erreurs.
+    The 'debug=True' option allows the application to restart automatically on
+    code changes and provides debugging information in case of errors.
     """
     app.run(debug=True)

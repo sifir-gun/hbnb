@@ -1,0 +1,9 @@
+part2/app/api/v1/__pycache__/places.cpython-310.pyc
+part2/app/services/__pycache__/facade.cpython-310.pyc
+part2/.venv/lib/python3.10/site-packages/werkzeug/wrappers/user_agent.py
+part2/.venv/lib/python3.10/site-packages/Werkzeug-1.0.1.dist-info/RECORD
+part2/app/api/v1/__pycache__/
+part2/app/models/__pycache__/
+part2/app/services/__pycache__/
+*.pyc
+part2/.venv/
