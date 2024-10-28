@@ -3,43 +3,38 @@ from .base_model import BaseModel
 
 class Review(BaseModel):
     """
-    Classe Review représentant un avis laissé par un utilisateur pour un lieu.
+    Review class representing a review left by a user for a place.
 
-    Hérite de BaseModel pour bénéficier des fonctionnalités de base comme l'ID
-    et les méthodes de gestion des objets dans le système de stockage.
+    Inherits from BaseModel to gain base functionalities such as ID
+    and object management methods in the storage system.
 
-    Attributs :
-        text (str)   : Le texte de l'avis, requis.
-        rating (int) : La note de l'avis (entre 1 et 5).
-        place (obj)  : Le lieu auquel l'avis est associé, doit être une
-        instance de Place.
-        user (obj)   : L'utilisateur ayant rédigé l'avis, doit être une
-        instance de User.
+    Attributes:
+        text (str): The text of the review, required.
+        rating (int): The rating of the review (between 1 and 5).
+        place_id (str): The ID of the place associated with the review.
+        user_id (str): The ID of the user who wrote the review.
 
-    Méthodes :
-        validate_text(text)   : Valide que le texte n'est pas vide.
-        validate_rating(rating) : Valide que la note est comprise entre 1 et 5.
-        validate_place(place) : Valide que le lieu est une instance valide de
-        Place.
-        validate_user(user)   : Valide que l'utilisateur est une instance
-        valide de User.
+    Methods:
+        validate_text(text): Validates that the text is not empty.
+        validate_rating(rating): Validates that the rating is between 1 and 5.
+        validate_place(place): Validates that the place is a valid instance of Place.
+        validate_user(user): Validates that the user is a valid instance of User.
     """
 
     def __init__(self, text, rating, place_id, user_id):
         """
-        Initialise un nouvel avis avec les attributs spécifiés.
+        Initializes a new review with the specified attributes.
 
         Args:
-            text (str): Le texte de l'avis.
-            rating (int): La note de l'avis (1-5).
-            place (Place): Le lieu auquel l'avis est associé.
-            user (User): L'utilisateur ayant rédigé l'avis.
+            text (str): The text of the review.
+            rating (int): The rating of the review (1-5).
+            place_id (str): The ID of the place associated with the review.
+            user_id (str): The ID of the user who wrote the review.
 
         Raises:
-            ValueError: Si l'un des champs 'text', 'rating', 'place' ou 'user'
-            est invalide.
+            ValueError: If any of the 'text', 'rating', 'place_id', or 'user_id' fields are invalid.
         """
-        # Appel au constructeur de BaseModel pour initialiser l'ID et autres
+        # Call the BaseModel constructor to initialize the ID and other base attributes
         super().__init__()
         self.text = self.validate_text(text)
         self.rating = self.validate_rating(rating)
@@ -48,75 +43,74 @@ class Review(BaseModel):
 
     def validate_text(self, text):
         """
-        Valide que le texte de l'avis n'est pas vide.
+        Validates that the review text is not empty.
 
         Args:
-            text (str): Le texte de l'avis à valider.
+            text (str): The review text to validate.
 
         Returns:
-            str: Le texte validé.
+            str: The validated text.
 
         Raises:
-            ValueError: Si le texte est vide.
+            ValueError: If the text is empty.
         """
         if not text:
-            raise ValueError("Le texte de l'avis est requis.")
-        return text  # Retourner le texte validé
+            raise ValueError("Review text is required.")
+        return text  # Return the validated text
 
     def validate_rating(self, rating):
         """
-        Valide que la note de l'avis est comprise entre 1 et 5.
+        Validates that the review rating is between 1 and 5.
 
         Args:
-            rating (int): La note à valider.
+            rating (int): The rating to validate.
 
         Returns:
-            int: La note validée.
+            int: The validated rating.
 
         Raises:
-            ValueError: Si la note n'est pas comprise entre 1 et 5.
+            ValueError: If the rating is not between 1 and 5.
         """
         print(f"Debug: Validating rating={rating} of type {type(rating)}")
         try:
             rating = int(rating)
         except ValueError:
-            raise ValueError("La note doit être un entier.")
+            raise ValueError("The rating must be an integer.")
 
         if not 1 <= rating <= 5:
-            raise ValueError("La note doit être comprise entre 1 et 5.")
+            raise ValueError("The rating must be between 1 and 5.")
         return rating
 
     def validate_place(self, place):
         """
-        Valide que le lieu est une instance valide de Place.
+        Validates that the place is a valid instance of Place.
 
         Args:
-            place (Place): Le lieu à valider.
+            place (Place): The place to validate.
 
         Returns:
-            Place: Le lieu validé.
+            Place: The validated place.
 
         Raises:
-            ValueError: Si le lieu n'est pas une instance valide de Place.
+            ValueError: If the place is not a valid instance of Place.
         """
         if not isinstance(place, BaseModel):
-            raise ValueError("Le lieu doit être une instance valide de Place.")
-        return place  # Retourner le lieu validé
+            raise ValueError("The place must be a valid instance of Place.")
+        return place  # Return the validated place
 
     def validate_user(self, user):
         """
-        Valide que l'utilisateur est une instance valide de User.
+        Validates that the user is a valid instance of User.
 
         Args:
-            user (User): L'utilisateur à valider.
+            user (User): The user to validate.
 
         Returns:
-            User: L'utilisateur validé.
+            User: The validated user.
 
         Raises:
-            ValueError: Si l'utilisateur n'est pas une instance valide de User.
+            ValueError: If the user is not a valid instance of User.
         """
         if not isinstance(user, BaseModel):
-            raise ValueError(
-                "L'utilisateur doit être une instance valide de User.")
-        return user  # Retourner l'utilisateur validé
+            raise ValueError("The user must be a valid instance of User.")
+        return user  # Return the validated user

@@ -4,83 +4,83 @@ from .base_model import BaseModel
 
 class User(BaseModel):
     """
-    Classe User représentant un utilisateur dans le système.
+    User class representing a user in the system.
     
-    Hérite de BaseModel pour bénéficier des fonctionnalités de base comme l'ID et les méthodes 
-    de gestion des objets dans le système de stockage.
+    Inherits from BaseModel to gain basic functionalities such as ID and 
+    object management methods in the storage system.
 
-    Attributs :
-        first_name (str) : Le prénom de l'utilisateur, limité à 50 caractères.
-        last_name (str)  : Le nom de famille de l'utilisateur, limité à 50 caractères.
-        email (str)      : L'adresse email de l'utilisateur, doit être une adresse valide.
-        is_admin (bool)  : Un booléen indiquant si l'utilisateur est un administrateur (par défaut False).
+    Attributes:
+        first_name (str): The user's first name, limited to 50 characters.
+        last_name (str): The user's last name, limited to 50 characters.
+        email (str): The user's email address, must be a valid format.
+        is_admin (bool): A boolean indicating if the user is an administrator (default is False).
     
-    Méthodes :
-        validate_name(name, field_name) : Valide que le nom/prénom n'est pas vide et contient un maximum de 50 caractères.
-        validate_email(email)           : Valide que l'email est au format correct et est requis.
+    Methods:
+        validate_name(name, field_name): Validates that the name/first name is not empty and has a maximum of 50 characters.
+        validate_email(email): Validates that the email is in the correct format and is required.
     """
 
     def __init__(self, first_name, last_name, email, is_admin=False):
         """
-        Initialise un nouvel utilisateur avec les attributs spécifiés.
+        Initializes a new user with the specified attributes.
 
         Args:
-            first_name (str): Le prénom de l'utilisateur.
-            last_name (str): Le nom de famille de l'utilisateur.
-            email (str): L'adresse email de l'utilisateur.
-            is_admin (bool, optional): Indique si l'utilisateur est administrateur (par défaut False).
+            first_name (str): The user's first name.
+            last_name (str): The user's last name.
+            email (str): The user's email address.
+            is_admin (bool, optional): Indicates if the user is an administrator (default is False).
         
         Raises:
-            ValueError: Si l'un des champs 'first_name', 'last_name' ou 'email' est invalide.
+            ValueError: If any of the 'first_name', 'last_name', or 'email' fields are invalid.
         """
-        super().__init__()  # Appel au constructeur de BaseModel pour initialiser l'ID et autres
-        # Validation et assignation du prénom
-        self.first_name = self.validate_name(first_name, 'Prénom')
-        # Validation et assignation du nom de famille
-        self.last_name = self.validate_name(last_name, 'Nom de famille')
-        # Validation et assignation de l'email
+        super().__init__()  # Call to BaseModel constructor to initialize ID and other attributes
+        # Validate and assign the first name
+        self.first_name = self.validate_name(first_name, 'First name')
+        # Validate and assign the last name
+        self.last_name = self.validate_name(last_name, 'Last name')
+        # Validate and assign the email
         self.email = self.validate_email(email)
-        # Assignation du statut admin (par défaut False)
+        # Assign the admin status (default is False)
         self.is_admin = is_admin
 
     def validate_name(self, name, field_name):
         """
-        Valide que le prénom ou nom de famille n'est pas vide et contient au maximum 50 caractères.
+        Validates that the first or last name is not empty and has a maximum of 50 characters.
         
         Args:
-            name (str): Le nom ou prénom à valider.
-            field_name (str): Le nom du champ (pour personnaliser le message d'erreur).
+            name (str): The name or first name to validate.
+            field_name (str): The name of the field (for customizing the error message).
 
         Returns:
-            str: Le nom validé.
+            str: The validated name.
 
         Raises:
-            ValueError: Si le nom est vide ou dépasse 50 caractères.
+            ValueError: If the name is empty or exceeds 50 characters.
         """
-        # Vérification si le nom est vide ou trop long
+        # Check if the name is empty or too long
         if not name or len(name) > 50:
             raise ValueError(
-                f"{field_name} est requis et doit contenir au maximum 50 caractères."
+                f"{field_name} is required and must be 50 characters or fewer."
             )
-        return name  # Retourner le nom validé
+        return name  # Return the validated name
 
     def validate_email(self, email):
         """
-        Valide que l'email est au format valide.
+        Validates that the email is in a valid format.
         
         Args:
-            email (str): L'adresse email à valider.
+            email (str): The email address to validate.
 
         Returns:
-            str: L'email validé.
+            str: The validated email.
 
         Raises:
-            ValueError: Si l'email est invalide.
+            ValueError: If the email is invalid.
         """
-        # Expression régulière pour valider le format de l'email
+        # Regular expression to validate the email format
         email_regex = r'^\S+@\S+\.\S+$'
-        # Vérification si l'email est vide ou n'a pas un format correct
+        # Check if the email is empty or not in the correct format
         if not email or not re.match(email_regex, email):
-            raise ValueError("Une adresse email valide est requise.")
-        # Ici, vous pourriez ajouter un contrôle d'unicité de l'email dans le système de stockage
-        return email  # Retourner l'email validé
+            raise ValueError("A valid email address is required.")
+        # Here, you could add a check for email uniqueness in the storage system
+        return email  # Return the validated email

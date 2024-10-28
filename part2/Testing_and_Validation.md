@@ -207,3 +207,17 @@ Example with the Amenities class:
         127.0.0.1 - - [27/Oct/2024 13:08:16] "GET /api/v1/amenities/b2444ecd-bf3a-4785-9b2d-ac8f71e87c18 HTTP/1.1" 200 -
         127.0.0.1 - - [27/Oct/2024 13:08:24] "PUT /api/v1/amenities/b2444ecd-bf3a-4785-9b2d-ac8f71e87c18 HTTP/1.1" 200 -
         127.0.0.1 - - [27/Oct/2024 13:08:30] "DELETE /api/v1/amenities/b2444ecd-bf3a-4785-9b2d-ac8f71e87c18 HTTP/1.1" 200 -
+
+## Unit Test Results
+
+After running tests on the application, all tests passed successfully.
+
+Example:
+```bash
+neia@6342NEIA:~/hbnb_27_10/part2$ python3 -m unittest discover -s tests
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.027s
+
+OK
+```

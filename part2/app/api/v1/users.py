@@ -1,22 +1,21 @@
+"""
+This module manages CRUD (Create, Read, Update, Delete) endpoints for users via the API.
+It allows for creating, updating, retrieving, and deleting users.
+
+The managed routes include:
+- POST to create a new user
+- GET to retrieve user details by ID
+- PUT to update a user by ID
+- DELETE to delete a user by ID
+"""
+
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import HBnBFacade
 
-"""
-Ce module gère les endpoints CRUD (Create, Read, Update, Delete) pour les
-utilisateurs via l'API. Il permet la création, la modification, la
-récupération et la suppression des utilisateurs.
-
-Les routes gérées incluent :
-- POST pour créer un nouvel utilisateur
-- GET pour récupérer les détails d'un utilisateur via son ID
-- PUT pour mettre à jour un utilisateur via son ID
-- DELETE pour supprimer un utilisateur via son ID
-"""
-
-# Création de l'espace de noms pour les opérations sur les utilisateurs
+# Creating the namespace for user-related operations
 api = Namespace('users', description='User operations')
 
-# Modèle utilisateur pour la validation des entrées et la documentation
+# User model for input validation and documentation
 user_model = api.model('User', {
     'first_name': fields.String(
         required=True, description='First name of the user'),
@@ -26,15 +25,15 @@ user_model = api.model('User', {
         required=True, description='Email of the user')
 })
 
-# Instanciation de la façade pour les opérations utilisateur
+# Instantiating the facade for user operations
 facade = HBnBFacade()
 
 
 @api.route('/')
 class UserList(Resource):
     """
-    Classe gérant les opérations sur la collection d'utilisateurs
-    (liste d'utilisateurs).
+    Class to handle operations on the user collection (list of users).
+    Provides methods to create and retrieve users.
     """
 
     @api.expect(user_model, validate=True)
@@ -43,32 +42,32 @@ class UserList(Resource):
     @api.response(400, 'Invalid input data')
     def post(self):
         """
-        Crée un nouvel utilisateur.
+        Create a new user.
 
-        Cette méthode vérifie d'abord si l'email fourni est déjà enregistré.
-        Si c'est le cas, elle retourne une erreur 400. Si l'email est unique,
-        l'utilisateur est créé et ses détails sont renvoyés.
+        This method first checks if the provided email is already registered.
+        If so, it returns a 400 error. If the email is unique,
+        the user is created, and the details are returned.
 
-        Retourne :
-            - 201 : Si l'utilisateur a été créé avec succès
-            - 400 : Si l'email est déjà enregistré ou
-            si les données sont invalides
+        Returns:
+            - 201: If the user was successfully created
+            - 400: If the email is already registered or
+                   if the data is invalid
         """
         user_data = api.payload
 
-        # Vérification de l'unicité de l'email
+        # Check for unique email
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
             return {'error': 'Email already registered'}, 400
 
-        # Création d'un nouvel utilisateur via le service facade
+        # Create a new user via the facade service
         try:
             new_user = facade.create_user(user_data)
         except Exception as error:
-            # Gestion des erreurs lors de la création de l'utilisateur
+            # Handle errors during user creation
             return {'error': str(error)}, 400
 
-        # Retourne les détails de l'utilisateur créé
+        # Return the details of the created user
         return {
             'id': new_user.id,
             'first_name': new_user.first_name,
@@ -80,24 +79,25 @@ class UserList(Resource):
 @api.route('/<string:user_id>')
 class UserResource(Resource):
     """
-    Classe gérant les opérations sur un utilisateur spécifique (via son ID).
+    Class to handle operations on a specific user (by ID).
+    Provides methods to retrieve, update, and delete a user by ID.
     """
 
     @api.response(200, 'User details retrieved successfully')
     @api.response(404, 'User not found')
     def get(self, user_id):
         """
-        Récupère les détails d'un utilisateur en fonction de son ID.
+        Retrieve user details by ID.
 
-        Retourne :
-            - 200 : Si l'utilisateur a été trouvé et ses détails sont renvoyés
-            - 404 : Si l'utilisateur n'existe pas
+        Returns:
+            - 200: If the user is found and the details are returned
+            - 404: If the user does not exist
         """
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
 
-        # Retourne les détails de l'utilisateur trouvé
+        # Return the details of the found user
         return {
             'id': user.id,
             'first_name': user.first_name,
@@ -110,27 +110,27 @@ class UserResource(Resource):
     @api.response(404, 'User not found')
     def put(self, user_id):
         """
-        Met à jour les détails d'un utilisateur en fonction de son ID.
+        Update user details by ID.
 
-        Cette méthode vérifie d'abord si l'utilisateur existe.
-        Si c'est le cas, elle met à jour les informations de l'utilisateur.
+        This method first checks if the user exists.
+        If so, it updates the user’s information.
 
-        Retourne :
-            - 200 : Si l'utilisateur a été mis à jour avec succès
-            - 404 : Si l'utilisateur n'existe pas
+        Returns:
+            - 200: If the user was successfully updated
+            - 404: If the user does not exist
         """
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
 
-        # Récupération des nouvelles données de l'utilisateur
+        # Retrieve updated user data
         user_data = api.payload
         try:
             updated_user = facade.update_user(user_id, user_data)
         except Exception as error:
             return {'error': str(error)}, 400
 
-        # Retourne les détails de l'utilisateur mis à jour
+        # Return the details of the updated user
         return {
             'id': updated_user.id,
             'first_name': updated_user.first_name,
@@ -142,17 +142,16 @@ class UserResource(Resource):
     @api.response(404, 'User not found')
     def delete(self, user_id):
         """
-        Supprime un utilisateur en fonction de son ID.
+        Delete a user by ID.
 
-        Retourne :
-            - 200 : Si l'utilisateur a été supprimé avec succès
-            - 404 : Si l'utilisateur n'existe pas
+        Returns:
+            - 200: If the user was successfully deleted
+            - 404: If the user does not exist
         """
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
 
-        # Suppression de l'utilisateur
+        # Delete the user
         facade.delete_user(user_id)
         return {'message': 'User deleted successfully'}, 200
-    

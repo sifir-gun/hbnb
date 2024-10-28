@@ -1,134 +1,134 @@
-"""Référentiel en mémoire pour gérer les objets.
-Fournit des méthodes pour ajouter, récupérer, mettre à jour,
-et supprimer des objets."""
+"""
+In-memory repository to manage objects.
+Provides methods to add, retrieve, update, and delete objects.
+"""
 
 from abc import ABC, abstractmethod
 
 
 class Repository(ABC):
     """
-    Classe abstraite représentant un dépôt générique.
+    Abstract class representing a generic repository.
     
-    Cette classe définit les méthodes de base que tout dépôt doit implémenter
-    pour gérer des objets de manière générique. Elle impose l'implémentation
-    de certaines méthodes via des abstractions pour gérer les objets dans un dépôt.
+    This class defines basic methods that any repository should implement
+    to manage objects in a generic way. It enforces the implementation
+    of specific methods through abstractions to manage objects in a repository.
     """
 
     @abstractmethod
     def add(self, obj):
         """
-        Ajoute un objet au dépôt.
+        Adds an object to the repository.
         
         Args:
-            obj: L'objet à ajouter au dépôt.
+            obj: The object to add to the repository.
         """
         pass
 
     @abstractmethod
     def get(self, obj_id):
         """
-        Récupère un objet du dépôt par son identifiant.
+        Retrieves an object from the repository by its identifier.
         
         Args:
-            obj_id: L'identifiant unique de l'objet à récupérer.
+            obj_id: The unique identifier of the object to retrieve.
         
         Returns:
-            L'objet correspondant à l'identifiant donné, ou None si l'objet n'existe pas.
+            The object corresponding to the given identifier, or None if the object does not exist.
         """
         pass
 
     @abstractmethod
     def get_all(self):
         """
-        Récupère tous les objets du dépôt.
+        Retrieves all objects from the repository.
         
         Returns:
-            Une liste contenant tous les objets du dépôt.
+            A list containing all objects in the repository.
         """
         pass
 
     @abstractmethod
     def update(self, obj_id, data):
         """
-        Met à jour un objet dans le dépôt.
+        Updates an object in the repository.
         
         Args:
-            obj_id: L'identifiant de l'objet à mettre à jour.
-            data: Un dictionnaire contenant les nouvelles données pour l'objet.
+            obj_id: The identifier of the object to update.
+            data: A dictionary containing new data for the object.
         """
         pass
 
     @abstractmethod
     def delete(self, obj_id):
         """
-        Supprime un objet du dépôt par son identifiant.
+        Deletes an object from the repository by its identifier.
         
         Args:
-            obj_id: L'identifiant de l'objet à supprimer.
+            obj_id: The identifier of the object to delete.
         """
         pass
 
     @abstractmethod
     def get_by_attribute(self, attr_name, attr_value):
         """
-        Récupère un objet en fonction d'un attribut spécifique.
+        Retrieves an object based on a specific attribute.
         
         Args:
-            attr_name: Le nom de l'attribut à rechercher.
-            attr_value: La valeur de l'attribut pour laquelle chercher un objet.
+            attr_name: The name of the attribute to search by.
+            attr_value: The attribute value to match.
         
         Returns:
-            L'objet correspondant à la recherche, ou None s'il n'existe pas.
+            The object matching the search criteria, or None if it does not exist.
         """
         pass
 
 
 class InMemoryRepository:
     """
-    Classe représentant un dépôt en mémoire.
+    Class representing an in-memory repository.
     
-    Cette classe implémente les méthodes de base pour gérer des objets
-    en mémoire, en stockant les objets dans un dictionnaire.
+    This class implements basic methods to manage objects in memory,
+    storing them in a dictionary.
     """
 
     def __init__(self):
         """
-        Initialise le dépôt avec un dictionnaire vide pour stocker les objets.
-        Les objets sont stockés avec leurs ID comme clé.
+        Initializes the repository with an empty dictionary to store objects.
+        Objects are stored with their IDs as keys.
         """
         self.storage = {}
 
     def add(self, obj):
         """
-        Ajoute un objet au dépôt en utilisant son ID comme clé.
+        Adds an object to the repository using its ID as the key.
         
         Args:
-            obj: L'objet à ajouter.
+            obj: The object to add.
         """
         self.storage[obj.id] = obj
 
     def get(self, obj_id):
         """
-        Récupère un objet par son ID depuis le dépôt.
+        Retrieves an object by its ID from the repository.
         
         Args:
-            obj_id: L'identifiant de l'objet à récupérer.
+            obj_id: The identifier of the object to retrieve.
         
         Returns:
-            L'objet correspondant à l'ID fourni, ou None s'il n'existe pas.
+            The object corresponding to the provided ID, or None if it does not exist.
         """
         return self.storage.get(obj_id)
 
     def get_all(self, cls=None):
         """
-        Récupère tous les objets ou tous les objets d'un type spécifique.
+        Retrieves all objects or all objects of a specific type.
         
         Args:
-            cls: Classe des objets à récupérer (facultatif). Si ce paramètre est fourni,
-                 seuls les objets de ce type seront retournés.
+            cls: The class of objects to retrieve (optional). If provided, only objects of this type are returned.
         
         Returns:
-            Une liste de tous les objets, ou une liste d'objets d'un certain type.
+            A list of all objects, or a list of objects of a certain type.
         """
         if cls is None:
             return list(self.storage.values())
@@ -137,11 +137,11 @@ class InMemoryRepository:
 
     def update(self, obj_id, data):
         """
-        Met à jour un objet existant dans le dépôt avec de nouvelles données.
+        Updates an existing object in the repository with new data.
         
         Args:
-            obj_id: L'identifiant de l'objet à mettre à jour.
-            data: Un dictionnaire contenant les nouvelles données pour l'objet.
+            obj_id: The identifier of the object to update.
+            data: A dictionary containing new data for the object.
         """
         obj = self.get(obj_id)
         if obj:
@@ -151,10 +151,10 @@ class InMemoryRepository:
 
     def delete(self, obj_or_id):
         """
-        Supprime un objet par son ID ou l'objet lui-même.
+        Deletes an object by its ID or the object itself.
         
         Args:
-            obj_or_id: L'ID de l'objet ou l'objet lui-même à supprimer.
+            obj_or_id: The ID of the object or the object itself to delete.
         """
         if isinstance(obj_or_id, str):
             obj_id = obj_or_id
@@ -168,11 +168,10 @@ class InMemoryRepository:
 
     def clear_all(self, cls=None):
         """
-        Supprime tous les objets, ou tous les objets d'un certain type.
+        Deletes all objects, or all objects of a specific type.
         
         Args:
-            cls: Classe des objets à supprimer (facultatif). Si ce paramètre est fourni,
-                 seuls les objets de ce type seront supprimés.
+            cls: The class of objects to delete (optional). If provided, only objects of this type are deleted.
         """
         if cls is None:
             self.storage.clear()
@@ -183,14 +182,14 @@ class InMemoryRepository:
 
     def get_by_attribute(self, attr_name, attr_value):
         """
-        Récupère un objet en fonction d'un attribut spécifique.
+        Retrieves an object based on a specific attribute.
         
         Args:
-            attr_name: Le nom de l'attribut à rechercher.
-            attr_value: La valeur de l'attribut à rechercher.
+            attr_name: The name of the attribute to search by.
+            attr_value: The attribute value to match.
         
         Returns:
-            L'objet qui correspond à la recherche, ou None si aucun objet ne correspond.
+            The object that matches the search criteria, or None if no object matches.
         """
         return next(
             (
@@ -202,14 +201,14 @@ class InMemoryRepository:
 
     def get_all_by_attribute(self, attr_name, attr_value):
         """
-        Récupère tous les objets qui ont un certain attribut avec une valeur donnée.
+        Retrieves all objects that have a specific attribute with a given value.
         
         Args:
-            attr_name: Le nom de l'attribut à rechercher.
-            attr_value: La valeur de l'attribut à rechercher.
+            attr_name: The name of the attribute to search by.
+            attr_value: The attribute value to match.
         
         Returns:
-            Une liste d'objets qui correspondent aux critères de recherche.
+            A list of objects that match the search criteria.
         """
         return [
             obj for obj in self.storage.values()
@@ -218,8 +217,8 @@ class InMemoryRepository:
 
     def save(self):
         """
-        Enregistre les changements dans le dépôt.
-        Dans cette implémentation, la méthode est vide car le stockage est en mémoire,
-        donc les changements sont immédiatement reflétés.
+        Saves changes to the repository.
+        In this in-memory implementation, this method is empty because
+        changes are immediately reflected.
         """
         pass

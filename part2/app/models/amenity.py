@@ -3,35 +3,54 @@ from .base_model import BaseModel
 
 class Amenity(BaseModel):
     """
-    Classe représentant une commodité associée à une place.
+    Class representing an amenity associated with a place.
 
-    Attributs :
+    Attributes:
     ----------
     id : str
-        Identifiant unique de la commodité.
+        Unique identifier of the amenity.
     name : str
-        Nom de la commodité.
+        Name of the amenity.
     created_at : datetime
-        Date et heure de création de la commodité.
+        Creation date and time of the amenity.
     updated_at : datetime
-        Date et heure de la dernière mise à jour de la commodité.
+        Last update date and time of the amenity.
     """
+
     def __init__(self, name):
         """
-        Initialise une nouvelle instance de la classe Amenity.
+        Initializes a new instance of the Amenity class.
 
-        Paramètres :
-        -----------
+        Parameters:
+        ----------
         name : str
-            Le nom de la commodité.
+            The name of the amenity.
         """
-        super().__init__()  # Appel au constructeur de BaseModel
+        super().__init__()  # Call to the BaseModel constructor
         self.name = self.validate_name(name)
 
     def validate_name(self, name):
+        """
+        Validates the name of the amenity. Ensures it is not empty and does
+        not exceed 50 characters.
+
+        Parameters:
+        ----------
+        name : str
+            The name to validate.
+
+        Returns:
+        -------
+        str
+            The validated name if it passes validation.
+
+        Raises:
+        ------
+        ValueError
+            If the name is empty or exceeds 50 characters.
+        """
         if not name or len(name) > 50:
             raise ValueError(
-                "Le nom de la commodité est requis et doit contenir "
-                "au maximum 50 caractères."
+                "The amenity name is required and must be 50 characters or fewer."
             )
         return name

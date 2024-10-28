@@ -3,48 +3,48 @@ from .base_model import BaseModel
 
 class Place(BaseModel):
     """
-    Représente un lieu dans l'application.
+    Represents a place in the application.
 
-    Cette classe hérite de `BaseModel` et ajoute des fonctionnalités
-    spécifiques aux objets `Place`, notamment la gestion du titre, du prix, de
-    la localisation, du propriétaire, ainsi que des reviews et des amenities
-    associées à ce lieu.
+    This class inherits from `BaseModel` and adds specific functionalities
+    for `Place` objects, including handling title, price, location, owner,
+    and associated reviews and amenities.
     """
 
     def __init__(self, title, price, owner_id, description='',
                  latitude=None, longitude=None):
         """
-        Initialise un objet Place avec les attributs fournis.
+        Initializes a Place object with the provided attributes.
 
         Args:
-            title (str): Le titre du lieu.
-            price (float): Le prix associé au lieu.
-            owner (BaseModel ou int/str): Le propriétaire du lieu (soit un ID,
-            soit une instance de BaseModel).
-            description (str, facultatif): Une description du lieu.
-            latitude (float, facultatif): La latitude du lieu.
-            longitude (float, facultatif): La longitude du lieu.
+            title (str): Title of the place.
+            price (float): Price associated with the place.
+            owner_id (BaseModel or int/str): Owner of the place (either an ID or an instance of BaseModel).
+            description (str, optional): Description of the place.
+            latitude (float, optional): Latitude of the place.
+            longitude (float, optional): Longitude of the place.
         """
-        # Appelle le constructeur de la classe parente `BaseModel`
+        # Call the parent class `BaseModel` constructor
         super().__init__()
-        self.title = self.validate_title(title)  # Valide et assigne le titre
-        self.description = description  # Description facultative
-        self.price = self.validate_price(price)  # Valide et assigne le prix
+        # Validate and assign the title
+        self.title = self.validate_title(title)
+        self.description = description  # Optional description
+        # Validate and assign the price
+        self.price = self.validate_price(price)
         self.latitude = self.validate_latitude(
-            latitude)  # Valide et assigne la latitude
+            latitude)  # Validate and assign latitude
         self.longitude = self.validate_longitude(
-            longitude)  # Valide et assigne la longitude
-        # Valide et assigne le propriétaire
+            longitude)  # Validate and assign longitude
+        # Validate and assign the owner
         self.owner_id = self.validate_owner_id(owner_id)
-        self.reviews = []  # Liste pour stocker les reviews associées
-        self.amenities = []  # Liste pour stocker les amenities associées
+        self.reviews = []  # List to store associated reviews
+        self.amenities = []  # List to store associated amenities
 
     def to_dict(self):
         """
-        Convertit l'objet `Place` en dictionnaire JSON-sérialisable.
+        Converts the `Place` object to a JSON-serializable dictionary.
 
         Returns:
-            dict: Un dictionnaire contenant les attributs de l'objet Place.
+            dict: A dictionary containing the attributes of the Place object.
         """
         return {
             "id": self.id,
@@ -53,132 +53,129 @@ class Place(BaseModel):
             "price": self.price,
             "latitude": self.latitude,
             "longitude": self.longitude,
-            # Sérialisation du propriétaire (soit ID, soit instance de
-            # BaseModel)
+            # Serialize the owner (either ID or BaseModel instance)
             "owner_id": self.owner_id if isinstance(self.owner_id, BaseModel)
             else self.owner_id,
-            # Sérialisation des reviews
+            # Serialize reviews
             "reviews": [review.to_dict() if hasattr(review, 'to_dict')
                         else review for review in self.reviews],
-            # Sérialisation des amenities
+            # Serialize amenities
             "amenities": [amenity.to_dict() if hasattr(amenity, 'to_dict')
                           else amenity for amenity in self.amenities]
         }
 
-    # Méthodes de validation
+    # Validation methods
     def validate_title(self, title):
         """
-        Valide le titre du lieu.
+        Validates the title of the place.
 
         Args:
-            title (str): Le titre à valider.
+            title (str): The title to validate.
 
         Returns:
-            str: Le titre validé.
+            str: The validated title.
 
         Raises:
-            ValueError: Si le titre est vide ou dépasse 100 caractères.
+            ValueError: If the title is empty or exceeds 100 characters.
         """
         if not title or len(title) > 100:
             raise ValueError(
-                "Le titre est requis et doit contenir au maximum "
-                "100 caractères.")
+                "The title is required and must be 100 characters or fewer."
+            )
         return title
 
     def validate_price(self, price):
         """
-        Valide le prix du lieu.
+        Validates the price of the place.
 
         Args:
-            price (float): Le prix à valider.
+            price (float): The price to validate.
 
         Returns:
-            float: Le prix validé.
+            float: The validated price.
 
         Raises:
-            ValueError: Si le prix est inférieur ou égal à 0.
+            ValueError: If the price is less than or equal to 0.
         """
         if price <= 0:
-            raise ValueError("Le prix doit être un nombre positif.")
+            raise ValueError("The price must be a positive number.")
         return price
 
     def validate_latitude(self, latitude):
         """
-        Valide la latitude du lieu.
+        Validates the latitude of the place.
 
         Args:
-            latitude (float): La latitude à valider.
+            latitude (float): The latitude to validate.
 
         Returns:
-            float: La latitude validée.
+            float: The validated latitude.
 
         Raises:
-            ValueError: Si la latitude n'est pas dans la plage valide
-            [-90.0, 90.0].
+            ValueError: If the latitude is not within the valid range [-90.0, 90.0].
         """
         if latitude is not None and (latitude < -90.0 or latitude > 90.0):
             raise ValueError(
-                "La latitude doit être comprise entre -90.0 et 90.0.")
+                "The latitude must be between -90.0 and 90.0."
+            )
         return latitude
 
     def validate_longitude(self, longitude):
         """
-        Valide la longitude du lieu.
+        Validates the longitude of the place.
 
         Args:
-            longitude (float): La longitude à valider.
+            longitude (float): The longitude to validate.
 
         Returns:
-            float: La longitude validée.
+            float: The validated longitude.
 
         Raises:
-            ValueError: Si la longitude n'est pas dans la plage valide
-            [-180.0, 180.0].
+            ValueError: If the longitude is not within the valid range [-180.0, 180.0].
         """
         if longitude is not None and (longitude < -180.0 or longitude > 180.0):
             raise ValueError(
-                "La longitude doit être comprise entre -180.0 et 180.0.")
+                "The longitude must be between -180.0 and 180.0."
+            )
         return longitude
 
     def validate_owner_id(self, owner_id):
         """
-        Valide le propriétaire du lieu.
+        Validates the owner of the place.
 
         Args:
-            owner (BaseModel, int, str): Le propriétaire à valider (soit un ID,
-            soit une instance de BaseModel).
+            owner_id (BaseModel, int, str): The owner to validate (either an ID or a BaseModel instance).
 
         Returns:
-            BaseModel, int, str: Le propriétaire validé.
+            BaseModel, int, str: The validated owner.
 
         Raises:
-            ValueError: Si le propriétaire n'est pas un ID valide ou une
-            instance de BaseModel.
+            ValueError: If the owner is not a valid ID or an instance of BaseModel.
         """
         if isinstance(owner_id, BaseModel):
             return owner_id
-        elif isinstance(owner_id, (int, str)):  # Si le propriétaire est un ID
+        elif isinstance(owner_id, (int, str)):  # If the owner is an ID
             return owner_id
         else:
             raise ValueError(
-                "Le propriétaire doit être un ID ou une instance de BaseModel."
+                "The owner must be an ID or an instance of BaseModel."
             )
 
-    # Ajout de reviews et d'amenities
+    # Adding reviews and amenities
     def add_review(self, review):
         """
-        Ajoute une review au lieu.
+        Adds a review to the place.
 
         Args:
-            review: L'objet review à ajouter.
+            review: The review object to add.
         """
         self.reviews.append(review)
 
     def add_amenity(self, amenity):
         """
-        Ajoute une amenity au lieu.
+        Adds an amenity to the place.
 
         Args:
-            amenity: L'objet amenity à ajouter.
+            amenity: The amenity object to add.
         """
         self.amenities.append(amenity)
