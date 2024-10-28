@@ -1,6 +1,6 @@
-"""initialise la couche de logique métier pour l'application HBnB.
-# Cette couche de logique métier définit les entités principales de
-# l'application"""
+"""initializes the business logic layer for the HBnB application.
+# This business logic layer defines the main entities of the
+# the application"""
 
 from app.persistence.repository import InMemoryRepository
 storage = InMemoryRepository()

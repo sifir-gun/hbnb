@@ -51,6 +51,7 @@ class Amenity(BaseModel):
         """
         if not name or len(name) > 50:
             raise ValueError(
-                "The amenity name is required and must be 50 characters or fewer."
+                "The amenity name is required and must be 50 characters or "
+                "fewer."
             )
         return name

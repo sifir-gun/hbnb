@@ -55,7 +55,9 @@ class TestUserEndpoints(unittest.TestCase):
         # Check for the appropriate error message for first name
         self.assertIn('error', response_json)
         self.assertIn(
-            'First Name is required and must be at most 50 characters long.', response_json['error'])
+            'First Name is required and must be at most 50 characters long.',
+            response_json['error']
+        )
 
     def test_create_user_duplicate_email(self):
         # Test creating a user with a duplicate email (email already exists)

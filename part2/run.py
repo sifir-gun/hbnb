@@ -1,8 +1,6 @@
+from app import create_app
 import sys
 import os
-
-from app import create_app
-
 
 # Adds the parent directory to the path to access the 'app' module
 # This allows importing the 'app' module even if this file is executed

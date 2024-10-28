@@ -17,8 +17,10 @@ class Review(BaseModel):
     Methods:
         validate_text(text): Validates that the text is not empty.
         validate_rating(rating): Validates that the rating is between 1 and 5.
-        validate_place(place): Validates that the place is a valid instance of Place.
-        validate_user(user): Validates that the user is a valid instance of User.
+        validate_place(place): Validates that the place is a valid instance
+        of Place.
+        validate_user(user): Validates that the user is a valid instance
+        of User.
     """
 
     def __init__(self, text, rating, place_id, user_id):
@@ -32,9 +34,11 @@ class Review(BaseModel):
             user_id (str): The ID of the user who wrote the review.
 
         Raises:
-            ValueError: If any of the 'text', 'rating', 'place_id', or 'user_id' fields are invalid.
+            ValueError: If any of the 'text', 'rating', 'place_id', or
+            'user_id' fields are invalid.
         """
-        # Call the BaseModel constructor to initialize the ID and other base attributes
+        # Call the BaseModel constructor to initialize the ID and other
+        # base attributes
         super().__init__()
         self.text = self.validate_text(text)
         self.rating = self.validate_rating(rating)

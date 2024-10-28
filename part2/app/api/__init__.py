@@ -1,4 +1,4 @@
-# app/__init__.py
+"""# app/__init__.py
 
 from flask import Flask
 from flask_restx import Api
@@ -24,3 +24,4 @@ def create_app():
     api.add_namespace(amenities_ns, path='/api/v1/amenities')
 
     return app
+"""

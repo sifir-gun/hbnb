@@ -9,18 +9,18 @@ class BaseModel:
         self.updated_at = datetime.now()
 
     def save(self):
-        """Met à jour l'horodatage updated_at."""
+        """Updates the updated_at timestamp."""
         self.updated_at = datetime.now()
 
     def update(self, data):
-        """Met à jour les attributs en fonction du dictionnaire fourni."""
+        """Updates attributes based on the dictionary supplied."""
         for key, value in data.items():
             if hasattr(self, key):
                 setattr(self, key, value)
         self.save()
 
     def to_dict(self):
-        """Convertit l'instance actuelle en dictionnaire."""
+        """Converts the current instance into a dictionary."""
         # Copie les attributs de l'objet dans un dictionnaire
         obj_dict = self.__dict__.copy()
         # Conversion des dates en chaîne ISO 8601

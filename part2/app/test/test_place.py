@@ -55,7 +55,9 @@ def test_post_place(client):
         'amenities': ["BBQ"]
     }
     response = client.post(
-        '/api/v1/places/', json=new_place_data, headers={"Content-Type": "application/json"}
+        '/api/v1/places/',
+        json=new_place_data,
+        headers={"Content-Type": "application/json"}
     )
 
     assert response.status_code == 201
@@ -86,7 +88,10 @@ def test_update_place(client, setup_data):
         'amenities': ["WiFi"]
     }
     response = client.put(
-        f'/api/v1/places/{place_id}', json=update_data, headers={"Content-Type": "application/json"})
+                f'/api/v1/places/{place_id}',
+                json=update_data,
+                headers={"Content-Type": "application/json"}
+        )
     assert response.status_code == 200
     assert 'Appartement' in response.get_data(as_text=True)
 
