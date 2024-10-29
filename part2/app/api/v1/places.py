@@ -115,7 +115,7 @@ class PlaceDetail(Resource):
     """
 
     @api.doc('get_place')
-    @api.expect(place_model, validate=True) # Valide automatiquement les données de la requête entrante
+    # @api.expect(place_model, validate=True) # Valide automatiquement les données de la requête entrante
     @api.marshal_with(place_model)          # Structurer et formater la réponse de l’API
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
@@ -173,3 +173,4 @@ class PlaceDetail(Resource):
         # Suppression du lieu via la façade
         result, status_code = facade.delete_place(place_id)
         return result, status_code
+

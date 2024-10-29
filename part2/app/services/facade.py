@@ -225,7 +225,7 @@ class HBnBFacade:
                 'Description must be between 1 and 500 characters')
 
     def get_place(self, place_id):
-        return self.place_repo(place_id)
+        return self.place_repo.get(place_id)
 
     def get_all_places(self):
         return self.place_repo.get_all()
@@ -248,3 +248,11 @@ class HBnBFacade:
         storage.delete(place)
         storage.save()
         return {"message": "Place deleted successfully"}, 200
+
+    def get_amenities_by_place(self, place_id):
+        # Utilisez le repository pour récupérer les commodités d'un lieu
+        return storage.get_amenities_by_place(place_id)
+
+    def get_reviews_by_place(self, place_id):
+        # Utilisez le repository pour récupérer les avis d'un lieu
+        return storage.get_reviews_by_place(place_id)
