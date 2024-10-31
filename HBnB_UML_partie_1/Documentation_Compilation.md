@@ -179,7 +179,7 @@ Amenities help users refine their search for a place by specifying the features 
 
 The class diagram and the relationships between entities provide a well-structured foundation for the HBnB project. Each class has clearly defined responsibilities and attributes, and the use of inheritance and encapsulation ensures that the design is both scalable and maintainable.
 
-![Class Diagram](https://github.com/sifir-gun/hbnb/blob/main/Diagram_de_Class_HBnB.png)
+![Class Diagram](https://raw.githubusercontent.com/sifir-gun/hbnb/refs/heads/main/HBnB_UML_partie_1/Diagram_de_Class_HBnB.png)
 
 ## **API Interaction Flow: Sequence Diagram for User Registration**
 
@@ -236,7 +236,7 @@ This sequence diagram for user registration provides a clear representation of h
 
 ---
 
-![User Registration Diagram](https://github.com/sifir-gun/hbnb/blob/e21bbe3ccef8088f068ec70323ced9a920109d21/API%20POST%20register.jpg)
+![User Registration Diagram](https://raw.githubusercontent.com/sifir-gun/hbnb/refs/heads/main/HBnB_UML_partie_1/API%20POST%20register.jpg)
 
 ## **API GET Place**
 
@@ -271,7 +271,7 @@ The Business Logic layer takes the query criteria (for example, filters on locat
 **Answer 200 OK:**
 Once the user has received the list of ads, the API sends an HTTP 200 OK response, which means that the request was successful.
 
-![API GET place](https://github.com/sifir-gun/hbnb/blob/main/API%20GET%20place.jpg)  
+![API GET place](https://raw.githubusercontent.com/sifir-gun/hbnb/refs/heads/main/HBnB_UML_partie_1/API%20GET%20place.jpg)  
 
 ## **API POST places**
 
@@ -316,7 +316,7 @@ The Business Logic returns a response to the API, confirming that the new advert
 **Return response to user:**
 
 The API returns a response to the user indicating whether the operation was successful or unsuccessful. If the backup was successful, the user receives a success confirmation, otherwise an error message.  
-![API POST places](https://github.com/sifir-gun/hbnb/blob/main/API%20POST%20places.jpg)
+![API POST places](https://raw.githubusercontent.com/sifir-gun/hbnb/refs/heads/main/HBnB_UML_partie_1/API%20POST%20places.jpg)
 
 
 
@@ -362,4 +362,4 @@ The BusinessLogic layer sends a response to the API, indicating whether the revi
 ### Returning Response to the User.
 The API sends a final response back to the user, informing them of the outcome. If successful, the response might be something like "Review submitted successfully"; otherwise, the user may receive an error message.
 
-![API POST reviews](https://github.com/sifir-gun/hbnb/blob/main/API_POST_reviews.jpg)
+![API POST reviews](https://raw.githubusercontent.com/sifir-gun/hbnb/refs/heads/main/HBnB_UML_partie_1/API_POST_reviews.jpg)
