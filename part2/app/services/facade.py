@@ -1,3 +1,10 @@
+"""
+Ce module initialise la couche de services pour l'application HBnB.
+La couche de services utilise le pattern Façade pour simplifier
+l'interaction entre la logique métier et la persistance des données.
+"""
+
+from app.models.review import Review
 from app.persistence.repository import InMemoryRepository
 from app.models.user import User
 from app.models.review import Review
@@ -20,6 +27,7 @@ class HBnBFacade:
     """
 
     def __init__(self):
+        """Initialise les dépôts pour les utilisateurs, les lieux, les avis et les commodités."""
         self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
