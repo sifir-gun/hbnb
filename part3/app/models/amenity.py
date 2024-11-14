@@ -1,3 +1,4 @@
+from app import db
 from .base_model import BaseModel
 
 
@@ -16,6 +17,10 @@ class Amenity(BaseModel):
     updated_at : datetime
         Last update date and time of the amenity.
     """
+
+    __tablename__ = 'amenities'
+
+    name = db.Column(db.String(100), nullable=False, unique=True)
 
     def __init__(self, name):
         """

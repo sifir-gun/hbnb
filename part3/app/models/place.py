@@ -1,3 +1,4 @@
+from app import db
 from .base_model import BaseModel
 
 
@@ -9,6 +10,16 @@ class Place(BaseModel):
     for `Place` objects, including handling title, price, location, owner,
     and associated reviews and amenities.
     """
+
+    __tablename__ = 'places'
+
+    # Définir les colonnes SQLAlchemy pour chaque attribut
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+    owner_id = db.Column(db.String(36), nullable=False)
 
     def __init__(self, title, price, owner_id, description='',
                  latitude=None, longitude=None):

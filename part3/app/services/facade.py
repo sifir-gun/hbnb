@@ -9,6 +9,10 @@ from app.models import storage
 from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repository import UserRepository
 from app import db
+from app.persistence.place_repository import PlaceRepository
+from app.persistence.review_repository import ReviewRepository
+from app.persistence.amenity_repository import AmenityRepository
+
 
 bcrypt = Bcrypt()
 
@@ -32,6 +36,9 @@ class HBnBFacade:
         self.amenity_repo = InMemoryRepository()
         self.user_repo = SQLAlchemyRepository(User)
         self.user_repo = UserRepository()
+        self.place_repo = PlaceRepository()
+        self.review_repo = ReviewRepository()
+        self.amenity_repo = AmenityRepository()
 
     def admin_update_user(self, user_id, user_data):
         """
