@@ -25,9 +25,19 @@ class Review(BaseModel):
     """
 
     __tablename__ = 'reviews'
+
+    # Définition des colonnes
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(255), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
+    
+    # Clés étrangères
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
+
+    # Relation avec Place
+    user = db.relationship("User", backref="reviews")
+    place_id = db.relationship("Place", backref="reviews")
 
     def __init__(self, text, rating, place_id, user_id):
         """
