@@ -1,6 +1,12 @@
 from app import db
 from .base_model import BaseModel
 
+# Table d'association pour la relation plusieurs-à-plusieurs entre Place et Amenity
+place_amenity = db.Table(
+    'place_amenity',
+    db.Column('place_id', db.Integer, db.ForeignKey('places.id'), primary_key=True),
+    db.Column('amenity_id', db.Integer, db.ForeignKey('amenities.id'), primary_key=True)
+)
 
 class Place(BaseModel):
     """
@@ -13,7 +19,7 @@ class Place(BaseModel):
 
     __tablename__ = 'places'
 
-    # Définir les colonnes SQLAlchemy pour chaque attribut
+    # Columns for Place attributes
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
@@ -21,35 +27,32 @@ class Place(BaseModel):
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
 
-    def __init__(self, title, price, owner_id, description='',
-                 latitude=None, longitude=None):
+    # Foreign key to reference the User (owner)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    # Relationships
+    reviews_received = db.relationship("Review", backref="place_reviewed", lazy="select")
+    amenities = db.relationship("Amenity", secondary=place_amenity, lazy="subquery", backref=db.backref("places", lazy=True))
+
+    def __init__(self, title, price, owner_id, description='', latitude=None, longitude=None):
         """
         Initializes a Place object with the provided attributes.
 
         Args:
             title (str): Title of the place.
             price (float): Price associated with the place.
-            owner_id (BaseModel or int/str): Owner of the place
-            (either an ID or an instance of BaseModel).
+            owner_id (int): ID of the user who owns the place.
             description (str, optional): Description of the place.
             latitude (float, optional): Latitude of the place.
             longitude (float, optional): Longitude of the place.
         """
-        # Call the parent class `BaseModel` constructor
         super().__init__()
-        # Validate and assign the title
         self.title = self.validate_title(title)
-        self.description = description  # Optional description
-        # Validate and assign the price
+        self.description = description
         self.price = self.validate_price(price)
-        self.latitude = self.validate_latitude(
-            latitude)  # Validate and assign latitude
-        self.longitude = self.validate_longitude(
-            longitude)  # Validate and assign longitude
-        # Validate and assign the owner
-        self.owner_id = self.validate_owner_id(owner_id)
-        self.reviews = []  # List to store associated reviews
-        self.amenities = []  # List to store associated amenities
+        self.latitude = self.validate_latitude(latitude)
+        self.longitude = self.validate_longitude(longitude)
+        self.user_id = owner_id  # Assign the owner's ID
 
     def to_dict(self):
         """
@@ -65,119 +68,13 @@ class Place(BaseModel):
             "price": self.price,
             "latitude": self.latitude,
             "longitude": self.longitude,
-            # Serialize the owner (either ID or BaseModel instance)
-            "owner_id": self.owner_id if isinstance(self.owner_id, BaseModel)
-            else self.owner_id,
-            # Serialize reviews
-            "reviews": [review.to_dict() if hasattr(review, 'to_dict')
-                        else review for review in self.reviews],
-            # Serialize amenities
-            "amenities": [amenity.to_dict() if hasattr(amenity, 'to_dict')
-                          else amenity for amenity in self.amenities]
+            "owner_id": self.user_id,
+            "reviews": [review.to_dict() for review in self.reviews],
+            "amenities": [amenity.to_dict() for amenity in self.amenities]
         }
 
-    # Validation methods
-    def validate_title(self, title):
-        """
-        Validates the title of the place.
+    # Validation methods (as previously defined)
 
-        Args:
-            title (str): The title to validate.
-
-        Returns:
-            str: The validated title.
-
-        Raises:
-            ValueError: If the title is empty or exceeds 100 characters.
-        """
-        if not title or len(title) > 100:
-            raise ValueError(
-                "The title is required and must be 100 characters or fewer."
-            )
-        return title
-
-    def validate_price(self, price):
-        """
-        Validates the price of the place.
-
-        Args:
-            price (float): The price to validate.
-
-        Returns:
-            float: The validated price.
-
-        Raises:
-            ValueError: If the price is less than or equal to 0.
-        """
-        if price <= 0:
-            raise ValueError("The price must be a positive number.")
-        return price
-
-    def validate_latitude(self, latitude):
-        """
-        Validates the latitude of the place.
-
-        Args:
-            latitude (float): The latitude to validate.
-
-        Returns:
-            float: The validated latitude.
-
-        Raises:
-            ValueError: If the latitude is not within the valid range
-            [-90.0, 90.0].
-        """
-        if latitude is not None and (latitude < -90.0 or latitude > 90.0):
-            raise ValueError(
-                "The latitude must be between -90.0 and 90.0."
-            )
-        return latitude
-
-    def validate_longitude(self, longitude):
-        """
-        Validates the longitude of the place.
-
-        Args:
-            longitude (float): The longitude to validate.
-
-        Returns:
-            float: The validated longitude.
-
-        Raises:
-            ValueError: If the longitude is not within the valid range
-            [-180.0, 180.0].
-        """
-        if longitude is not None and (longitude < -180.0 or longitude > 180.0):
-            raise ValueError(
-                "The longitude must be between -180.0 and 180.0."
-            )
-        return longitude
-
-    def validate_owner_id(self, owner_id):
-        """
-        Validates the owner of the place.
-
-        Args:
-            owner_id (BaseModel, int, str): The owner to validate (either an
-            ID or a BaseModel instance).
-
-        Returns:
-            BaseModel, int, str: The validated owner.
-
-        Raises:
-            ValueError: If the owner is not a valid ID or an instance of
-            BaseModel.
-        """
-        if isinstance(owner_id, BaseModel):
-            return owner_id
-        elif isinstance(owner_id, (int, str)):  # If the owner is an ID
-            return owner_id
-        else:
-            raise ValueError(
-                "The owner must be an ID or an instance of BaseModel."
-            )
-
-    # Adding reviews and amenities
     def add_review(self, review):
         """
         Adds a review to the place.
