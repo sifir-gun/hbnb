@@ -14,12 +14,12 @@ class Place(BaseModel):
     __tablename__ = 'places'
 
     # Définir les colonnes SQLAlchemy pour chaque attribut
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
-    owner_id = db.Column(db.String(36), nullable=False)
 
     def __init__(self, title, price, owner_id, description='',
                  latitude=None, longitude=None):
