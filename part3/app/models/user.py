@@ -1,14 +1,23 @@
 import re
 from .base_model import BaseModel
-from flask_bcrypt import Bcrypt  # type: ignore
+from app import db
+from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
 
 
 class User(BaseModel):
+    __tablename__ = 'users'
+
+    # Définition des colonnes de la base de données
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
     def __init__(self, first_name, last_name, email, password, is_admin=False):
-        """Initialize a new user with a hashed password"""
-        super().__init__()
+        """Initialize a new user with validated data and hashed password"""
         self.first_name = self.validate_name(first_name, 'First name')
         self.last_name = self.validate_name(last_name, 'Last name')
         self.email = self.validate_email(email)
