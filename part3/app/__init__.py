@@ -3,6 +3,9 @@ from flask_bcrypt import Bcrypt
 from flask_restx import Api
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 # Create extensions
 bcrypt = Bcrypt()
@@ -18,6 +21,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     app.config['JWT_SECRET_KEY'] = 'dev-secret-key'
 
     # Initialize extensions
+    db.init_app(app)
     CORS(app)
     jwt.init_app(app)
     bcrypt.init_app(app)

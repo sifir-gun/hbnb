@@ -1,3 +1,5 @@
-Flask==3.0.0         # Flask is a micro-framework for web application development
-Flask-RESTx==1.3.0   # Flask-RESTx is an extension for Flask that simplifies creating RESTful APIs
-Flask-Bcrypt==3.2.0        # Used for password hashing and security
+Flask==3.0.0                  # Micro-framework pour le développement d'applications web
+Flask-RESTx==1.3.0            # Extension pour créer des APIs RESTful avec Flask
+Flask-Bcrypt==3.2.0           # Pour le hachage et la sécurité des mots de passe
+SQLAlchemy==2.0.36             # ORM pour la gestion des interactions avec la base de données
+Flask-SQLAlchemy==3.1.1       # Extension de SQLAlchemy intégrée avec Flask

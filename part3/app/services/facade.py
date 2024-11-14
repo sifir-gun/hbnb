@@ -6,6 +6,8 @@ from app.models.review import Review
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models import storage
+from app.persistence.sqlalchemy_repository import SQLAlchemyRepository
+from app import db
 
 bcrypt = Bcrypt()
 
@@ -27,6 +29,7 @@ class HBnBFacade:
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
+        self.user_repo = SQLAlchemyRepository(User)
 
     def admin_update_user(self, user_id, user_data):
         """
@@ -135,16 +138,17 @@ class HBnBFacade:
         """Create a new user."""
         print("\n=== Creating User in Facade ===")
         try:
-            # Check if email exists
+            # Vérifier si l'email existe déjà
             existing_user = self.get_user_by_email(user_data.get('email'))
             if existing_user:
                 raise ValueError("Email already in use")
 
-            # Get the password from user data
+            # Obtenir le mot de passe et autres données utilisateur
             password = user_data.get('password')
             print("Received raw password in facade")
 
-            # Create user instance (password will be hashed in User.__init__)
+            # Créer une instance User (le hachage du mot de passe sera géré
+            # dans le constructeur de User)
             user = User(
                 first_name=user_data["first_name"],
                 last_name=user_data["last_name"],
@@ -156,8 +160,8 @@ class HBnBFacade:
             print(f"User created in facade. Final password hash: {
                 user.password[:20]}...")
 
-            storage.add(user)
-            storage.save()
+            # Ajouter l'utilisateur via le SQLAlchemyRepository
+            self.user_repo.add(user)
             return user
 
         except Exception as e:
@@ -170,11 +174,11 @@ class HBnBFacade:
         if user_id != current_user_id:
             raise ValidationError("Unauthorized access")
 
-        user = storage.get(user_id)
+        user = self.user_repo.get(user_id)
         if not user:
             raise ValidationError("User not found")
 
-        # Update user fields
+        # Mise à jour des champs utilisateur autorisés
         if 'first_name' in user_data:
             user.first_name = user_data['first_name']
         if 'last_name' in user_data:
@@ -182,31 +186,26 @@ class HBnBFacade:
         if 'email' in user_data or 'password' in user_data:
             print("Modification de l'email ou du mot de passe interdite.")
 
-        storage.save()  # Save changes
+        db.session.commit()  # Sauvegarder les changements
         return user
 
     def delete_user(self, user_id):
-        # Retrieve the user
-        user = storage.get(user_id)
+        user = self.user_repo.get(user_id)
         if not user:
             raise ValidationError("User not found")
-        storage.delete(user)  # Delete the user
-        storage.save()
+
+        # Suppression via SQLAlchemyRepository
+        self.user_repo.delete(user_id)
 
     def get_user(self, user_id):
-        # Retrieve the user from storage
-        return storage.get(user_id)
+        return self.user_repo.get(user_id)
 
     def get_user_by_email(self, email):
-        # Search for the user by email among all users
-        users = storage.get_all(User)
-        for user in users:
-            if user.email == email:
-                return user
-        return None
+        # Rechercher l'utilisateur par email en utilisant SQLAlchemy
+        return self.user_repo.get_by_attribute("email", email)
 
     def get_all_users(self):
-        return storage.get_all(User)  # Retrieve all users
+        return self.user_repo.get_all()
 
     # ---------------------------- Review Management --------------------------
 
