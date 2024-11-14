@@ -1,19 +1,25 @@
+from app import db
 import uuid
 from datetime import datetime
 
 
-class BaseModel:
-    def __init__(self):
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+class BaseModel(db.Model):
+    __abstract__ = True
+
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(
+        uuid.uuid4()))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def save(self):
-        """Updates the updated_at timestamp."""
-        self.updated_at = datetime.now()
+        """Updates the updated_at timestamp and saves the instance."""
+        self.updated_at = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
 
     def update(self, data):
-        """Updates attributes based on the dictionary supplied."""
+        """Attribute updates based on the dictionary provided."""
         for key, value in data.items():
             if hasattr(self, key):
                 setattr(self, key, value)
@@ -21,9 +27,9 @@ class BaseModel:
 
     def to_dict(self):
         """Converts the current instance into a dictionary."""
-        # Copie les attributs de l'objet dans un dictionnaire
         obj_dict = self.__dict__.copy()
-        # Conversion des dates en chaîne ISO 8601
+        # Converting dates to ISO 8601 format
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
+        obj_dict.pop('_sa_instance_state', None)
         return obj_dict
