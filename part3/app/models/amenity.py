@@ -1,6 +1,6 @@
 from app import db
 from .base_model import BaseModel
-
+from datetime import datetime
 
 class Amenity(BaseModel):
     """
@@ -8,7 +8,7 @@ class Amenity(BaseModel):
 
     Attributes:
     ----------
-    id : str
+    id : int
         Unique identifier of the amenity.
     name : str
         Name of the amenity.
@@ -20,7 +20,11 @@ class Amenity(BaseModel):
 
     __tablename__ = 'amenities'
 
+    # Définir 'id' avec autoincrement pour générer automatiquement l'ID
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Ajout d'autoincrement
     name = db.Column(db.String(100), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __init__(self, name):
         """
@@ -31,13 +35,13 @@ class Amenity(BaseModel):
         name : str
             The name of the amenity.
         """
-        super().__init__()  # Call to the BaseModel constructor
+        super().__init__()  # Appel du constructeur de BaseModel
         self.name = self.validate_name(name)
 
     def validate_name(self, name):
         """
         Validates the name of the amenity. Ensures it is not empty and does
-        not exceed 50 characters.
+        not exceed 100 characters.
 
         Parameters:
         ----------
@@ -52,11 +56,10 @@ class Amenity(BaseModel):
         Raises:
         ------
         ValueError
-            If the name is empty or exceeds 50 characters.
+            If the name is empty or exceeds 100 characters.
         """
-        if not name or len(name) > 50:
+        if not name or len(name) > 100:
             raise ValueError(
-                "The amenity name is required and must be 50 characters or "
-                "fewer."
+                "The amenity name is required and must be 100 characters or fewer."
             )
         return name
