@@ -1,0 +1,20 @@
+from app import db
+from app.models.review import Review
+
+try:
+    nouveau_review = Review(
+        text="C'est un excellent endroit, je recommande fortement !",
+        rating=5,  # Note entre 1 et 5
+        place_id="21575dc4-7463-4543-a21a-66624b600436",  # ID de Place, à adapter
+        user_id="12345abcde"  # ID d'utilisateur, à adapter
+    )
+
+    # Ajouter l'objet à la session et valider la transaction
+    db.session.add(nouveau_review)
+    db.session.commit()
+
+    # Afficher l'ID généré pour le nouvel avis
+    print(f"Review added with ID: {nouveau_review.id}")
+
+except ValueError as e:
+    print(f"Error: {e}")

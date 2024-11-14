@@ -1,0 +1,14 @@
+from app import db
+from app.models.amenity import Amenity
+
+# Vérifier si l'amenity existe déjà
+existing_amenity = Amenity.query.filter_by(name="Wi-Fi").first()
+
+if existing_amenity is None:
+    # Créer un nouvel équipement seulement si il n'existe pas déjà
+    nouveau_amenity = Amenity(name="Wi-Fi")
+    db.session.add(nouveau_amenity)
+    db.session.commit()
+    print(f"Nouveau amenity créé avec l'ID : {nouveau_amenity.id}")
+else:
+    print("L'amenity 'Wi-Fi' existe déjà.")

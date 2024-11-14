@@ -1,0 +1,19 @@
+from app import db
+from app.models.place import Place
+
+# Créer un nouvel endroit
+nouveau_place = Place(
+    title="Exemple de Place", 
+    price=100.0, 
+    description="Une description d'exemple pour le lieu", 
+    latitude=48.8566,  # Latitude de Paris
+    longitude=2.3522   # Longitude de Paris
+)
+
+# Ajouter à la session et valider la transaction
+db.session.add(nouveau_place)
+db.session.commit()
+
+# Vérifier si l'ajout a fonctionné
+places = Place.query.all()
+print(places)
