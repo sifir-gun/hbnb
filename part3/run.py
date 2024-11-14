@@ -1,9 +1,13 @@
 """Script to run the Flask application."""
 import sys
 import os
-from app import create_app
+from app import create_app, db  # Import unique de create_app et db
 from app.models.user import User
 from app.models import storage
+# Imports des nouveaux modèles task8
+from app.models.place import Place
+from app.models.review import Review
+from app.models.amenity import Amenity
 
 # Adds the parent directory to the path to access the 'app' module
 sys.path.append(os.path.abspath(
@@ -44,4 +48,6 @@ if __name__ == '__main__':
     Flask application with debugging enabled.
     """
     create_admin_if_not_exists()
+    with app.app_context():
+        db.create_all()  # Crée les tables pour tous les modèles importés
     app.run(debug=True)
