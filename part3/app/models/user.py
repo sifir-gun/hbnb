@@ -1,11 +1,18 @@
 import re
+from app import db, bcrypt  # Import direct depuis app
 from .base_model import BaseModel
-from flask_bcrypt import Bcrypt  # type: ignore
 
-bcrypt = Bcrypt()
+class User(db.Model, BaseModel):  # Hérite de db.Model pour activer SQLAlchemy
+    __tablename__ = 'users'
 
+    # Définition des colonnes pour SQLAlchemy
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)  # Hash du mot de passe
+    is_admin = db.Column(db.Boolean, default=False)
 
-class User(BaseModel):
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         """Initialize a new user with a hashed password"""
         super().__init__()

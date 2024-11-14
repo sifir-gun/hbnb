@@ -157,8 +157,8 @@ class HBnBFacade:
                 is_admin=user_data.get("is_admin", False)
             )
 
-            print(f"User created in facade. Final password hash: {
-                user.password[:20]}...")
+            print(f"User created in facade. Final password hash: {user.password[:20]}...")
+
 
             # Ajouter l'utilisateur via le SQLAlchemyRepository
             self.user_repo.add(user)
