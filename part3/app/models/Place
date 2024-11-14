@@ -3,7 +3,7 @@ from app.models.place import Place
 
 # Créer un nouvel endroit
 nouveau_place = Place(
-    title="Exemple de Place", 
+    title="Appartement Charmant", 
     price=100.0, 
     description="Une description d'exemple pour le lieu", 
     latitude=48.8566,  # Latitude de Paris
