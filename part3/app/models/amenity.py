@@ -26,6 +26,9 @@ class Amenity(BaseModel):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    # Relation avec Place
+    places = db.relationship("Place", secondary='place_amenity', back_populates="amenities")
+    
     def __init__(self, name):
         """
         Initializes a new instance of the Amenity class.
