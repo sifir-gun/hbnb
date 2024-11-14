@@ -5,8 +5,22 @@ from flask_bcrypt import Bcrypt  # type: ignore
 
 bcrypt = Bcrypt()
 
-
 class User(BaseModel):
+    __tablename__ = 'users'
+    
+     # Définition des colonnes
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+
+    # Relation avec Place
+    places = db.relationship("Place", backref="owner", lazy="select")
+
+    # Relation avec Review
+    reviews = db.relationship("Review", backref="review_author", lazy="select")
+
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         """Initialize a new user with validated data and hashed password"""
         self.first_name = self.validate_name(first_name, 'First name')
@@ -17,10 +31,10 @@ class User(BaseModel):
         print(f"User initialized with email: {email}")
 
     def hash_password(self, password):
-        """Hash le mot de passe avant de le stocker"""
+        """Hash the password before storing it"""
         if not password:
             raise ValueError("Password is required")
-
+        
         print(f"Hashing password for user: {self.email}")
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
         print(f"Password hashed. Hash: {self.password[:20]}...")
@@ -45,7 +59,7 @@ class User(BaseModel):
             return False
 
     def validate_name(self, name, field_name):
-        """Validate le nom (prénom ou nom)"""
+        """Validate name (first name or last name)"""
         if not name or len(name) > 50:
             raise ValueError(
                 f"{field_name} is required and must be 50 characters or fewer."
@@ -53,7 +67,7 @@ class User(BaseModel):
         return name
 
     def validate_email(self, email):
-        """Validate l'adresse email"""
+        """Validate the email address"""
         email_regex = r'^\S+@\S+\.\S+$'
         if not email or not re.match(email_regex, email):
             raise ValueError("A valid email address is required.")
