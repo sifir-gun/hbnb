@@ -1,13 +1,17 @@
 import re
 from .base_model import BaseModel
+from sqlalchemy.orm import relationship
 from app import db
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
 
 
-class User(BaseModel):
+class User(BaseModel, db.Model):
     __tablename__ = 'users'
+
+    places = relationship('Place', backref='owner', lazy=True)
+    reviews = relationship('Review', backref='author', lazy=True)
 
     # Définition des colonnes de la base de données
     first_name = db.Column(db.String(50), nullable=False)

@@ -1,163 +1,118 @@
-
-# HBnB - Location Management Platform
-
-![Python Version](https://img.shields.io/badge/python-3.12.2-blue.svg)
-![Flask Version](https://img.shields.io/badge/flask-3.0.0-green.svg)
-![Status](https://img.shields.io/badge/status-development-yellow.svg)
-
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Technical Stack](#technical-stack)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [API Documentation](#api-documentation)
-- [Development Team](#development-team)
-- [Contributing](#contributing)
-- [License](#license)
-
-## 🎯 Overview
-
-HBnB is an advanced property rental management platform inspired by Airbnb. It provides a robust backend API for managing properties, user accounts, reviews, and amenities. The platform is built with scalability and maintainability in mind, following clean architecture principles and modern development practices.
-
-## ✨ Features
-
-- **User Management**
-  - User registration and profile management
-  - Authentication and authorization
-  - Admin and regular user roles
-
-- **Property Management**
-  - Property listing creation and management
-  - Detailed property information (location, price, amenities)
-  - Geographic coordinate support
-
-- **Review System**
-  - Property review submission
-  - Rating system
-  - Review management
-
-- **Amenity Management**
-  - Customizable amenity listings
-  - Property-amenity associations
-
-## 🏗 Architecture
-
-The application follows a layered architecture pattern:
-
-1. **Presentation Layer** (API)
-   - RESTful endpoints using Flask-RESTx
-   - Request validation and response formatting
-   - API documentation with Swagger UI
-
-2. **Service Layer**
-   - Business logic implementation
-   - Facade pattern for simplified interface
-   - Data validation and processing
-
-3. **Persistence Layer**
-   - Data storage and retrieval
-   - Repository pattern implementation
-   - In-memory storage (expandable to other storage solutions)
-
-## 🛠 Technical Stack
-
-- **Framework**: Flask 3.0.0
-- **API Documentation**: Flask-RESTx 1.3.0
-- **Security**: bcrypt 3.2.0
-- **Development Tools**:
-  - Python 3.12.2
-  - Git for version control
-
-## 📁 Project Structure
-
-```
-hbnb/
-├── app/
-│   ├── __init__.py
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── v1/
-│   │       ├── __init__.py
-│   │       ├── users.py
-│   │       ├── places.py
-│   │       ├── reviews.py
-│   │       ├── amenities.py
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── user.py
-│   │   ├── place.py
-│   │   ├── review.py
-│   │   ├── amenity.py
-│   ├── services/
-│   │   ├── __init__.py
-│   │   ├── facade.py
-│   ├── persistence/
-│       ├── __init__.py
-│       ├── repository.py
-├── run.py
-├── config.py
-├── requirements.txt
-├── README.md
-```
-
-## 🚀 Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/sifir-gun/hbnb.git
-cd hbnb
-```
-
-2. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Start the application:
-```bash
-python run.py
-```
-
-The API will be available at `http://localhost:5000`
-
-## 📚 API Documentation
-
-Once the application is running, you can access the Swagger UI documentation at:
-`http://localhost:5000/`
-
-Available endpoints:
-- `/api/v1/users` - User management
-- `/api/v1/places` - Property management
-- `/api/v1/reviews` - Review management
-- `/api/v1/amenities` - Amenity management
-
-## 👥 Development Team
-
-- **Guney TASDELEN** - Backend Development & Architecture
-- **Xavier PIEDALLU** - API Development & Documentation
-- **Neia SANTOS** - Data Models & Business Logic
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+# 🚀 HBnB Evolution - Part 3: Enhanced Backend with Authentication and Database Integration
 
 ---
 
-Developed with ❤️ by Guney, Xavier, and Neia.
+## 📋 Table of Contents
+
+- [🚀 HBnB Evolution - Part 3: Enhanced Backend with Authentication and Database Integration](#-hbnb-evolution---part-3-enhanced-backend-with-authentication-and-database-integration)
+	- [📋 Table of Contents](#-table-of-contents)
+	- [📖 Introduction](#-introduction)
+	- [🌟 New Features in Part 3](#-new-features-in-part-3)
+		- [🔐 Authentication and Authorization](#-authentication-and-authorization)
+		- [🗃️ Persistent Storage](#️-persistent-storage)
+		- [🛡️ Enhanced Data Models](#️-enhanced-data-models)
+		- [🌐 Secure API Endpoints](#-secure-api-endpoints)
+	- [🏗️ Architecture and Design](#️-architecture-and-design)
+		- [📂 High-Level Package Diagram](#-high-level-package-diagram)
+		- [🧩 Business Logic Layer Class Diagram](#-business-logic-layer-class-diagram)
+		- [🔄 Sequence Diagrams for API Calls](#-sequence-diagrams-for-api-calls)
+	- [🛠️ Usage](#️-usage)
+		- [🛑 Prerequisites](#-prerequisites)
+		- [▶️ Steps to Run](#️-steps-to-run)
+	- [🤝 Acknowledgments](#-acknowledgments)
+
+---
+
+## 📖 Introduction
+
+Welcome to **Part 3** of the HBnB Evolution project! 🎉 This phase focuses on transitioning the backend from prototype to a robust and scalable system by introducing authentication, persistent database storage, and enhanced CRUD operations.
+
+---
+
+## 🌟 New Features in Part 3
+
+### 🔐 Authentication and Authorization
+- **JWT Authentication**: Secure user sessions with JSON Web Tokens (JWT).
+- **Role-Based Access**: Admins have unrestricted access, while regular users are limited to their own resources.
+
+### 🗃️ Persistent Storage
+- **SQLite Integration**: Transitioned from in-memory storage to SQLite for development.
+- **SQLAlchemy CRUD Operations**: Refactored to handle persistent data effectively.
+
+### 🛡️ Enhanced Data Models
+- Refined entity models (`User`, `Place`, `Review`, `Amenity`) with SQLAlchemy database mappings.
+- Enforced relationships between entities for data consistency and integrity.
+
+### 🌐 Secure API Endpoints
+- Authenticated endpoints for creating, updating, and deleting resources.
+- Public endpoints remain accessible without authentication for general queries.
+
+---
+
+## 🏗️ Architecture and Design
+
+### 📂 High-Level Package Diagram
+
+The application follows a **three-layer architecture**:
+
+1. **Presentation Layer**: Handles user interaction through APIs.
+2. **Business Logic Layer**: Contains core application logic and models.
+3. **Persistence Layer**: Manages data storage and retrieval with SQLAlchemy.
+
+---
+
+### 🧩 Business Logic Layer Class Diagram
+
+The class diagram includes the following key entities:
+- **User**: Attributes such as `email`, `password_hash`, and `is_admin`.
+- **Place**: Attributes such as `name`, `description`, and associated amenities.
+- **Review**: User ratings and comments for places.
+- **Amenity**: Features that enhance a place.
+
+---
+
+### 🔄 Sequence Diagrams for API Calls
+
+Here are the main API interaction flows in this phase:
+1. **User Registration**: Securely register a new user with password hashing.
+2. **Place Creation**: Authenticated users can add new listings.
+3. **Review Submission**: Users can leave reviews with validation.
+4. **Fetching Places**: Retrieve a list of places based on filters.
+
+---
+
+## 🛠️ Usage
+
+To explore the features of Part 3:
+
+### 🛑 Prerequisites
+- Python 3.10+
+- SQLite installed
+- Flask and SQLAlchemy dependencies (`pip install -r requirements.txt`)
+
+### ▶️ Steps to Run
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/hbnb-evolution.git
+   cd hbnb-evolution/part3
+   ```
+2. **Set Up Environment**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Application**:
+   ```bash
+   flask run
+   ```
+
+4. **Test Endpoints**:
+   - Use tools like `Postman` or `cURL` to test APIs.
+
+---
+
+## 🤝 Acknowledgments
+
+A big thanks to our team and mentors for their guidance and support throughout this phase of the project. Your contributions made this possible! 🌟

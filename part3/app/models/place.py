@@ -1,8 +1,11 @@
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from app import db
 from .base_model import BaseModel
+from app.models import place_amenity
 
 
-class Place(BaseModel):
+class Place(BaseModel, db.Model):
     """
     Represents a place in the application.
 
@@ -13,6 +16,9 @@ class Place(BaseModel):
 
     __tablename__ = 'places'
 
+    user_id = db.Column(db.String(36), ForeignKey('users.id'), nullable=False)
+    reviews = relationship('Review', backref='place', lazy=True)
+
     # Définir les colonnes SQLAlchemy pour chaque attribut
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
@@ -20,6 +26,14 @@ class Place(BaseModel):
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
     owner_id = db.Column(db.String(36), nullable=False)
+
+    # Relation Many-to-Many avec Amenity
+    amenities = db.relationship(
+        'Amenity',
+        secondary=place_amenity,
+        lazy='subquery',
+        backref=db.backref('places', lazy=True)
+    )
 
     def __init__(self, title, price, owner_id, description='',
                  latitude=None, longitude=None):

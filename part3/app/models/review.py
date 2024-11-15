@@ -1,8 +1,9 @@
+from sqlalchemy import ForeignKey
 from app import db
 from .base_model import BaseModel
 
 
-class Review(BaseModel):
+class Review(BaseModel, db.Model):
     """
     Review class representing a review left by a user for a place.
 
@@ -25,6 +26,10 @@ class Review(BaseModel):
     """
 
     __tablename__ = 'reviews'
+
+    place_id = db.Column(db.String(36), ForeignKey(
+        'places.id'), nullable=False)
+    user_id = db.Column(db.String(36), ForeignKey('users.id'), nullable=False)
 
     text = db.Column(db.String(255), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
