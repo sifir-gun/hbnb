@@ -59,8 +59,9 @@ class UserList(Resource):
         """
         user_data = api.payload
         print("\n=== Creating User via API ===")
-        print(f"Received request to create user with email: {user_data.get(
-            'email')}")
+        print(
+            f"Received request to create user with email: {user_data.get('email')}"
+        )
 
         # Check for unique email first
         existing_user = facade.get_user_by_email(user_data['email'])
