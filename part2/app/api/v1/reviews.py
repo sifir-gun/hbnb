@@ -1,33 +1,33 @@
+"""
+API Endpoints to manage reviews.
+Provides routes to create, retrieve, update, and delete reviews via the API.
+"""
+
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import HBnBFacade, ValidationError
 
-# Création du namespace pour les opérations sur les avis (reviews)
+# Create a namespace for review-related operations
 api = Namespace('reviews', description='Review operations')
 
-# Définition du modèle de données d'une review pour la validation et la
-# documentation des entrées
+# Define the data model for a review, used for validation and API documentation
 review_model = api.model('Review', {
-    # Le texte de l'avis
     'text': fields.String(required=True, description='Text of the review'),
-    # La note de l'avis (1-5)
     'rating': fields.Integer(
         required=True, description='Rating of the place (1-5)'
     ),
-    # L'ID de l'utilisateur ayant rédigé l'avis
     'user_id': fields.String(required=True, description='ID of the user'),
-    # L'ID du lieu associé à l'avis
     'place_id': fields.String(required=True, description='ID of the place')
 })
 
-# Initialisation de la façade HBnB pour gérer la logique métier
+# Initialize HBnB facade to handle business logic
 facade = HBnBFacade()
 
 
 @api.route('/')
 class ReviewList(Resource):
     """
-    Ressource pour gérer la liste des avis.
-    Permet de créer un nouvel avis (POST) ou de récupérer tous les avis (GET).
+    Resource to manage the list of reviews.
+    Allows creating a new review (POST) or retrieving all reviews (GET).
     """
 
     @api.expect(review_model, validate=True)
@@ -35,7 +35,11 @@ class ReviewList(Resource):
     @api.response(400, 'Invalid input data')
     def post(self):
         """
-        Créer un nouvel avis.
+        Create a new review.
+
+        Returns:
+            dict: Details of the created review or
+            error message if validation fails.
         """
         review_data = api.payload
         try:
@@ -53,13 +57,14 @@ class ReviewList(Resource):
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
         """
-        Récupérer la liste de tous les avis.
+        Retrieve a list of all reviews.
 
-        Retourne une liste d'avis avec le statut HTTP 200.
+        Returns:
+            list: A list of reviews with HTTP status 200.
         """
-        # Appelle la façade pour récupérer tous les avis
+        # Call facade to retrieve all reviews
         reviews = facade.get_all_reviews()
-        # Formate les avis pour la réponse
+        # Format reviews for the response
         review_list = [
             {
                 'id': review.id,
@@ -69,33 +74,35 @@ class ReviewList(Resource):
                 'place_id': review.place_id
             } for review in reviews
         ]
-        # Retourne la liste d'avis avec un code HTTP 200
+        # Return the list of reviews with HTTP status 200
         return review_list, 200
 
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):
     """
-    Ressource pour gérer un avis spécifique par son ID.
-    Permet de récupérer (GET), mettre à jour (PUT), ou supprimer (DELETE)
-    un avis.
+    Resource to manage a specific review by its ID.
+    Allows retrieving (GET), updating (PUT), or deleting (DELETE) a review.
     """
 
     @api.response(200, 'Review details retrieved successfully')
     @api.response(404, 'Review not found')
     def get(self, review_id):
         """
-        Récupérer les détails d'un avis par ID.
+        Retrieve review details by ID.
 
-        Retourne les détails de l'avis avec le statut HTTP 200 ou une erreur
-        404 si l'avis n'existe pas.
+        Args:
+            review_id (str): ID of the review to retrieve.
+
+        Returns:
+            dict: Review details with HTTP status 200 or
+            error message if not found.
         """
-        review = facade.get_review(
-            review_id)  # Récupère l'avis depuis la façade
+        review = facade.get_review(review_id)  # Retrieve review via facade
         if not review:
-            # Retourne une erreur si l'avis n'existe pas
+            # Return error if review does not exist
             return {'error': 'Review not found'}, 404
-        # Retourne les détails de l'avis avec un code HTTP 200
+        # Return review details with HTTP status 200
         return {
             'id': review.id,
             'text': review.text,
@@ -110,20 +117,23 @@ class ReviewResource(Resource):
     @api.response(404, 'Review not found')
     def put(self, review_id):
         """
-        Mettre à jour les informations d'un avis.
+        Update review information.
 
-        Reçoit des données JSON pour mettre à jour l'avis et retourne l'avis
-        mis à jour avec un code HTTP 200.
-        Retourne une erreur 400 si les données sont invalides ou une erreur
-        404 si l'avis n'est pas trouvé.
+        Args:
+            review_id (str): ID of the review to update.
+
+        Returns:
+            dict: Updated review details with HTTP status 200,
+            error 400 for invalid data,
+            or error 404 if review is not found.
         """
-        review_data = api.payload  # Récupère les nouvelles données de l'avis
-        # Met à jour l'avis via la façade
+        review_data = api.payload  # Retrieve updated review data
+        # Update review via facade
         review = facade.update_review(review_id, review_data)
         if not review:
-            # Retourne une erreur si l'avis n'existe pas
+            # Return error if review does not exist
             return {'error': 'Review not found'}, 404
-        # Retourne les détails de l'avis mis à jour avec un code HTTP 200
+        # Return updated review details with HTTP status 200
         return {
             'id': review.id,
             'text': review.text,
@@ -136,45 +146,52 @@ class ReviewResource(Resource):
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """
-        Supprimer un avis par son ID.
+        Delete a review by its ID.
 
-        Retourne un message de confirmation avec un statut HTTP 200 si la
-        suppression est réussie ou une erreur 404 si l'avis n'existe pas.
+        Args:
+            review_id (str): ID of the review to delete.
+
+        Returns:
+            dict: Confirmation message with HTTP status 200 or
+            error 404 if review is not found.
         """
-        success = facade.delete_review(
-            review_id)  # Supprime l'avis via la façade
+        success = facade.delete_review(review_id)  # Delete review via facade
         if not success:
-            # Retourne une erreur si l'avis n'existe pas
+            # Return error if review does not exist
             return {'error': 'Review not found'}, 404
-        # Retourne un message de succès avec un code HTTP 200
+        # Return success message with HTTP status 200
         return {'message': 'Review deleted successfully'}, 200
 
 
 @api.route('/places/<place_id>/reviews')
 class PlaceReviewList(Resource):
     """
-    Ressource pour gérer les avis associés à un lieu spécifique.
-    Permet de récupérer tous les avis pour un lieu donné par son ID.
+    Resource to manage reviews associated with a specific place.
+    Allows retrieving all reviews for a given place by its ID.
     """
 
     @api.response(200, 'List of reviews for the place retrieved successfully')
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """
-        Récupérer tous les avis associés à un lieu spécifique.
+        Retrieve all reviews associated with a specific place.
 
-        Retourne une liste d'avis pour le lieu spécifié avec le statut HTTP
-        200 ou une erreur 404 si le lieu n'existe pas.
+        Args:
+            place_id (str): ID of the place for which to retrieve reviews.
+
+        Returns:
+            list: A list of reviews for the specified place with HTTP status
+            200 or error 404 if place is not found.
         """
-        # Vérifie si le lieu existe via la façade
+        # Check if the place exists via the facade
         place = facade.place_repo.get(place_id)
         if not place:
-            # Retourne une erreur si le lieu n'existe pas
+            # Return error if place does not exist
             return {'error': 'Place not found'}, 404
 
-        # Récupère tous les avis associés à ce lieu
+        # Retrieve all reviews associated with this place
         reviews = facade.get_reviews_by_place(place_id)
-        # Formate les avis pour la réponse
+        # Format reviews for the response
         review_list = [
             {
                 'id': review.id,
@@ -184,5 +201,5 @@ class PlaceReviewList(Resource):
                 'place_id': review.place_id
             } for review in reviews
         ]
-        # Retourne la liste d'avis avec un code HTTP 200
+        # Return the list of reviews with HTTP status 200
         return review_list, 200

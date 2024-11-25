@@ -1,24 +1,18 @@
 """Script to run the Flask application."""
-import sys
-import os
-from app import create_app, db  # Importez db pour créer les tables
+from app import create_app, db
 from app.models.user import User
 from app.models import storage
-
-# Ajoute le répertoire parent au chemin pour accéder au module 'app'
-sys.path.append(os.path.abspath(
-    os.path.join(os.path.dirname(__file__), 'app')))
+from app.models.place import Place
+from app.models.review import Review
+from app.models.amenity import Amenity
 
 # Crée une instance de l'application Flask
 app = create_app()
 
 
 def create_admin_if_not_exists():
-    """Create admin user if it doesn't exist."""
+    """Create an admin user if it doesn't exist."""
     with app.app_context():
-        # Crée les tables si elles n'existent pas encore
-        db.create_all()
-
         # Vérifie si un administrateur existe déjà
         users = storage.get_all(User)
         admin_exists = any(user.email == "admin@example.com" for user in users)
@@ -41,10 +35,13 @@ def create_admin_if_not_exists():
 
 if __name__ == '__main__':
     """
-    This block checks if the script is executed directly
-    (not imported as a module).
-    If so, it creates the admin user if needed and starts the
-    Flask application with debugging enabled.
+    This block is executed if the script is run directly.
+    It creates the admin user if necessary and starts the Flask app.
     """
-    create_admin_if_not_exists()
+    with app.app_context():
+        # Crée les tables pour tous les modèles importés
+        db.create_all()
+        create_admin_if_not_exists()
+
+    # Lance l'application Flask en mode débogage
     app.run(debug=True)

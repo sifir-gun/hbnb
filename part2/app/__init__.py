@@ -5,13 +5,13 @@ from app.api.v1.places import api as places_ns
 from app.api.v1.reviews import api as reviews_ns
 from app.api.v1.amenities import api as amenities_ns
 
-"""Initialise Flask et configure l'API Flask-RESTx
-pip install flask-restx. Facilite la création d'API RESTful en Python """
+"""Initializes Flask and configures the Flask-RESTx API
+pip install flask-restx. Makes it easy to create RESTful APIs in Python"""
 
 
 def create_app():
     app = Flask(__name__)
-    """Créer et configurer l'application Flask."""
+    """Creating and configuring the Flask application."""
 
     api = Api(app, version='1.0', title='HBnB',
               description='HBnB Application API')

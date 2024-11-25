@@ -6,4 +6,4 @@ part2/app/api/v1/__pycache__/
 part2/app/models/__pycache__/
 part2/app/services/__pycache__/
 *.pyc
-part2/.venv/
+part2/.venv/*.pyc

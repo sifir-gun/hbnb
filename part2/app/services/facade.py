@@ -5,7 +5,7 @@ from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models import storage
 
-# Gestionnaire d'exceptions pour les validations
+# Exception handler for validation errors
 
 
 class ValidationError(Exception):
@@ -14,9 +14,9 @@ class ValidationError(Exception):
 
 class HBnBFacade:
     """
-    La façade HBnB permet d'interagir avec les dépôts d'objets (utilisateurs,
-    lieux, reviews, amenities).
-    Cette classe abstrait les opérations CRUD pour plusieurs entités.
+    The HBnB facade enables interaction with object repositories
+    (users, places, reviews, amenities).
+    This class abstracts CRUD operations for multiple entities.
     """
 
     def __init__(self):
@@ -25,30 +25,30 @@ class HBnBFacade:
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-    # ---------------------------- Gestion des Utilisateurs ----------------------------
+    # ---------------------------- User Management ----------------------------
 
     def create_user(self, user_data):
         existing_user = self.get_user_by_email(user_data.get('email'))
         if existing_user:
             raise ValidationError("Email already in use")
 
-        # Création de l'utilisateur
+        # Create the user
         user = User(
             first_name=user_data["first_name"],
             last_name=user_data["last_name"],
             email=user_data["email"],
         )
-        storage.add(user)  # Utilisation de storage pour ajouter l'utilisateur
+        storage.add(user)  # Use storage to add the user
         storage.save()
         return user
 
     def update_user(self, user_id, user_data):
-        # Récupération de l'utilisateur
+        # Retrieve the user
         user = storage.get(user_id)
         if not user:
             raise ValidationError("User not found")
 
-        # Mise à jour des champs de l'utilisateur
+        # Update user fields
         if 'first_name' in user_data:
             user.first_name = user_data['first_name']
         if 'last_name' in user_data:
@@ -56,23 +56,23 @@ class HBnBFacade:
         if 'email' in user_data:
             user.email = user_data['email']
 
-        storage.save()  # Sauvegarde des changements
+        storage.save()  # Save changes
         return user
 
     def delete_user(self, user_id):
-        # Récupération de l'utilisateur
+        # Retrieve the user
         user = storage.get(user_id)
         if not user:
             raise ValidationError("User not found")
-        storage.delete(user)  # Suppression de l'utilisateur
+        storage.delete(user)  # Delete the user
         storage.save()
 
     def get_user(self, user_id):
-        # Récupération de l'utilisateur depuis storage
+        # Retrieve the user from storage
         return storage.get(user_id)
 
     def get_user_by_email(self, email):
-        # Rechercher l'utilisateur par email dans tous les objets
+        # Search for the user by email among all users
         users = storage.get_all(User)
         for user in users:
             if user.email == email:
@@ -80,9 +80,9 @@ class HBnBFacade:
         return None
 
     def get_all_users(self):
-        return storage.get_all(User)  # Récupération de tous les utilisateur
+        return storage.get_all(User)  # Retrieve all users
 
-    # ---------------------------- Gestion des Reviews ----------------------------
+    # ---------------------------- Review Management --------------------------
 
     def create_review(self, review_data):
         user_id = review_data.get('user_id')
@@ -135,7 +135,9 @@ class HBnBFacade:
         if not review:
             print(f"Error: Review with ID {review_id} not found.")
             return {
-                "message": "Review not found. It might have already been deleted."
+                "message": (
+                    "Review not found. It might have already been deleted."
+                )
             }, 200
 
         storage.delete(review)
@@ -143,14 +145,14 @@ class HBnBFacade:
         print(f"Review with ID {review_id} successfully deleted.")
         return {"message": "Review deleted successfully"}, 200
 
-    # ---------------------------- Gestion des Amenities ----------------------------
+    # ---------------------------- Amenity Management -------------------------
 
     def create_amenity(self, amenity_data):
         name = amenity_data.get('name')
         if not name:
             return None, "Name is required"
 
-        # Create new Amenity object and save to storage
+        # Create a new Amenity object and save it to storage
         new_amenity = Amenity(name=name)
         self.amenity_repo.add(new_amenity)
         return new_amenity, None
@@ -161,7 +163,7 @@ class HBnBFacade:
         """
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
-            return None, "amenity not found"  # Get the amenity by ID
+            return None, "Amenity not found"
         return amenity
 
     def get_all_amenities(self):
@@ -185,10 +187,10 @@ class HBnBFacade:
         self.amenity_repo.delete(amenity_id)
         return True
 
-    # ---------------------------- Gestion des Lieux (Place) ----------------------------
+    # ---------------------------- Place Management ---------------------------
 
     def create_place(self, place_data):
-        # Validation des champs obligatoires
+        # Validate required fields
         self.validate_place_data(place_data)
 
         new_place = Place(
@@ -200,27 +202,32 @@ class HBnBFacade:
             owner_id=place_data['owner_id']
         )
 
-        # Ajoute le lieu au stockage
+        # Add the place to storage
         storage.add(new_place)
         storage.save()
         return new_place
 
     def validate_place_data(self, place_data):
         """
-        Fonction interne pour valider les données d'un lieu.
+        Internal function to validate place data.
         """
-        if not isinstance(place_data.get('price'), (int, float)) or not (1 <= place_data.get("price") <= 1000000):
+        if not isinstance(place_data.get('price'), (int, float)) or not (
+             1 <= place_data.get("price") <= 1000000):
             raise ValidationError(
                 'Price must be a number between 1 and 1000000')
-        if not isinstance(place_data.get('latitude'), (int, float)) or not (-90 <= place_data.get("latitude") <= 90):
+        if not isinstance(place_data.get('latitude'), (int, float)) or not (
+             -90 <= place_data.get("latitude") <= 90):
             raise ValidationError(
                 'Latitude must be a number between -90 and 90')
-        if not isinstance(place_data.get('longitude'), (int, float)) or not (-180 <= place_data.get("longitude") <= 180):
+        if not isinstance(place_data.get('longitude'), (int, float)) or not (
+             -180 <= place_data.get("longitude") <= 180):
             raise ValidationError(
                 'Longitude must be a number between -180 and 180')
-        if not isinstance(place_data.get('title'), str) or not (1 <= len(place_data.get("title", "")) <= 50):
+        if not isinstance(place_data.get('title'), str) or not (
+             1 <= len(place_data.get("title", "")) <= 50):
             raise ValidationError('Title must be between 1 and 50 characters')
-        if 'description' in place_data and not (1 <= len(place_data['description']) <= 500):
+        if 'description' in place_data and not (
+             1 <= len(place_data['description']) <= 500):
             raise ValidationError(
                 'Description must be between 1 and 500 characters')
 
