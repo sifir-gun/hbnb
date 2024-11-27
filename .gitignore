@@ -7,3 +7,4 @@ part2/app/models/__pycache__/
 part2/app/services/__pycache__/
 *.pyc
 part2/.venv/
+development.db/
