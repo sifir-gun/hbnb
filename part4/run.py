@@ -44,4 +44,4 @@ if __name__ == '__main__':
     Flask application with debugging enabled.
     """
     create_admin_if_not_exists()
-    app.run(debug=True)
+    app.run(port=5300, debug=True)
