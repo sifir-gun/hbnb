@@ -8,6 +8,9 @@
 body {
   background-color: #f27f7f;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Assure que la hauteur du body prend tout l'écran */
 }
 
 /* Applique une boîte de taille standardisée et enlève les marges et padding par défaut */
@@ -65,6 +68,12 @@ header {
   align-items: center;
   padding: 1rem;
   background-color: #333;
+  color: #fff;
+  width: 100%; /* Étend le conteneur de l'en-tête sur toute la largeur de la page.*/
+  position: fixed; /* Fixe l'en-tête pour qu'il reste visible même lorsque l'utilisateur fait défiler la page. */
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 header img.logo {
@@ -95,7 +104,8 @@ header nav ul li a:hover {
 /* --- Section principale (main) --- */
 /* Applique un padding pour espacer le contenu */
 main {
-  padding: 2rem;
+  margin-top: 100px; /* Ajoute un espace entre le header et le contenu principal */
+  flex: 1;
 }
 
 /* --- Styles pour la section des filtres --- */
@@ -105,15 +115,20 @@ main {
   padding: 1rem; /* Espacement interne */
   border: 5px solid #ddd; /* Bordure grise */
   border-radius: 10px; /* Coins arrondis */
-  margin-bottom: 2rem; /* Espace en dessous */
+  margin: 1rem; /* Espace en dessous */
   display: flex; /* Affiche les éléments en ligne */
   align-items: center; /* Aligne les éléments verticalement */
+  align-items: center; /* Aligne les éléments verticalement */
+  justify-content: center; /* Centre les éléments horizontalement */
+  max-width: 300px; /* Limite la largeur maximale */
+  width: 100%; /* Prend 100% de la largeur disponible jusqu'à max-width */
 }
+
 
 /* Style pour le label des filtres */
 #filter label {
   font-weight: bold; /* Texte en gras */
-  margin-right: 1rem; /* Espace après le label */
+  margin-right: 1.5rem; /* Espace après le label */
 }
 
 /* Style pour le champ de sélection */
@@ -142,6 +157,26 @@ main {
   text-align: center; /* Centre le texte */
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* Ombre subtile */
   transition: transform 0.2s, box-shadow 0.2s; /* Animation sur le survol */
+}
+
+.place-card img.place-image {
+  width: 90%; /* L'image occupe toute la largeur du conteneur */
+  height: auto; /* Maintient les proportions de l'image */
+  padding: 20px; /* Espacement interne */
+  border-radius: 10px; /* Coins arrondis comme le cadre */
+  margin: 0 auto 1rem auto; /* Centrer l'image horizontalement et ajouter un espace en bas */
+  display: block; /* Centre l'image */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ajoute une ombre subtile */
+}
+
+#caravane img {
+  width: 90%;
+  height: auto;
+  margin: 0 auto 1rem auto;
+  padding: 20px; /* Espacement interne */
+  border-radius: 10px;
+  display: block;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Effet de survol sur une carte */
@@ -189,7 +224,7 @@ footer {
   color: #fff; /* Texte blanc */
   text-align: center; /* Centre le texte */
   padding: 1rem; /* Espacement interne */
-  margin-top: 2rem; /* Espace au-dessus */
+  margin-top: auto; /* Espace au-dessus */
 }
 
 /* Texte du pied de page */
@@ -272,6 +307,12 @@ footer p {
 
 /* ----- Place Cabane des bois-----*/
 
+.main-container {
+  margin-left: 50px; /* Décale tout le contenu principal vers la gauche */
+  margin-right: auto; /* Ajuste l’espace automatiquement à droite */
+  width: 90%; /* Ajuste la largeur pour garder un bon alignement */
+}
+
 .place-details {
   max-width: 600px;
   margin: 10 auto;
@@ -345,10 +386,13 @@ header nav ul li a:hover {
 
 .review-card {
   background-color: #f2ebeb;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   border-radius: 10px;
   border: 2px solid #080707;
+  max-width: 600px; /* Réduit la largeur maximale */
+  
+  text-align: left; /* Aligne le texte à gauche */
 }
 
 /* Rating styles */
