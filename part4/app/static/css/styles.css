@@ -1,0 +1,438 @@
+/* 
+  Ceci est un fichier de style de base. 
+  Les styles doivent être ajustés selon les consignes du projet.
+*/
+
+/* --- Styles de base --- */
+/* Applique une couleur de fond et une couleur de texte par défaut */
+body {
+  background-color: #f27f7f;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Assure que la hauteur du body prend tout l'écran */
+}
+
+/* Applique une boîte de taille standardisée et enlève les marges et padding par défaut */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; /* Définit la police par défaut */
+}
+
+/* --- Styles de l'en-tête (header) --- */
+/* Stylise le conteneur de l'en-tête */
+header {
+  background-color: #333; /* Couleur de fond sombre */
+  color: #fff; /* Couleur de texte blanche */
+  padding: 1rem; /* Espacement interne autour du contenu */
+  display: flex; /* Disposition en ligne pour les éléments */
+  justify-content: space-between; /* Espacement entre les éléments */
+  align-items: center; /* Alignement vertical des éléments */
+}
+
+/* Style pour le logo dans l'en-tête */
+header img.logo {
+  height: 50px; /* Hauteur fixe */
+  width: auto; /* Largeur proportionnelle */
+}
+
+/* Liste des liens de navigation */
+nav ul {
+  list-style: none; /* Supprime les puces */
+  display: flex; /* Affiche les éléments en ligne */
+  align-items: center; /* Aligne verticalement les éléments */
+}
+
+/* Style des éléments de la liste de navigation */
+nav ul li {
+  margin-right: 1rem; /* Espacement entre les liens */
+}
+
+/* Style des liens de navigation */
+nav ul li a {
+  color: #fff; /* Couleur de texte blanche */
+  text-decoration: none; /* Supprime le soulignement */
+}
+
+/* Effet de survol sur les liens */
+nav ul li a:hover {
+  text-decoration: underline; /* Ajoute un soulignement au survol */
+}
+
+/* Header styles */
+header {
+  display: flex;
+  justify-content: space-between; /* Sépare le logo des liens */
+  align-items: center;
+  padding: 1rem;
+  background-color: #333;
+  color: #fff;
+  width: 100%; /* Étend le conteneur de l'en-tête sur toute la largeur de la page.*/
+  position: fixed; /* Fixe l'en-tête pour qu'il reste visible même lorsque l'utilisateur fait défiler la page. */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+header img.logo {
+  height: 40px;
+  width: auto;
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  margin-left: 1.5rem; /* Ajoute de l'espace entre les liens */
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+/* --- Section principale (main) --- */
+/* Applique un padding pour espacer le contenu */
+main {
+  margin-top: 100px; /* Ajoute un espace entre le header et le contenu principal */
+  flex: 1;
+}
+
+/* --- Styles pour la section des filtres --- */
+/* Conteneur des filtres */
+#filter {
+  background-color: #f2ebeb; /* Fond blanc */
+  padding: 1rem; /* Espacement interne */
+  border: 5px solid #ddd; /* Bordure grise */
+  border-radius: 10px; /* Coins arrondis */
+  margin: 1rem; /* Espace en dessous */
+  display: flex; /* Affiche les éléments en ligne */
+  align-items: center; /* Aligne les éléments verticalement */
+  align-items: center; /* Aligne les éléments verticalement */
+  justify-content: center; /* Centre les éléments horizontalement */
+  max-width: 300px; /* Limite la largeur maximale */
+  width: 100%; /* Prend 100% de la largeur disponible jusqu'à max-width */
+}
+
+
+/* Style pour le label des filtres */
+#filter label {
+  font-weight: bold; /* Texte en gras */
+  margin-right: 1.5rem; /* Espace après le label */
+}
+
+/* Style pour le champ de sélection */
+#filter select {
+  padding: 0.5rem; /* Espacement interne */
+  border: 1px solid #110f0f; /* Bordure grise */
+  border-radius: 5px; /* Coins légèrement arrondis */
+  font-size: 1rem; /* Taille de police standard */
+}
+
+/* --- Styles pour la liste des lieux --- */
+/* Conteneur de la liste des lieux */
+#places-list {
+  display: grid; /* Affiche les éléments en grille */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Colonnes adaptatives */
+  gap: 1.5rem; /* Espace entre les colonnes */
+}
+
+/* Carte individuelle pour un lieu */
+.place-card {
+  background-color: #f2ebeb; /* Fond blanc */
+  border: 5px solid #ddd; /* Bordure grise épaisse */
+  border-radius: 10px; /* Coins arrondis */
+  margin: 20px; /* Espacement externe */
+  padding: 10px; /* Espacement interne */
+  text-align: center; /* Centre le texte */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* Ombre subtile */
+  transition: transform 0.2s, box-shadow 0.2s; /* Animation sur le survol */
+}
+
+.place-card img.place-image {
+  width: 90%; /* L'image occupe toute la largeur du conteneur */
+  height: auto; /* Maintient les proportions de l'image */
+  padding: 20px; /* Espacement interne */
+  border-radius: 10px; /* Coins arrondis comme le cadre */
+  margin: 0 auto 1rem auto; /* Centrer l'image horizontalement et ajouter un espace en bas */
+  display: block; /* Centre l'image */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ajoute une ombre subtile */
+}
+
+#caravane img {
+  width: 90%;
+  height: auto;
+  margin: 0 auto 1rem auto;
+  padding: 20px; /* Espacement interne */
+  border-radius: 10px;
+  display: block;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de survol sur une carte */
+.place-card:hover {
+  transform: scale(1.05); /* Agrandissement léger */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Ombre plus marquée */
+}
+
+/* Titre du lieu */
+.place-card h2 {
+  font-size: 1.5rem; /* Taille de police pour le titre */
+  color: #333; /* Couleur du texte */
+  margin-bottom: 1.5rem; /* Espacement sous le titre */
+}
+
+/* Texte descriptif pour le lieu */
+.place-card p {
+  font-size: 1rem; /* Taille de police standard */
+  color: #413f3f; /* Couleur légèrement plus sombre */
+  margin-bottom: 1rem; /* Espacement sous le texte */
+}
+
+/* Bouton pour voir les détails */
+.details-button {
+  display: inline-block; /* Affiche comme un bouton */
+  padding: 10px 20px; /* Espacement interne */
+  background-color: #747b83; /* Couleur de fond */
+  color: #922626; /* Couleur du texte */
+  border: none; /* Pas de bordure */
+  border-radius: 10px; /* Coins arrondis */
+  cursor: pointer; /* Affiche un curseur au survol */
+  font-size: 0.8rem; /* Taille de police légèrement réduite */
+  text-decoration: none; /* Supprime le soulignement */
+}
+
+/* Effet de survol pour le bouton */
+.details-button:hover {
+  background-color: #8e8286; /* Change la couleur de fond */
+}
+
+/* --- Styles pour le pied de page --- */
+/* Conteneur du pied de page */
+footer {
+  background-color: #333; /* Fond sombre */
+  color: #fff; /* Texte blanc */
+  text-align: center; /* Centre le texte */
+  padding: 1rem; /* Espacement interne */
+  margin-top: auto; /* Espace au-dessus */
+}
+
+/* Texte du pied de page */
+footer p {
+  font-size: 0.9rem; /* Taille de police réduite */
+}
+
+/* --- Design responsive --- */
+/* Adaptation pour les écrans de moins de 768px */
+@media (max-width: 868px) {
+  /* La liste des lieux s'affiche en une seule colonne */
+  #places-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Les liens de navigation s'espacent davantage */
+  nav ul li {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Formulaire de connexion Login */
+#login-form {
+  background-color: #f2ebeb; /* Couleur de fond du formulaire */
+  padding: 2rem; /* Espacement interne */
+  border: 5px solid #ddd; /* Bordure grise */
+  border-radius: 20px; /* Coins arrondis */
+  max-width: 400px; /* Largeur maximale */
+  margin: 2rem auto; /* Centrage horizontal */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre pour effet visuel */
+}
+
+#login-form h2 {
+  font-size: 1.5rem; /* Taille du titre */
+  margin-bottom: 1rem; /* Espacement sous le titre */
+  text-align: center; /* Centrage du texte */
+}
+
+#login-form label {
+  display: block; /* Affichage sur une ligne */
+  margin-bottom: 0.5rem; /* Espacement sous le label */
+  font-weight: bold; /* Texte en gras */
+}
+
+#login-form input {
+  width: 100%; /* Largeur complète */
+  padding: 0.2em; /* Espacement interne */
+  margin-bottom: 1rem; /* Espacement entre les champs */
+  border: 1px solid #ddd; /* Bordure grise */
+  border-radius: 5px; /* Coins arrondis */
+  font-size: 1rem; /* Taille de police */
+}
+
+#login-form button {
+  display: block; /* Bouton en mode bloc */
+  width: 100%; /* Largeur complète */
+  padding: 0.2rem; /* Espacement interne */
+  background-color: #333; /* Couleur de fond sombre */
+  color: #fff; /* Texte blanc */
+  border: none; /* Pas de bordure */
+  border-radius: 5px; /* Coins arrondis */
+  cursor: pointer; /* Affiche un curseur au survol */
+}
+
+#login-form button:hover {
+  background-color: #444; /* Couleur de fond légèrement plus claire */
+}
+
+.forgot-password {
+  display: block; /* Affichage sur une ligne */
+  text-align: center; /* Centrage du texte */
+  margin-top: 1rem; /* Espacement au-dessus */
+  color: #171716; /* Couleur bleue pour le lien */
+  text-decoration: none; /* Pas de soulignement */
+}
+
+.forgot-password:hover {
+  text-decoration: underline; /* Ajoute un soulignement au survol */
+}
+
+/* ----- Place Cabane des bois-----*/
+
+.main-container {
+  margin-left: 50px; /* Décale tout le contenu principal vers la gauche */
+  margin-right: auto; /* Ajuste l’espace automatiquement à droite */
+  width: 90%; /* Ajuste la largeur pour garder un bon alignement */
+}
+
+.place-details {
+  max-width: 600px;
+  margin: 10 auto;
+  background-color: #f2ebeb;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid #080707;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details-container p {
+  margin-bottom: 1.2rem; /* Ajoute un espace de 1rem sous chaque paragraphe */
+  line-height: 1.6; /* Améliore l'espacement entre les lignes */
+}
+
+.place-details ul {
+  margin-top: 1rem; /* Ajoute un espace au-dessus de la liste */
+  margin-left: 1.5rem; /* Décale légèrement la liste vers la droite */
+  list-style-type: disc; /* Affiche des puces */
+}
+.place-details ul li {
+  margin-bottom: 0.5rem; /* Espace entre les items de la liste */
+  line-height: 1.4; /* Améliore la lisibilité des items */
+}
+
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+header nav ul li {
+  margin: 0 1rem;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.place-photos {
+  display: flex; /* Affiche les photos côte à côte */
+  flex-wrap: wrap; /* Permet d'aller à la ligne si nécessaire */
+  gap: 1rem; /* Espace entre les photos */
+  margin-top: 1rem;
+}
+
+.place-photos img {
+  width: 45%; /* Réduit la taille des photos à 45% du conteneur */
+  border-radius: 10px; /* Coins arrondis */
+  box-shadow: 0 4px 8px rgba(41, 39, 39, 0.1); /* Ombre subtile */
+  transition: transform 0.3s; /* Ajoute une transition fluide pour l'agrandissement */
+  cursor: pointer; /* Change le curseur au survol */
+}
+
+.place-photos img:hover {
+  transform: scale(1.05); /* Agrandit légèrement au survol */
+}
+
+
+.reviews {
+  margin-top: 1rem;
+
+}
+
+.review-card {
+  background-color: #f2ebeb;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid #080707;
+  max-width: 600px; /* Réduit la largeur maximale */
+  
+  text-align: left; /* Aligne le texte à gauche */
+}
+
+/* Rating styles */
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Espace entre le label et le select */
+  margin-top: 1rem;
+}
+
+.rating-container label {
+  font-weight: bold; /* Texte en gras */
+}
+
+.rating-container select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Rating styles */
+.rating-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Espace entre le label et le select */
+  margin-top: 1rem;
+}
+
+.rating-container label {
+  font-weight: bold; /* Texte en gras */
+}
+
+.rating-container select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  cursor: pointer;
+}
