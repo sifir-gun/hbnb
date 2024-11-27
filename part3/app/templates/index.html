@@ -25,10 +25,10 @@
             <label for="price-filter">Max Price:</label>
             <select id="price-filter">
                 <option value="">Select Price</option>
+                <option value="10">10€</option>
                 <option value="50">50€</option>
                 <option value="100">100€</option>
-                <option value="150">150€</option>
-                <option value="200">200€</option>
+                <option value="All">All</option>
             </select>
         </section>
 
@@ -39,20 +39,22 @@
                 <h2>Cabane des bois</h2>
                 <p>Price per night: 149€</p>
                 <a href="place.html" class="details-button">View Details</a>
+                <img src="../static/images/cabane_des_bois.jpg" alt="${place.name}" class="place-image">
             </article>
 
             <!-- Duplicate the structure for more places -->
-            <article class="place-card">
+            <article class="place-card" id="caravane">
                 <h2>La Caravane du cousin tkt</h2>
                 <p>Price per night: 249€</p>
                 <a href="caravane.html" class="details-button">View Details</a>
+                <img src="../static/images/caravane.jpg" alt="Caravane vue extérieure">
             </article>
         </section>
     </main>
 
     <!-- Footer Section -->
     <footer>
-        <p>&copy; 2024 All rights reserved.</p>
+        <p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
     </footer>
 </body>
 </html>

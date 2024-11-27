@@ -99,14 +99,11 @@ class HBnBFacade:
                 raise ValueError("Password is required")
             print("Received raw password in facade")
 
-            password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-            print(f"Password hash generated: {password_hash[:20]}...")
-
             user = User(
                 first_name=user_data["first_name"],
                 last_name=user_data["last_name"],
                 email=user_data["email"],
-                password=password_hash,
+                password=password,
                 is_admin=user_data.get("is_admin", False)
             )
 
@@ -223,16 +220,20 @@ class HBnBFacade:
     def validate_place_data(self, place_data):
         if not isinstance(place_data.get('price'), (int, float)) or not (
                 1 <= place_data.get("price") <= 1000000):
-            raise ValidationError('Price must be a number between 1 and 1000000')
+            raise ValidationError(
+                'Price must be a number between 1 and 1000000')
         if not isinstance(place_data.get('latitude'), (int, float)) or not (
                 -90 <= place_data.get("latitude") <= 90):
-            raise ValidationError('Latitude must be a number between -90 and 90')
+            raise ValidationError(
+                'Latitude must be a number between -90 and 90')
         if not isinstance(place_data.get('longitude'), (int, float)) or not (
                 -180 <= place_data.get("longitude") <= 180):
-            raise ValidationError('Longitude must be a number between -180 and 180')
+            raise ValidationError(
+                'Longitude must be a number between -180 and 180')
         if not isinstance(place_data.get('title'), str) or not (
                 1 <= len(place_data.get("title", "")) <= 50):
             raise ValidationError('Title must be between 1 and 50 characters')
         if 'description' in place_data and not (
                 1 <= len(place_data['description']) <= 500):
-            raise ValidationError('Description must be between 1 and 500 characters')
+            raise ValidationError(
+                'Description must be between 1 and 500 characters')
