@@ -7,7 +7,7 @@
 // Fonction utilitaire pour effectuer la requête de connexion
 async function loginUser(email, password) {
   try {
-    const response = await fetch('http://127.0.0.1:5000/api/v1/auth/login', {
+    const response = await fetch('http://127.0.0.1:5300/api/v1/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ function checkAuthentication() {
 // Récupère la liste des lieux depuis l'API
 async function fetchPlaces(token) {
   try {
-    const response = await fetch('https://your-api-url/places', { // Remplace par l'URL de ton API
+    const response = await fetch('http://127.0.0.1:5300/api/v1//places', { // Remplace par l'URL de ton API
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`, // Inclut le token JWT dans l'en-tête
@@ -99,7 +99,7 @@ function displayPlaces(places) {
   addPriceFilter();
 }
 
-// ----------------------- TASK 4: FILTER PLACES -----------------------
+// ----------------------- TASK 2: FILTER PLACES -----------------------
 // Fonction pour filtrer les lieux affichés en fonction du prix sélectionné
 function addPriceFilter() {
   const priceFilter = document.getElementById('price-filter'); // Récupère le menu déroulant de filtrage
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form'); // Récupère le formulaire de connexion
 
   // Vérifie l'authentification au chargement de la page
-  checkAuthentication();
+  // checkAuthentication();
 
   if (loginForm) {
     // Ajoute un écouteur pour l'événement "submit" du formulaire
