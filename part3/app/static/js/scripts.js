@@ -7,7 +7,7 @@
 // Fonction utilitaire pour effectuer la requête de connexion
 async function loginUser(email, password) {
   try {
-    const response = await fetch('https://your-api-url/login', { // Remplace par ton URL d'API réelle
+    const response = await fetch('http://127.0.0.1:5000/api/v1/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
