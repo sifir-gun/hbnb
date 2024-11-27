@@ -13,7 +13,7 @@
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="login.html" class="login-button">Login</a></li>
+                <li><a href="/login" id="login-link">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -28,27 +28,13 @@
                 <option value="10">10€</option>
                 <option value="50">50€</option>
                 <option value="100">100€</option>
-                <option value="All">All</option>
+                <option value="all">All</option>
             </select>
         </section>
 
         <!-- Places List Section -->
         <section id="places-list">
-            <!-- Example Place Card -->
-            <article class="place-card">
-                <h2>Cabane des bois</h2>
-                <p>Price per night: 149€</p>
-                <a href="place.html" class="details-button">View Details</a>
-                <img src="../static/images/cabane_des_bois.jpg" alt="${place.name}" class="place-image">
-            </article>
-
-            <!-- Duplicate the structure for more places -->
-            <article class="place-card" id="caravane">
-                <h2>La Caravane du cousin tkt</h2>
-                <p>Price per night: 249€</p>
-                <a href="caravane.html" class="details-button">View Details</a>
-                <img src="../static/images/caravane.jpg" alt="Caravane vue extérieure">
-            </article>
+            <!-- Les places seront générées dynamiquement par JavaScript -->
         </section>
     </main>
 
@@ -56,5 +42,7 @@
     <footer>
         <p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
     </footer>
+    <!-- Lien vers le fichier JavaScript -->
+    <script src="/static/js/scripts.js" defer></script>
 </body>
 </html>
