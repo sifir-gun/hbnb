@@ -23,7 +23,6 @@ class Place(BaseModel, db.Model):
     reviews = relationship('Review', backref='place', lazy=True)
 
     # Définir les colonnes SQLAlchemy pour chaque attribut
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Float, nullable=False)

@@ -214,3 +214,95 @@ async function fetchPlaceDetails(placeId, token) {
   }
 }
 
+// récupérer les lieux associés à un utilisateur
+
+async function fetchUserPlaces(token) {
+  try {
+      const response = await fetch('http://127.0.0.1:5300/api/v1/user/places', {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          }
+      });
+
+      if (response.ok) {
+          const userPlaces = await response.json(); // Liste des lieux de l'utilisateur
+          displayUserPlaces(userPlaces);
+      } else {
+          console.error('Erreur lors de la récupération des lieux:', response.statusText);
+      }
+  } catch (error) {
+      console.error('Erreur réseau:', error);
+  }
+}
+
+// afficher les lieux
+function displayUserPlaces(places) {
+  const placesList = document.getElementById('place-details'); // Section pour afficher les lieux
+  placesList.innerHTML = ''; // Efface le contenu actuel
+
+  places.forEach(place => {
+      const placeCard = document.createElement('div');
+      placeCard.classList.add('place-card');
+
+      placeCard.innerHTML = `
+          <h2>${place.title}</h2>
+          <p>${place.description}</p>
+          <p><strong>Prix par nuit :</strong> ${place.price}€</p>
+          <p><strong>Localisation :</strong> (${place.latitude}, ${place.longitude})</p>
+          <button class="details-button" onclick="fetchPlaceDetails('${place.id}')">Voir les détails</button>
+      `;
+
+      placesList.appendChild(placeCard);
+  });
+}
+
+//  Gestion des détails du lieu
+
+async function fetchPlaceDetails(placeId) {
+  try {
+      const token = getCookie('token'); // Récupérer le token
+      const response = await fetch(`http://127.0.0.1:5300/api/v1/places/${placeId}`, {
+          method: 'GET',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          }
+      });
+
+      if (response.ok) {
+          const placeDetails = await response.json();
+          displayPlaceDetails(placeDetails); // Affiche les détails
+      } else {
+          console.error('Erreur lors de la récupération des détails du lieu:', response.statusText);
+      }
+  } catch (error) {
+      console.error('Erreur réseau:', error);
+  }
+}
+
+
+function displayPlaceDetails(place) {
+  const detailsSection = document.getElementById('place-details');
+  detailsSection.innerHTML = `
+      <h2>${place.title}</h2>
+      <p>${place.description}</p>
+      <p><strong>Prix :</strong> ${place.price}€</p>
+      <p><strong>Localisation :</strong> (${place.latitude}, ${place.longitude})</p>
+      <h3>Amenities:</h3>
+      <ul>${place.amenities.map(amenity => `<li>${amenity}</li>`).join('')}</ul>
+  `;
+}
+
+// Ajoutez un formulaire pour les reviews
+function checkAuthentication() {
+  const token = getCookie('token'); // Récupérer le token
+  const addReviewSection = document.getElementById('add-review');
+
+  if (!token) {
+      addReviewSection.style.display = 'none';
+  } else {
+      addReviewSection.style.display = 'block';
+  }
+}

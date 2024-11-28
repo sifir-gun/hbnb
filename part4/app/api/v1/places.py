@@ -82,7 +82,7 @@ class PlaceList(Resource):
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     @api.response(401, 'Authentication required')
-    @api.marshal_list_with(place_model)
+    @api.marshal_with(place_model, code=201)
     @jwt_required()
     def post(self):
         """Protected endpoint: Create a new place"""
@@ -169,3 +169,26 @@ class PlaceDetail(Resource):
             return {"message": "Place deleted successfully"}, 200
         except Exception as e:
             return {"error": str(e)}, 400
+
+
+@api.route('/user/places')
+class UserPlaces(Resource):
+    @api.doc('get_user_places')
+    @api.response(200, 'List of user places retrieved successfully')
+    @api.response(401, 'Authentication required')
+    @jwt_required()
+    def get(self):
+        """Protected endpoint: Retrieve all places for the authenticated user."""
+        current_user = get_jwt_identity()  # Récupérer l'utilisateur courant
+        user_id = current_user['id']
+
+        try:
+            # Récupérer les lieux appartenant à cet utilisateur
+            user_places = storage.query(Place).filter_by(owner_id=user_id).all()
+            if not user_places:
+                return {"message": "No places found for this user"}, 404
+
+            # Retourner la liste des lieux sous forme de dictionnaire
+            return [place.to_dict() for place in user_places], 200
+        except Exception as e:
+            return {"error": f"Server error: {str(e)}"}, 500

@@ -206,7 +206,6 @@ class HBnBFacade:
     def create_place(self, place_data):
         self.validate_place_data(place_data)
         new_place = Place(
-            id=place_data['id'],
             title=place_data['title'],
             description=place_data.get('description', ''),
             price=place_data['price'],
