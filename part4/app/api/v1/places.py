@@ -14,6 +14,7 @@ api = Namespace('places', description="Operations related to places")
 
 # Data model for a place
 place_model = api.model('Place', {
+    'id': fields.String(required=False, description='ID of the place'),
     'title': fields.String(
         required=True,
         description='Title of the place',
@@ -81,6 +82,7 @@ class PlaceList(Resource):
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     @api.response(401, 'Authentication required')
+    @api.marshal_list_with(place_model)
     @jwt_required()
     def post(self):
         """Protected endpoint: Create a new place"""

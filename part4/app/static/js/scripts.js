@@ -96,7 +96,7 @@ function displayPlaces(places) {
   });
 
   // Ajoute le filtre après l'affichage des lieux
-  addPriceFilter();
+  addPriceFilter();S
 }
 
 // ----------------------- TASK 2: FILTER PLACES -----------------------
@@ -179,3 +179,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// ----------------------- TASK 3: Place details -----------------------
+
+// Fonction pour récupérer l'ID du lieu à partir de l'URL
+function getPlaceIdFromURL() {
+  const params = new URLSearchParams(window.location.search); // Récupère les paramètres de l'URL
+  return params.get('id'); // Retourne la valeur associée à "id"
+}
+
+// Exemple d'utilisation
+const placeId = getPlaceIdFromURL();
+console.log('Place ID:', placeId); // Vérifiez dans la console que l'ID est correctement extrait
+
+// Fonction pour récupérer les détails d'un lieu à partir de l'API
+async function fetchPlaceDetails(placeId, token) {
+  try {
+    const response = await fetch(`http://127.0.0.1:5300/api/v1/places/${placeId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`, // Inclut le token pour l'authentification
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      const placeDetails = await response.json(); // Récupère les détails du lieu
+      displayPlaceDetails(placeDetails); // Affiche les détails du lieu
+    } else {
+      console.error('Erreur lors de la récupération des détails du lieu:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Erreur réseau:', error);
+  }
+}
+

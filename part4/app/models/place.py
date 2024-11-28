@@ -3,6 +3,9 @@ from sqlalchemy.orm import relationship
 from app import db
 from .base_model import BaseModel
 from app.models import place_amenity
+import uuid
+from sqlalchemy import Column
+from sqlalchemy.dialects.postgresql import UUID
 
 
 class Place(BaseModel, db.Model):
@@ -20,6 +23,7 @@ class Place(BaseModel, db.Model):
     reviews = relationship('Review', backref='place', lazy=True)
 
     # Définir les colonnes SQLAlchemy pour chaque attribut
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Float, nullable=False)
