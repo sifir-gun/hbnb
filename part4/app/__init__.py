@@ -22,9 +22,17 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     # Initialize extensions
     db.init_app(app)
-    CORS(app)
     jwt.init_app(app)
     bcrypt.init_app(app)
+
+    # Set up refined CORS configuration
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:3000", "https://your-frontend-domain.com"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Authorization", "Content-Type"]
+        }
+    })
 
     # Configure authorization for Swagger UI
     authorizations = {

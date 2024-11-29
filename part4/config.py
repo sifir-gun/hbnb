@@ -1,3 +1,4 @@
+# part4/config.py
 import os
 
 
@@ -24,8 +25,11 @@ class DevelopmentConfig(Config):
     development environment.
     """
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///development.db'
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # Get the base directory
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(BASE_DIR, "instance", "development.db")}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ECHO = True  # Enable SQL query logging
+
 
 
 # Dictionary to manage configurations by environment
