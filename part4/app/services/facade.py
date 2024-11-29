@@ -204,7 +204,18 @@ class HBnBFacade:
         return place
 
     def create_place(self, place_data):
+        print(f"Validating place data: {place_data}")
         self.validate_place_data(place_data)
+
+        amenities = []
+        for amenity_name in place_data.get('amenities', []):
+            amenity = self.amenity_repo.get_by_attribute('name', amenity_name)
+            if amenity:
+                amenities.append(amenity)
+
+            else:
+                print(f"Amenity '{amenity_name}' not found, skipping")
+
         new_place = Place(
             title=place_data['title'],
             description=place_data.get('description', ''),
@@ -212,28 +223,34 @@ class HBnBFacade:
             latitude=place_data['latitude'],
             longitude=place_data['longitude'],
             owner_id=place_data['owner_id']
-        )
-        storage.add(new_place)
-        storage.save()
+    )
+        print(f"New Place object before save: {new_place}")  # Log objet Place avant sauvegarde
+
+        try:
+            storage.add(new_place)
+            storage.save()
+            print(f"Place ID after save: {new_place.id}")  # Log ID après sauvegarde
+        except Exception as e:
+            print(f"Error saving place to storage: {str(e)}")  # Log des erreurs de sauvegarde
+            raise e
+
         return new_place
 
     def validate_place_data(self, place_data):
-        if not isinstance(place_data.get('price'), (int, float)) or not (
-                1 <= place_data.get("price") <= 1000000):
-            raise ValidationError(
-                'Price must be a number between 1 and 1000000')
-        if not isinstance(place_data.get('latitude'), (int, float)) or not (
-                -90 <= place_data.get("latitude") <= 90):
-            raise ValidationError(
-                'Latitude must be a number between -90 and 90')
-        if not isinstance(place_data.get('longitude'), (int, float)) or not (
-                -180 <= place_data.get("longitude") <= 180):
-            raise ValidationError(
-                'Longitude must be a number between -180 and 180')
-        if not isinstance(place_data.get('title'), str) or not (
-                1 <= len(place_data.get("title", "")) <= 50):
-            raise ValidationError('Title must be between 1 and 50 characters')
-        if 'description' in place_data and not (
-                1 <= len(place_data['description']) <= 500):
-            raise ValidationError(
-                'Description must be between 1 and 500 characters')
+        print(f"Starting validation for: {place_data}")  # Début validation
+        if not isinstance(place_data.get('price'), (int, float)) or not (1 <= place_data.get("price") <= 1000000):
+          print("Validation error: Invalid price")  # Log prix invalide
+          raise ValidationError('Price must be a number between 1 and 1000000')
+        if not isinstance(place_data.get('latitude'), (int, float)) or not (-90 <= place_data.get("latitude") <= 90):
+          print("Validation error: Invalid latitude")  # Log latitude invalide
+          raise ValidationError('Latitude must be a number between -90 and 90')
+        if not isinstance(place_data.get('longitude'), (int, float)) or not (-180 <= place_data.get("longitude") <= 180):
+          print("Validation error: Invalid longitude")  # Log longitude invalide
+          raise ValidationError('Longitude must be a number between -180 and 180')
+        if not isinstance(place_data.get('title'), str) or not (1 <= len(place_data.get("title", "")) <= 50):
+          print("Validation error: Invalid title")  # Log titre invalide
+          raise ValidationError('Title must be between 1 and 50 characters')
+        if 'description' in place_data and not (1 <= len(place_data['description']) <= 500):
+          print("Validation error: Invalid description")  # Log description invalide
+          raise ValidationError('Description must be between 1 and 500 characters')
+        print("Validation passed!")

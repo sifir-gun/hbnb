@@ -14,7 +14,7 @@ api = Namespace('places', description="Operations related to places")
 
 # Data model for a place
 place_model = api.model('Place', {
-    'id': fields.String(required=False, description='ID of the place'),
+    'owner_id': fields.String(required=False, description='ID of the place'),
     'title': fields.String(
         required=True,
         description='Title of the place',
@@ -87,19 +87,24 @@ class PlaceList(Resource):
     def post(self):
         """Protected endpoint: Create a new place"""
         current_user = get_jwt_identity()
-        print(f"Creating place for user: {current_user}")
+        print(f"User authenticated: {current_user}")  # Log utilisateur
 
         place_data = api.payload
-        place_data['owner_id'] = current_user['id']
+        print(f"Received payload: {place_data}")  # Log des données reçues
 
+        place_data['owner_id'] = current_user['id']
         validation_error = validate_place_data(place_data)
         if validation_error:
+            # Log d'erreur de validation
+            print(f"Validation error: {validation_error}")
             return validation_error
 
         try:
             new_place = facade.create_place(place_data)
+            print(f"Created place: {new_place}")  # Log de l'objet Place créé
             return new_place.to_dict(), 201
         except Exception as e:
+            print(f"Error creating place: {str(e)}")  # Log des erreurs
             return {'error': str(e)}, 400
 
 
@@ -184,7 +189,8 @@ class UserPlaces(Resource):
 
         try:
             # Récupérer les lieux appartenant à cet utilisateur
-            user_places = storage.query(Place).filter_by(owner_id=user_id).all()
+            user_places = storage.query(
+                Place).filter_by(owner_id=user_id).all()
             if not user_places:
                 return {"message": "No places found for this user"}, 404
 

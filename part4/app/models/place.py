@@ -19,16 +19,16 @@ class Place(BaseModel, db.Model):
 
     __tablename__ = 'places'
 
-    user_id = db.Column(db.String(36), ForeignKey('users.id'), nullable=False)
+    owner_id_id = db.Column(db.String(36), ForeignKey('users.id'), nullable=False)
     reviews = relationship('Review', backref='place', lazy=True)
 
     # Définir les colonnes SQLAlchemy pour chaque attribut
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
-    owner_id = db.Column(db.String(36), nullable=False)
 
     # Relation Many-to-Many avec Amenity
     amenities = db.relationship(
@@ -76,21 +76,19 @@ class Place(BaseModel, db.Model):
             dict: A dictionary containing the attributes of the Place object.
         """
         return {
-            "id": self.id,
+            "id": str(self.id),
             "title": self.title,
             "description": self.description,
             "price": self.price,
             "latitude": self.latitude,
             "longitude": self.longitude,
-            # Serialize the owner (either ID or BaseModel instance)
-            "owner_id": self.owner_id if isinstance(self.owner_id, BaseModel)
-            else self.owner_id,
-            # Serialize reviews
-            "reviews": [review.to_dict() if hasattr(review, 'to_dict')
-                        else review for review in self.reviews],
-            # Serialize amenities
-            "amenities": [amenity.to_dict() if hasattr(amenity, 'to_dict')
-                          else amenity for amenity in self.amenities]
+            "owner_id": str(self.owner_id),
+            "amenities": [
+                amenity.to_dict() if hasattr(amenity, 'to_dict') else {
+                    "id": str(amenity.id),
+                    "name": amenity.name
+                } for amenity in self.amenities
+            ]
         }
 
     # Validation methods

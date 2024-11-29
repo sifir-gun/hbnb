@@ -14,6 +14,8 @@ class SQLAlchemyRepository:
     def add(self, obj):
         db.session.add(obj)
         db.session.commit()
+        if not obj.id:
+            raise ValueError("Failed to generate ID for the object")
 
     def get(self, obj_id):
         return self.model.query.get(obj_id)
