@@ -4,7 +4,7 @@ Provides routes to create, retrieve, update, and delete places via the API.
 """
 
 from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from app.services.facade import HBnBFacade
 from app.models.place import Place
 from app.models import storage
@@ -83,12 +83,11 @@ class PlaceList(Resource):
     @api.response(401, 'Authentication required')
     @jwt_required()
     def post(self):
-        """Protected endpoint: Create a new place"""
-        current_user = get_jwt_identity()
-        print(f"Creating place for user: {current_user}")
-
+        current_user_id = get_jwt_identity()
+        jwt_claims = get_jwt()
+        is_admin = jwt_claims.get('is_admin', False)
         place_data = api.payload
-        place_data['owner_id'] = current_user['id']
+        place_data['owner_id'] = current_user_id
 
         validation_error = validate_place_data(place_data)
         if validation_error:

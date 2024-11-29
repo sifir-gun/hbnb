@@ -1,5 +1,6 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.sqlite import JSON
 from .base_model import BaseModel, db
 from .place_amenity import place_amenity
 
@@ -30,6 +31,7 @@ class Place(BaseModel, db.Model):
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
     owner_id = db.Column(db.String(36), nullable=False)
+    photos = db.Column(JSON, nullable=True)
 
     # Relation Many-to-Many avec Amenity
     amenities = db.relationship(
@@ -39,7 +41,7 @@ class Place(BaseModel, db.Model):
     )
 
     def __init__(self, title, price, owner_id, description='',
-                 latitude=None, longitude=None):
+                 latitude=None, longitude=None, photos=None):
         """
         Initializes a Place object with the provided attributes.
 
@@ -65,6 +67,7 @@ class Place(BaseModel, db.Model):
             longitude)  # Validate and assign longitude
         # Validate and assign the owner
         self.owner_id = self.validate_owner_id(owner_id)
+        self.photos = photos if photos is not None else []
         self.reviews = []  # List to store associated reviews
         self.amenities = []  # List to store associated amenities
 
@@ -75,23 +78,25 @@ class Place(BaseModel, db.Model):
         Returns:
             dict: A dictionary containing the attributes of the Place object.
         """
-        return {
-            "id": self.id,
+        # Obtenez le dictionnaire de base de la classe parente
+        obj_dict = super().to_dict()
+        # Ajoutez ou mettez à jour les champs spécifiques à Place
+        obj_dict.update({
             "title": self.title,
             "description": self.description,
             "price": self.price,
             "latitude": self.latitude,
             "longitude": self.longitude,
-            # Serialize the owner (either ID or BaseModel instance)
-            "owner_id": self.owner_id if isinstance(self.owner_id, BaseModel)
-            else self.owner_id,
-            # Serialize reviews
-            "reviews": [review.to_dict() if hasattr(review, 'to_dict')
-                        else review for review in self.reviews],
-            # Serialize amenities
-            "amenities": [amenity.to_dict() if hasattr(amenity, 'to_dict')
-                          else amenity for amenity in self.amenities]
-        }
+            "owner_id": self.owner_id,
+            "photos": self.photos or [],
+            # Sérialisation des reviews
+            "reviews": [review.to_dict() for review in self.reviews],
+            # Sérialisation des amenities
+            "amenities": [amenity.to_dict() for amenity in self.amenities]
+        })
+        # Supprimez les clés indésirables si nécessaire
+        obj_dict.pop('user_id', None)  # Si 'user_id' est redondant avec 'owner_id'
+        return obj_dict
 
     # Validation methods
     def validate_title(self, title):

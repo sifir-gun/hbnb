@@ -6,15 +6,20 @@ from flask import (
     request,
     redirect,
     url_for,
-    flash
+    flash,
+    current_app
 )
+import os
 from flask_bcrypt import Bcrypt
 from flask_restx import Api
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import (
+    JWTManager, create_access_token, get_jwt_identity
+)
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from app.models.user import User
 from flask_jwt_extended import jwt_required
+from werkzeug.utils import secure_filename
 
 
 db = SQLAlchemy()
@@ -34,6 +39,9 @@ def create_app(config_class="config.DevelopmentConfig"):
     app.config['JWT_HEADER_NAME'] = 'Authorization'
     app.config['JWT_HEADER_TYPE'] = 'Bearer'
     app.config['JWT_SECRET_KEY'] = 'dev-secret-key'
+    # Configuration pour les téléchargements
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.static_folder, 'uploads')
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 
     # Configuration CORS plus détaillée
     CORS(app, resources={
@@ -54,11 +62,18 @@ def create_app(config_class="config.DevelopmentConfig"):
     jwt.init_app(app)
     bcrypt.init_app(app)
 
+    from app.services import facade
     from app.models import init_db
     init_db(db)
 
     from app.models import storage
     from app.models.place import Place
+
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+    def allowed_file(filename):
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     # Create main blueprint for HTML routes
     main = Blueprint('main', __name__)
 
@@ -111,11 +126,57 @@ def create_app(config_class="config.DevelopmentConfig"):
     def register():
         return render_template('register.html')
 
-    @main.route('/add-place')
-    @jwt_required()  # Protection de la route
+    @main.route('/add-place', methods=['GET', 'POST'])
+    @jwt_required()
     def add_place():
-        """Route pour ajouter un nouveau logement"""
-        return render_template('add_place.html')
+        if request.method == 'POST':
+            # Récupérer les données du formulaire
+            title = request.form.get('title')
+            description = request.form.get('description')
+            price = float(request.form.get('price'))
+            latitude = float(request.form.get('latitude')) \
+                if request.form.get('latitude') else None
+            longitude = float(request.form.get(
+                'longitude')) if request.form.get('longitude') else None
+            owner_id = get_jwt_identity()
+
+            # Gérer les fichiers téléchargés
+            files = request.files.getlist('photos')
+            photo_paths = []
+
+            for file in files:
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    filepath = os.path.join(
+                        current_app.config['UPLOAD_FOLDER'], filename)
+                    file.save(filepath)
+                    # Enregistrer le chemin relatif pour la base de données
+                    photo_paths.append(f'uploads/{filename}')
+                else:
+                    flash('Type de fichier non autorisé', 'error')
+
+            # Créer le nouveau "place" en utilisant le facade
+            place_data = {
+                'title': title,
+                'description': description,
+                'price': price,
+                'latitude': latitude,
+                'longitude': longitude,
+                'owner_id': owner_id,
+                'photos': photo_paths
+            }
+
+            try:
+                new_place = facade.create_place(place_data)
+                flash('Logement ajouté avec succès', 'success')
+                return redirect(url_for('main.index'))
+            except Exception as e:
+                flash(f'Erreur lors de l\'ajout du logement : {str(e)}',
+                      'error')
+                return redirect(url_for('main.add_place'))
+
+        else:
+            return render_template('add_place.html')
 
     @main.route('/place')
     def place_base():
