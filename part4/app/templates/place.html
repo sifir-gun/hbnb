@@ -1,94 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Place Details</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
-    
+    <title>Détails du lieu - HBnB</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
-  <header>
-    <img src="../static/images/logo.png" alt="Logo" class="logo">
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-        </ul>
-    </nav>
-  </header>
-    <main class="main-container">
-      <!-- -------------- Place details------------------------ -->
-
-        <section id="place-details"  class="place-details">
-            <!-- Place details will be populated dynamically -->
-          <h1>Cabane des bois</h1>
-          <div class="details-container">
-            <p><strong>Host:</strong> L'Homme des bois</p>
-            <p><strong>Price per night:</strong> 149€</p>
-            <p><strong>Description:</strong> Une cabane rustique mais confort au milieu de la nature, parfaite pour un séjour paisible.</p>
-          </div>
-
-          <!-- Logo et liste des amenities -->
-          <div class="amenities-section">
-              <img src="../static/images/icon_bed.png" alt="Amenities Logo" class="amenities-logo">
-              <img src="../static/images/icon_bed.png" alt="Amenities Logo" class="amenities-logo">
-              <img src="../static/images/icon_bath.png" alt="Amenities Logo" class="amenities-logo">
+    <!-- Header Section -->
+    <header>
+        <img src="/static/images/logo.png" alt="Logo" class="logo">
+        <nav>
             <ul>
-              <li>NO Wi-Fi</li>
-              <li>Chauffage</li>
-              <li>Parking gratuit</li>
-              <li>Animaux acceptés</li>
-          </ul>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/login" id="login-link">Connexion</a></li>
+            </ul>
+        </nav>
+    </header>
 
-            <!-- Ajout des photos -->
-            <div class="place-photos">
-              <img src="../static/images/cabane_des_bois.jpg" alt="Cabane des bois vue extérieure">
-              <img src="../static/images/cabane_interieur.jpg" alt="Cabane des bois intérieur">
-          </div>
+    <main>
+        <!-- Section des détails du lieu -->
+        <div id="place-details" class="place-details-container">
+            <!-- Le contenu sera inséré dynamiquement via JavaScript -->
+            <section class="place-header"></section>
+            <section class="place-description"></section>
+            
+            <!-- Structure de base pour les équipements -->
+            <section class="amenities-section">
+                <h2>Équipements</h2>
+                <div class="amenities-grid"></div>
+            </section>
+            
+            <!-- Structure de base pour les photos -->
+            <section class="place-photos">
+                <div class="photo-grid"></div>
+            </section>
+            
+            <!-- Structure de base pour les avis -->
+            <section class="reviews-section">
+                <h2>Avis</h2>
+                <div class="reviews-container"></div>
+            </section>
+        </div>
 
-          </section>
-
-          <!-- ---------------Notices section---------------------- -->
-
-        <section id="reviews" class="reviews">
-            <!-- Reviews will be populated dynamically -->
-            <h2>Reviews</h2>
-            <article class="review-card">
-                <p><strong>Guney:</strong> Superbe expérience, très calme ! Dommage pour l'eau chaude.</p>
-                <p><strong>Rating:</strong> ★★★★☆</p>
-            </article>
-            <article class="review-card">
-                <p><strong>Kevin:</strong> Idéal pour un week-end en famille, on  joué au petit poucet.</p>
-                <p><strong>Rating:</strong> ★★★★★</p>
-            </article>
-              
-        </section>
-
-        <!-- ------- Section for adding a notice -->
-
-        <section id="add-review" class="add-review">
-            <h2>Add a Review</h2>
+        <!-- Section d'ajout d'avis -->
+        <div id="add-review" class="add-review-section" style="display: none;">
+            <h3>Ajouter un avis</h3>
             <form id="review-form">
-                <label for="review-text">Review:</label>
-                <textarea id="review-text" name="review-text" rows="4" required></textarea>
-                <label for="rating">Rating:</label>
-                <select id="rating" name="rating" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-
-                <button type="submit">Submit</button>
+                <div class="form-group">
+                    <label>Note :</label>
+                    <div class="rating-input">
+                        <span>☆</span>
+                        <span>☆</span>
+                        <span>☆</span>
+                        <span>☆</span>
+                        <span>☆</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="review-text">Votre avis :</label>
+                    <textarea id="review-text" required></textarea>
+                </div>
+                <button type="submit" class="submit-review">Publier</button>
             </form>
-        </section>
-
         </div>
     </main>
+
     <footer>
-      <p>&copy; 2024 All rights reserved by Néia, Guney, Xavier.</p>
-  </footer>
-    <script src="../static/js/scripts.js""></script>
+        <p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/static/js/scripts.js"></script>
 </body>
 </html>

@@ -15,6 +15,16 @@ class Config:
     JWT_SECRET_KEY = 'your_secret_key'
     DEBUG = False
 
+    # Configuration JWT
+    JWT_TOKEN_LOCATION = ['headers']
+    JWT_HEADER_NAME = 'Authorization'
+    JWT_HEADER_TYPE = 'Bearer'
+    JWT_ACCESS_TOKEN_EXPIRES = False
+    JWT_ERROR_MESSAGE_KEY = 'message'
+
+    # Configuration CORS
+    CORS_HEADERS = 'Content-Type'
+
 
 class DevelopmentConfig(Config):
     """
@@ -26,6 +36,11 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///development.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Configuration supplémentaire pour le développement
+    JWT_COOKIE_CSRF_PROTECT = False
+    JWT_COOKIE_SECURE = False  # En développement, permet HTTP
+    CORS_SUPPORTS_CREDENTIALS = True
 
 
 # Dictionary to manage configurations by environment

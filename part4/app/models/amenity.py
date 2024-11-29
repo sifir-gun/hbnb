@@ -1,5 +1,11 @@
-from app import db
-from .base_model import BaseModel
+from .base_model import BaseModel, db
+from .place_amenity import place_amenity
+
+places = db.relationship(
+    'Place',
+    secondary=place_amenity,
+    back_populates='amenities'
+)
 
 
 class Amenity(BaseModel):
@@ -22,6 +28,12 @@ class Amenity(BaseModel):
 
     id = db.Column(db.String(36), primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
+
+    places = db.relationship(
+        'Place',
+        secondary='place_amenity',
+        back_populates='amenities'
+    )
 
     def __init__(self, name):
         """

@@ -1,7 +1,6 @@
 import re
-from .base_model import BaseModel
+from .base_model import BaseModel, db
 from sqlalchemy.orm import relationship
-from app import db
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()

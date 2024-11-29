@@ -1,60 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List of Places</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>List of Places</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
 </head>
+
 <body>
-    <!-- Header Section -->
-    <header>
-        <img src="../static/images/logo.png" alt="Logo" class="logo">
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="login.html" class="login-button">Login</a></li>
-            </ul>
-        </nav>
-    </header>
+	<!-- Header Section -->
+	<header>
+		<img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo" />
+		<nav class="centered-nav">
+			<ul>
+				<li><a href="{{ url_for('main.index') }}">Logements</a></li>
+				<li><a href="#">Expériences</a></li>
+			</ul>
+		</nav>
+		<div class="action-buttons">
+			<a href="#" class="host-button" id="add-place-button">Mettre mon logement sur Hbnb</a>
+			<a href="{{ url_for('main.login') }}" class="login-button" id="auth-button">Login</a>
+		</div>
+	</header>
 
-    <!-- Main Section -->
-    <main>
-        <!-- Filter Section -->
-        <section id="filter">
-            <label for="price-filter">Max Price:</label>
-            <select id="price-filter">
-                <option value="">Select Price</option>
-                <option value="10">10€</option>
-                <option value="50">50€</option>
-                <option value="100">100€</option>
-                <option value="All">All</option>
-            </select>
-        </section>
+	<!-- Main Search Section -->
+	<section id="search-bar">
+		<div class="search-item">
+			<label for="destination">Destination</label>
+			<input type="text" id="destination" placeholder="Rechercher une destination" />
+		</div>
+		<div class="divider"></div>
+		<div class="search-item short">
+			<label for="arrival">Arrivée</label>
+			<input type="text" id="arrival" placeholder="Quand ?" onfocus="(this.type='date')" />
+		</div>
+		<div class="divider"></div>
+		<div class="search-item short">
+			<label for="departure">Départ</label>
+			<input type="text" id="departure" placeholder="Quand ?" onfocus="(this.type='date')" />
+		</div>
+		<div class="divider"></div>
+		<div class="search-item short">
+			<label for="travelers">Voyageurs</label>
+			<input type="text" id="travelers" placeholder="Ajouter des voyageurs" />
+		</div>
+		<button class="search-button">
+			<i class="fa fa-search"></i> Rechercher
+		</button>
+	</section>
 
-        <!-- Places List Section -->
-        <section id="places-list">
-            <!-- Example Place Card -->
-            <article class="place-card">
-                <h2>Cabane des bois</h2>
-                <p>Price per night: 149€</p>
-                <a href="place.html" class="details-button">View Details</a>
-                <img src="../static/images/cabane_des_bois.jpg" alt="${place.name}" class="place-image">
-            </article>
+	<!-- Filter Section -->
+	<section id="filters">
+		<button class="filter-button" data-category="iconic">Iconiques</button>
+		<button class="filter-button" data-category="countryside">Campagne</button>
+		<button class="filter-button" data-category="treehouse">Cabane perchée</button>
+		<button class="filter-button" data-category="pool">Piscines</button>
+	</section>
 
-            <!-- Duplicate the structure for more places -->
-            <article class="place-card" id="caravane">
-                <h2>La Caravane du cousin tkt</h2>
-                <p>Price per night: 249€</p>
-                <a href="caravane.html" class="details-button">View Details</a>
-                <img src="../static/images/caravane.jpg" alt="Caravane vue extérieure">
-            </article>
-        </section>
-    </main>
+	<select id="price-filter">
+		<option value="10">10</option>
+		<option value="50">50</option>
+		<option value="100">100</option>
+		<option value="all">All</option>
+	</select>
 
-    <!-- Footer Section -->
-    <footer>
-        <p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
-    </footer>
+	<!-- Places List Section -->
+	<section id="places-list">
+		{% if places %}
+		{% for place in places %}
+		<article class="place-card">
+			<a href="{{ url_for('main.place', place_id='1') }}">
+				<img src="{{ url_for('static', filename='images/places/default-place.jpg') }}"
+				alt="Place"
+				class="place-image">
+				<h2>{{ place.title }}</h2>
+				<p>{{ place.price }}€ par nuit</p>
+			</a>
+		</article>
+		{% endfor %}
+		{% else %}
+		<!-- Contenu statique temporaire pour le développement -->
+		<article class="place-card">
+			<img src="{{ url_for('static', filename='images/cabane_des_bois.jpg') }}" alt="Cabane des bois"
+				class="place-image">
+			<h2>Cabane des bois</h2>
+			<p>149€ par nuit</p>
+		</article>
+
+		<article class="place-card">
+			<img src="{{ url_for('static', filename='images/caravane.jpg') }}" alt="Caravane vue extérieure"
+				class="place-image">
+			<h2>La Caravane du cousin tkt</h2>
+			<p>249€ par nuit</p>
+		</article>
+		{% endif %}
+	</section>
+
+	<!-- Footer Section -->
+	<footer>
+		<p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
+	</footer>
+	<div id="add-place-modal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>Ajouter un logement</h2>
+			<form id="place-form" class="place-form">
+				<div class="form-group">
+					<label for="title">Titre*</label>
+					<input type="text" id="title" name="title" required>
+				</div>
+	
+				<div class="form-group">
+					<label for="description">Description*</label>
+					<textarea id="description" name="description" required></textarea>
+				</div>
+	
+				<div class="form-group">
+					<label for="price">Prix par nuit (€)*</label>
+					<input type="number" id="price" name="price" min="1" required>
+				</div>
+	
+				<div class="form-group">
+					<label for="latitude">Latitude</label>
+					<input type="number" id="latitude" name="latitude" step="0.000001">
+				</div>
+	
+				<div class="form-group">
+					<label for="longitude">Longitude</label>
+					<input type="number" id="longitude" name="longitude" step="0.000001">
+				</div>
+	
+				<div class="form-group">
+					<label>Équipements</label>
+					<div class="amenities-list" id="amenities-list">
+						<!-- Les équipements seront ajoutés dynamiquement ici -->
+					</div>
+				</div>
+	
+				<button type="submit" class="submit-button">Ajouter le logement</button>
+			</form>
+		</div>
+	</div>
+	<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
+
 </html>

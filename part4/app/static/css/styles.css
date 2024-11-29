@@ -1,438 +1,721 @@
-/* 
-  Ceci est un fichier de style de base. 
-  Les styles doivent être ajustés selon les consignes du projet.
-*/
-
 /* --- Styles de base --- */
-/* Applique une couleur de fond et une couleur de texte par défaut */
 body {
-  background-color: #f27f7f;
-  color: #333;
+  background-color: #ffffff; /* Fond blanc propre */
+  color: #333; /* Couleur de texte par défaut */
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Assure que la hauteur du body prend tout l'écran */
+  min-height: 100vh; /* Assure que le contenu remplit l'écran */
+  font-family: Arial, sans-serif; /* Police standard */
+  margin: 0;
 }
 
-/* Applique une boîte de taille standardisée et enlève les marges et padding par défaut */
+/* Applique une boîte de taille standardisée */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif; /* Définit la police par défaut */
 }
 
-/* --- Styles de l'en-tête (header) --- */
-/* Stylise le conteneur de l'en-tête */
-header {
-  background-color: #333; /* Couleur de fond sombre */
-  color: #fff; /* Couleur de texte blanche */
-  padding: 1rem; /* Espacement interne autour du contenu */
-  display: flex; /* Disposition en ligne pour les éléments */
-  justify-content: space-between; /* Espacement entre les éléments */
-  align-items: center; /* Alignement vertical des éléments */
-}
-
-/* Style pour le logo dans l'en-tête */
-header img.logo {
-  height: 50px; /* Hauteur fixe */
-  width: auto; /* Largeur proportionnelle */
-}
-
-/* Liste des liens de navigation */
-nav ul {
-  list-style: none; /* Supprime les puces */
-  display: flex; /* Affiche les éléments en ligne */
-  align-items: center; /* Aligne verticalement les éléments */
-}
-
-/* Style des éléments de la liste de navigation */
-nav ul li {
-  margin-right: 1rem; /* Espacement entre les liens */
-}
-
-/* Style des liens de navigation */
-nav ul li a {
-  color: #fff; /* Couleur de texte blanche */
-  text-decoration: none; /* Supprime le soulignement */
-}
-
-/* Effet de survol sur les liens */
-nav ul li a:hover {
-  text-decoration: underline; /* Ajoute un soulignement au survol */
-}
-
-/* Header styles */
+/* --- Header --- */
 header {
   display: flex;
-  justify-content: space-between; /* Sépare le logo des liens */
+  justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  background-color: #333;
-  color: #fff;
-  width: 100%; /* Étend le conteneur de l'en-tête sur toute la largeur de la page.*/
-  position: fixed; /* Fixe l'en-tête pour qu'il reste visible même lorsque l'utilisateur fait défiler la page. */
+  padding: 0 2rem;
+  background-color: #ffffff; /* Fond blanc propre */
+  position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 70px; 
   z-index: 1000;
 }
 
+/* Logo à gauche */
 header img.logo {
   height: 40px;
   width: auto;
 }
 
+/* Centrage des liens "Logements" et "Expériences" */
+header nav {
+  position: absolute; /* Permet le centrage indépendant des autres éléments */
+  left: 50%; /* Place le centre de la navigation au centre de la page */
+  transform: translateX(-50%); /* Ajuste pour centrer parfaitement */
+}
+
 header nav ul {
   list-style: none;
   display: flex;
-  margin: 0;
-  padding: 0;
-}
-
-header nav ul li {
-  margin-left: 1.5rem; /* Ajoute de l'espace entre les liens */
+  align-items: center;
+  gap: 2rem; /* Espacement uniforme entre les liens */
 }
 
 header nav ul li a {
-  color: #fff;
+  color: #333;
   text-decoration: none;
+  font-size: 1rem;
 }
 
 header nav ul li a:hover {
   text-decoration: underline;
+  color: #ff5a5f; /* Couleur Airbnb */
 }
 
-/* --- Section principale (main) --- */
-/* Applique un padding pour espacer le contenu */
-main {
-  margin-top: 100px; /* Ajoute un espace entre le header et le contenu principal */
+/* Boutons alignés à droite */
+header .action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Espacement entre les boutons */
+}
+
+header .host-button {
+  background-color: #ff5a5f;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+header .host-button:hover {
+  background-color: #e14e50;
+}
+
+header .login-button {
+  background-color: #ff5a5f;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+header .login-button:hover {
+  background-color: #e14e50;
+}
+
+#search-bar {
+  border: 1px solid rgb(208, 208, 208);
+  margin-top: 80px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 1rem;
+  background-color: #fff;
+  margin: 2rem auto;
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 62%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 62px;
+  overflow: hidden;
+}
+
+/* Items de recherche */
+.search-item {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease;
+  border-radius: 50px; /* Arrondi pour homogénéité avec la barre principale */
+  position: relative;
+}
+
+.search-item.short {
   flex: 1;
 }
 
-/* --- Styles pour la section des filtres --- */
-/* Conteneur des filtres */
-#filter {
-  background-color: #f2ebeb; /* Fond blanc */
-  padding: 1rem; /* Espacement interne */
-  border: 5px solid #ddd; /* Bordure grise */
-  border-radius: 10px; /* Coins arrondis */
-  margin: 1rem; /* Espace en dessous */
-  display: flex; /* Affiche les éléments en ligne */
-  align-items: center; /* Aligne les éléments verticalement */
-  align-items: center; /* Aligne les éléments verticalement */
-  justify-content: center; /* Centre les éléments horizontalement */
-  max-width: 300px; /* Limite la largeur maximale */
-  width: 100%; /* Prend 100% de la largeur disponible jusqu'à max-width */
+/* Labels des champs */
+.search-item label {
+  font-size: 0.90rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.3rem;
+  transition: color 0.2s ease; /* Transition douce pour le label */
+}
+
+/* Input de saisie */
+.search-item input {
+  border: none;
+  outline: none;
+  padding: 0.2rem 0;
+  font-size: 0.90rem;
+  color: #333;
+  background-color: transparent;
+  text-align: left;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+}
+
+/* Placeholder gris clair */
+.search-item input::placeholder {
+  color: #aaa;
+}
+
+/* Effets de focus */
+.search-item input:focus {
+  background-color: #fff; /* Fond blanc au focus */
+}
+
+/* Effets de survol */
+.search-item:hover {
+  background-color: #efefef; /* Fond gris clair au survol */
 }
 
 
-/* Style pour le label des filtres */
-#filter label {
-  font-weight: bold; /* Texte en gras */
-  margin-right: 1.5rem; /* Espace après le label */
+/* Effet sur les labels au survol */
+.search-item:hover label {
+  color: #666; /* Couleur légèrement plus sombre au survol */
 }
 
-/* Style pour le champ de sélection */
-#filter select {
-  padding: 0.5rem; /* Espacement interne */
-  border: 1px solid #110f0f; /* Bordure grise */
-  border-radius: 5px; /* Coins légèrement arrondis */
-  font-size: 1rem; /* Taille de police standard */
+/* Barre de séparation */
+.divider {
+  width: 1px;
+  background-color: #ddd;
+  height: 40px;
+  align-self: center;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
-/* --- Styles pour la liste des lieux --- */
-/* Conteneur de la liste des lieux */
+/* Effets de survol sur les séparateurs */
+/* Supprimer la barre immédiatement à droite */
+.search-item:hover + .divider {
+  opacity: 0;
+}
+
+
+/* Bouton de recherche */
+.search-button {
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Effet au survol du bouton */
+.search-button:hover {
+  background-color: #e14e50;
+}
+
+/* Icône de recherche dans le bouton */
+.search-button i {
+  margin-right: 0.5rem;
+}
+/* --- Section filtres --- */
+#filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.filter-button {
+  background-color: #f7f7f7;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 0.8rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filter-button:hover {
+  background-color: #ff5a5f;
+  color: white;
+  border: 1px solid #ff5a5f;
+}
+
+/* --- Liste des lieux --- */
 #places-list {
-  display: grid; /* Affiche les éléments en grille */
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Colonnes adaptatives */
-  gap: 1.5rem; /* Espace entre les colonnes */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
 }
 
-/* Carte individuelle pour un lieu */
 .place-card {
-  background-color: #f2ebeb; /* Fond blanc */
-  border: 5px solid #ddd; /* Bordure grise épaisse */
-  border-radius: 10px; /* Coins arrondis */
-  margin: 20px; /* Espacement externe */
-  padding: 10px; /* Espacement interne */
-  text-align: center; /* Centre le texte */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1); /* Ombre subtile */
-  transition: transform 0.2s, box-shadow 0.2s; /* Animation sur le survol */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.place-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 .place-card img.place-image {
-  width: 90%; /* L'image occupe toute la largeur du conteneur */
-  height: auto; /* Maintient les proportions de l'image */
-  padding: 20px; /* Espacement interne */
-  border-radius: 10px; /* Coins arrondis comme le cadre */
-  margin: 0 auto 1rem auto; /* Centrer l'image horizontalement et ajouter un espace en bas */
-  display: block; /* Centre l'image */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ajoute une ombre subtile */
-}
-
-#caravane img {
-  width: 90%;
+  width: 100%;
   height: auto;
-  margin: 0 auto 1rem auto;
-  padding: 20px; /* Espacement interne */
-  border-radius: 10px;
-  display: block;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px 10px 0 0;
 }
 
-/* Effet de survol sur une carte */
-.place-card:hover {
-  transform: scale(1.05); /* Agrandissement léger */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Ombre plus marquée */
-}
-
-/* Titre du lieu */
 .place-card h2 {
-  font-size: 1.5rem; /* Taille de police pour le titre */
-  color: #333; /* Couleur du texte */
-  margin-bottom: 1.5rem; /* Espacement sous le titre */
+  font-size: 1.2rem;
+  color: #333;
+  padding: 1rem;
 }
 
-/* Texte descriptif pour le lieu */
 .place-card p {
-  font-size: 1rem; /* Taille de police standard */
-  color: #413f3f; /* Couleur légèrement plus sombre */
-  margin-bottom: 1rem; /* Espacement sous le texte */
+  font-size: 1rem;
+  color: #666;
+  margin: 0.5rem 0 1rem;
 }
 
-/* Bouton pour voir les détails */
-.details-button {
-  display: inline-block; /* Affiche comme un bouton */
-  padding: 10px 20px; /* Espacement interne */
-  background-color: #747b83; /* Couleur de fond */
-  color: #922626; /* Couleur du texte */
-  border: none; /* Pas de bordure */
-  border-radius: 10px; /* Coins arrondis */
-  cursor: pointer; /* Affiche un curseur au survol */
-  font-size: 0.8rem; /* Taille de police légèrement réduite */
-  text-decoration: none; /* Supprime le soulignement */
-}
-
-/* Effet de survol pour le bouton */
-.details-button:hover {
-  background-color: #8e8286; /* Change la couleur de fond */
-}
-
-/* --- Styles pour le pied de page --- */
-/* Conteneur du pied de page */
+/* --- Footer --- */
 footer {
-  background-color: #333; /* Fond sombre */
-  color: #fff; /* Texte blanc */
-  text-align: center; /* Centre le texte */
-  padding: 1rem; /* Espacement interne */
-  margin-top: auto; /* Espace au-dessus */
+  background-color: #f7f7f7;
+  color: #666;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  border-top: 1px solid #ddd;
+  margin-top: auto;
 }
 
-/* Texte du pied de page */
-footer p {
-  font-size: 0.9rem; /* Taille de police réduite */
-}
-
-/* --- Design responsive --- */
-/* Adaptation pour les écrans de moins de 768px */
-@media (max-width: 868px) {
-  /* La liste des lieux s'affiche en une seule colonne */
-  #places-list {
-    grid-template-columns: 1fr;
-  }
-
-  /* Les liens de navigation s'espacent davantage */
-  nav ul li {
-    margin-bottom: 0.5rem;
-  }
-}
-
-/* Formulaire de connexion Login */
-#login-form {
-  background-color: #f2ebeb; /* Couleur de fond du formulaire */
-  padding: 2rem; /* Espacement interne */
-  border: 5px solid #ddd; /* Bordure grise */
-  border-radius: 20px; /* Coins arrondis */
-  max-width: 400px; /* Largeur maximale */
-  margin: 2rem auto; /* Centrage horizontal */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre pour effet visuel */
-}
-
-#login-form h2 {
-  font-size: 1.5rem; /* Taille du titre */
-  margin-bottom: 1rem; /* Espacement sous le titre */
-  text-align: center; /* Centrage du texte */
-}
-
-#login-form label {
-  display: block; /* Affichage sur une ligne */
-  margin-bottom: 0.5rem; /* Espacement sous le label */
-  font-weight: bold; /* Texte en gras */
-}
-
-#login-form input {
-  width: 100%; /* Largeur complète */
-  padding: 0.2em; /* Espacement interne */
-  margin-bottom: 1rem; /* Espacement entre les champs */
-  border: 1px solid #ddd; /* Bordure grise */
-  border-radius: 5px; /* Coins arrondis */
-  font-size: 1rem; /* Taille de police */
-}
-
-#login-form button {
-  display: block; /* Bouton en mode bloc */
-  width: 100%; /* Largeur complète */
-  padding: 0.2rem; /* Espacement interne */
-  background-color: #333; /* Couleur de fond sombre */
-  color: #fff; /* Texte blanc */
-  border: none; /* Pas de bordure */
-  border-radius: 5px; /* Coins arrondis */
-  cursor: pointer; /* Affiche un curseur au survol */
-}
-
-#login-form button:hover {
-  background-color: #444; /* Couleur de fond légèrement plus claire */
-}
-
-.forgot-password {
-  display: block; /* Affichage sur une ligne */
-  text-align: center; /* Centrage du texte */
-  margin-top: 1rem; /* Espacement au-dessus */
-  color: #171716; /* Couleur bleue pour le lien */
-  text-decoration: none; /* Pas de soulignement */
-}
-
-.forgot-password:hover {
-  text-decoration: underline; /* Ajoute un soulignement au survol */
-}
-
-/* ----- Place Cabane des bois-----*/
-
-.main-container {
-  margin-left: 50px; /* Décale tout le contenu principal vers la gauche */
-  margin-right: auto; /* Ajuste l’espace automatiquement à droite */
-  width: 90%; /* Ajuste la largeur pour garder un bon alignement */
-}
-
-.place-details {
-  max-width: 600px;
-  margin: 10 auto;
-  background-color: #f2ebeb;
-  padding: 1.5rem;
-  border-radius: 10px;
-  border: 2px solid #080707;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.details-container p {
-  margin-bottom: 1.2rem; /* Ajoute un espace de 1rem sous chaque paragraphe */
-  line-height: 1.6; /* Améliore l'espacement entre les lignes */
-}
-
-.place-details ul {
-  margin-top: 1rem; /* Ajoute un espace au-dessus de la liste */
-  margin-left: 1.5rem; /* Décale légèrement la liste vers la droite */
-  list-style-type: disc; /* Affiche des puces */
-}
-.place-details ul li {
-  margin-bottom: 0.5rem; /* Espace entre les items de la liste */
-  line-height: 1.4; /* Améliore la lisibilité des items */
-}
-
-
-header nav ul {
-  list-style: none;
+.login-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+  min-height: calc(100vh - 160px);
+  padding: 20px;
 }
 
-header nav ul li {
-  margin: 0 1rem;
+.login-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
-header nav ul li a {
-  color: #fff;
+.login-form h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.login-form button:hover {
+  background-color: #ff4146;
+}
+
+Copy.login-button.user-initial {
+  background-color: #ff5a5f !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 1.2rem !important;
+  text-decoration: none !important;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  margin-left: auto;
+  /* Force les styles même avec l'héritage */
+  min-width: 40px !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+}
+
+.login-button.user-initial:hover {
+  transform: scale(1.1);
+  background-color: #ff4146;
   text-decoration: none;
 }
 
-header nav ul li a:hover {
-  text-decoration: underline;
+.forgot-password {
+  text-align: center;
+  margin-top: 20px;
 }
 
-.place-photos {
-  display: flex; /* Affiche les photos côte à côte */
-  flex-wrap: wrap; /* Permet d'aller à la ligne si nécessaire */
-  gap: 1rem; /* Espace entre les photos */
-  margin-top: 1rem;
+.forgot-password a {
+  color: #666;
+  text-decoration: none;
 }
 
-.place-photos img {
-  width: 45%; /* Réduit la taille des photos à 45% du conteneur */
-  border-radius: 10px; /* Coins arrondis */
-  box-shadow: 0 4px 8px rgba(41, 39, 39, 0.1); /* Ombre subtile */
-  transition: transform 0.3s; /* Ajoute une transition fluide pour l'agrandissement */
-  cursor: pointer; /* Change le curseur au survol */
+.forgot-password a:hover {
+  color: #ff5a5f;
 }
 
-.place-photos img:hover {
-  transform: scale(1.05); /* Agrandit légèrement au survol */
+.error-message {
+  color: #ff5a5f;
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: #ffe5e5;
+  border-radius: 4px;
 }
 
-
-.reviews {
-  margin-top: 1rem;
-
+.rating-input span {
+  cursor: pointer;
+  font-size: 24px;
+  color: #ffd700;
 }
 
 .review-card {
-  background-color: #f2ebeb;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+}
+
+.amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.amenity-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #ff5a5f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/*page d'inscription*/
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 160px);
+  padding: 20px;
+}
+
+.register-prompt {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.register-prompt a {
+  color: #ff5a5f;
+  text-decoration: none;
+}
+
+.register-prompt a:hover {
+  text-decoration: underline;
+}
+
+.register-form {
+  background-color: white;
+  padding: 40px;
   border-radius: 10px;
-  border: 2px solid #080707;
-  max-width: 600px; /* Réduit la largeur maximale */
-  
-  text-align: left; /* Aligne le texte à gauche */
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
 }
 
-/* Rating styles */
-.rating-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* Espace entre le label et le select */
-  margin-top: 1rem;
+.register-form h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
 }
 
-.rating-container label {
-  font-weight: bold; /* Texte en gras */
+.form-group {
+  margin-bottom: 20px;
 }
 
-.rating-container select {
-  padding: 0.5rem;
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  font-size: 1rem;
-  background-color: #fff;
+  font-size: 16px;
+}
+
+.register-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.register-form button:hover {
+  background-color: #ff4146;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-link a {
+  color: #ff5a5f;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+Copy.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.alert-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef5350;
+}
+
+/* Styles pour le formulaire d'ajout de place */
+.add-place-container {
+  padding-top: 100px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.add-place-form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-place-form h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.place-form .form-group {
+  margin-bottom: 20px;
+}
+
+.place-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.place-form input,
+.place-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.place-form textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.amenities-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.amenity-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #ff4146;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Style pour la modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #666;
   cursor: pointer;
 }
 
-/* Rating styles */
-.rating-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* Espace entre le label et le select */
-  margin-top: 1rem;
+.close:hover {
+  color: #ff5a5f;
 }
 
-.rating-container label {
-  font-weight: bold; /* Texte en gras */
+/* Styles pour le formulaire */
+.place-form {
+  margin-top: 20px;
 }
 
-.rating-container select {
-  padding: 0.5rem;
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  font-size: 1rem;
-  background-color: #fff;
+  font-size: 16px;
+}
+
+.form-group textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #ff4146;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+  #search-bar input {
+    width: 100%;
+  }
+
+  #places-list {
+    grid-template-columns: 1fr; /* Une seule colonne */
+  }
+
+  header nav ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

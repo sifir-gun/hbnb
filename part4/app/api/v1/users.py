@@ -176,3 +176,28 @@ class ProtectedResource(Resource):
     @jwt_required()
     def get(self):
         return {'message': 'You have accessed a protected resource.'}
+
+
+@api.route('/profile')
+class UserProfile(Resource):
+    @jwt_required()
+    def get(self):
+        """Récupérer le profil de l'utilisateur connecté"""
+        try:
+            # Récupérer l'ID directement depuis le token
+            user_id = get_jwt_identity()
+            print(f"Getting profile for user ID: {user_id}")
+
+            user = facade.get_user(user_id)
+            if not user:
+                return {'error': 'User not found'}, 404
+
+            return {
+                'id': str(user.id),
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email
+            }, 200
+        except Exception as e:
+            print(f"Error in profile route: {str(e)}")
+            return {'error': str(e)}, 500

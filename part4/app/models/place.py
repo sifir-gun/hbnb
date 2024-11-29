@@ -1,8 +1,12 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
-from app import db
-from .base_model import BaseModel
-from app.models import place_amenity
+from .base_model import BaseModel, db
+from .place_amenity import place_amenity
+
+amenities = db.relationship(
+    'Amenity',
+    secondary=place_amenity,
+)
 
 
 class Place(BaseModel, db.Model):
@@ -30,9 +34,8 @@ class Place(BaseModel, db.Model):
     # Relation Many-to-Many avec Amenity
     amenities = db.relationship(
         'Amenity',
-        secondary=place_amenity,
-        lazy='subquery',
-        backref=db.backref('places', lazy=True)
+        secondary='place_amenity',
+        back_populates='places'
     )
 
     def __init__(self, title, price, owner_id, description='',

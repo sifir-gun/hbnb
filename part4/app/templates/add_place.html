@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un logement - HBnB</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo" />
+        <nav class="centered-nav">
+            <ul>
+                <li><a href="{{ url_for('main.index') }}">Logements</a></li>
+                <li><a href="#">Expériences</a></li>
+            </ul>
+        </nav>
+        <div class="action-buttons">
+            <a href="{{ url_for('main.add_place') }}" class="host-button">Mettre mon logement sur Hbnb</a>
+            <a href="{{ url_for('main.login') }}" class="login-button" id="auth-button">Login</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="add-place-container">
+        <div class="add-place-form">
+            <h2>Ajouter un logement</h2>
+            <form id="place-form" class="place-form">
+                <div class="form-group">
+                    <label for="title">Titre*</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description*</label>
+                    <textarea id="description" name="description" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Prix par nuit (€)*</label>
+                    <input type="number" id="price" name="price" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="latitude">Latitude</label>
+                    <input type="number" id="latitude" name="latitude" step="0.000001">
+                </div>
+
+                <div class="form-group">
+                    <label for="longitude">Longitude</label>
+                    <input type="number" id="longitude" name="longitude" step="0.000001">
+                </div>
+
+                <div class="form-group">
+                    <label>Équipements</label>
+                    <div class="amenities-list" id="amenities-list">
+                        <!-- Les équipements seront ajoutés dynamiquement ici -->
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button">Ajouter le logement</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

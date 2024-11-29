@@ -1,12 +1,10 @@
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import get_jwt_identity
-from app.persistence.repository import InMemoryRepository
 from app.models.user import User
 from app.models.review import Review
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models import storage
-from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repository import UserRepository
 from app import db
 from app.persistence.place_repository import PlaceRepository
@@ -237,3 +235,102 @@ class HBnBFacade:
                 1 <= len(place_data['description']) <= 500):
             raise ValidationError(
                 'Description must be between 1 and 500 characters')
+
+    def get_all_places(self):
+        """Récupère toutes les places"""
+        return self.place_repo.get_all()
+
+    def update_place(self, place_id, place_data):
+        """Met à jour une place"""
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValidationError("Place not found")
+
+        self.validate_place_data(place_data)
+        for key, value in place_data.items():
+            setattr(place, key, value)
+
+        db.session.commit()
+        return place
+
+    def delete_place(self, place_id):
+        """Supprime une place"""
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValidationError("Place not found")
+        self.place_repo.delete(place_id)
+
+    def get_all_amenities(self):
+        """Récupère toutes les amenities"""
+        return self.amenity_repo.get_all()
+
+    def get_amenity(self, amenity_id):
+        """Récupère une amenity par son ID"""
+        return self.amenity_repo.get(amenity_id)
+
+    def update_amenity(self, amenity_id, amenity_data):
+        """Met à jour une amenity"""
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+            raise ValidationError("Amenity not found")
+
+        if 'name' in amenity_data:
+            amenity.name = amenity_data['name']
+
+        db.session.commit()
+        return amenity
+
+    def delete_amenity(self, amenity_id):
+        """Supprime une amenity"""
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+            raise ValidationError("Amenity not found")
+        self.amenity_repo.delete(amenity_id)
+
+    def get_all_reviews(self):
+        """Récupère tous les reviews"""
+        return self.review_repo.get_all()
+
+    def get_review(self, review_id):
+        """Récupère un review par son ID"""
+        return self.review_repo.get(review_id)
+
+    def update_review(self, review_id, review_data):
+        """Met à jour un review"""
+        review = self.review_repo.get(review_id)
+        if not review:
+            raise ValidationError("Review not found")
+
+        if 'text' in review_data:
+            review.text = review_data['text']
+        if 'rating' in review_data:
+            review.rating = self.validate_rating(review_data['rating'])
+
+        db.session.commit()
+        return review
+
+    def delete_review(self, review_id):
+        """Supprime un review"""
+        review = self.review_repo.get(review_id)
+        if not review:
+            raise ValidationError("Review not found")
+        self.review_repo.delete(review_id)
+
+    def get_user_review_for_place(self, user_id, place_id):
+        """Récupère la review d'un utilisateur pour une place spécifique"""
+        reviews = self.review_repo.get_all()
+        return next(
+            (review for review in reviews
+             if review.user_id == user_id and review.place_id == place_id),
+            None
+        )
+
+    def get_reviews_by_place(self, place_id):
+        """Récupère toutes les reviews pour une place donnée"""
+        reviews = self.review_repo.get_all()
+        return [review for review in reviews if review.place_id == place_id]
+
+    def get_reviews_by_user(self, user_id):
+        """Récupère toutes les reviews d'un utilisateur"""
+        reviews = self.review_repo.get_all()
+        return [review for review in reviews if review.user_id == user_id]

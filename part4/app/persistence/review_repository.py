@@ -1,4 +1,4 @@
-from app.persistence.repository import SQLAlchemyRepository
+from app.persistence.sqlalchemy_repository import SQLAlchemyRepository
 from app.models.review import Review
 
 

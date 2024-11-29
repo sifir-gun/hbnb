@@ -1,6 +1,5 @@
 from sqlalchemy import ForeignKey
-from app import db
-from .base_model import BaseModel
+from .base_model import BaseModel, db
 
 
 class Review(BaseModel, db.Model):

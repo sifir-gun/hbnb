@@ -6,8 +6,7 @@ from app.models.user import User
 from app.models import storage
 
 # Adds the parent directory to the path to access the 'app' module
-sys.path.append(os.path.abspath(
-    os.path.join(os.path.dirname(__file__), 'app')))
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 # Creates an instance of the Flask application
 app = create_app()
@@ -37,11 +36,5 @@ def create_admin_if_not_exists():
 
 
 if __name__ == '__main__':
-    """
-    This block checks if the script is executed directly
-    (not imported as a module).
-    If so, it creates the admin user if needed and starts the
-    Flask application with debugging enabled.
-    """
     create_admin_if_not_exists()
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5001)
