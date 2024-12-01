@@ -22,6 +22,7 @@
 			<a href="#" class="host-button" id="add-place-button">Mettre mon logement sur Hbnb</a>
 			<a href="{{ url_for('main.login') }}" class="login-button" id="auth-button">Login</a>
 		</div>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	</header>
 
 	<!-- Main Search Section -->
@@ -51,19 +52,17 @@
 	</section>
 
 	<!-- Filter Section -->
-	<section id="filters">
+	<section class="filter-container">
+		<div class="category-filters">
 		<button class="filter-button" data-category="iconic">Iconiques</button>
-		<button class="filter-button" data-category="countryside">Campagne</button>
+		<button class="filter-button" data-category="countryside">Campagne</button> 
 		<button class="filter-button" data-category="treehouse">Cabane perchée</button>
 		<button class="filter-button" data-category="pool">Piscines</button>
+		</div>
+		<button id="filterButton" class="filter-btn">
+		<i class="fas fa-sliders-h"></i> Filtres
+		</button>
 	</section>
-
-	<select id="price-filter">
-		<option value="10">10</option>
-		<option value="50">50</option>
-		<option value="100">100</option>
-		<option value="all">All</option>
-	</select>
 
 	<!-- Places List Section -->
 	<section id="places-list">
@@ -95,6 +94,106 @@
 		</article>
 		{% endif %}
 	</section>
+
+	<!-- Modal filtre -->
+	<div id="filterModal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close-btn">&times;</button>
+				<h2>Filtres</h2>
+				<div></div>
+			</div>
+			
+			<!-- Type de logement -->
+			<div class="filter-section">
+				<h3>Type de logement</h3>
+				<div class="type-buttons">
+					<button class="type-btn active">Tous les types</button>
+					<button class="type-btn">Chambre</button>
+					<button class="type-btn">Logement entier</button>
+				</div>
+			</div>
+
+			<!-- Prix -->
+			<div class="filter-section">
+				<h3>Fourchette de prix</h3>
+				<p class="subtitle">Prix par nuit, frais et taxes compris</p>
+				<div class="price-inputs">
+					<div class="price-input">
+						<label>Minimum</label>
+						<input type="number" value="9" min="0">
+					</div>
+					<div class="price-input">
+						<label>Maximum</label>
+						<input type="number" value="250" min="0">
+					</div>
+				</div>
+			</div>
+
+			<!-- Chambres et lits -->
+			<div class="filter-section">
+				<h3>Chambres et lits</h3>
+				<div class="counter-group">
+					<div class="counter">
+						<span>Chambres</span>
+						<div class="counter-controls">
+							<button class="counter-btn minus">-</button>
+							<span class="counter-value">0</span>
+							<button class="counter-btn plus">+</button>
+						</div>
+					</div>
+					<div class="counter">
+						<span>Lits</span>
+						<div class="counter-controls">
+							<button class="counter-btn minus">-</button>
+							<span class="counter-value">0</span>
+							<button class="counter-btn plus">+</button>
+						</div>
+					</div>
+					<div class="counter">
+						<span>Salles de bain</span>
+						<div class="counter-controls">
+							<button class="counter-btn minus">-</button>
+							<span class="counter-value">0</span>
+							<button class="counter-btn plus">+</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Équipements -->
+			<div class="filter-section">
+				<h3>Équipements</h3>
+				<div class="amenities-grid">
+					<label class="checkbox-label">
+						<input type="checkbox"> Cuisine
+					</label>
+					<label class="checkbox-label">
+						<input type="checkbox"> Espace de travail dédié
+					</label>
+					<label class="checkbox-label">
+						<input type="checkbox"> Wifi
+					</label>
+					<label class="checkbox-label">
+						<input type="checkbox"> Parking gratuit
+					</label>
+					<label class="checkbox-label">
+						<input type="checkbox"> Lave-linge
+					</label>
+					<label class="checkbox-label">
+						<input type="checkbox"> Bord de mer
+					</label>
+				</div>
+				<button class="show-more">Afficher plus</button>
+			</div>
+
+			<!-- Footer -->
+			<div class="modal-footer">
+				<button class="clear-btn">Tout effacer</button>
+				<button class="apply-btn">Afficher plus de 1 000 logements</button>
+			</div>
+		</div>
+	</div>
 
 	<!-- Footer Section -->
 	<footer>
@@ -142,6 +241,10 @@
 		</div>
 	</div>
 	<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+	<!-- Bouton filtre -->
+<button id="filterButton" class="filter-btn">
+    <i class="fas fa-sliders-h"></i> Filtres
+</button>
 </body>
 
 </html>

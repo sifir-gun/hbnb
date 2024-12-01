@@ -522,6 +522,58 @@ function addCategoryFilter() {
     });
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('filterModal');
+  const filterBtn = document.getElementById('filterButton');
+  const closeBtn = document.querySelector('.close-btn');
+  const clearBtn = document.querySelector('.clear-btn');
+  const typeButtons = document.querySelectorAll('.type-btn');
+  const counterBtns = document.querySelectorAll('.counter-btn');
+
+  // Ouvrir/Fermer modal
+  filterBtn.onclick = () => modal.style.display = 'block';
+  closeBtn.onclick = () => modal.style.display = 'none';
+  window.onclick = (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+  }
+
+  // Gestion des boutons de type
+  typeButtons.forEach(btn => {
+      btn.onclick = () => {
+          typeButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+      }
+  });
+
+  // Gestion des compteurs
+  counterBtns.forEach(btn => {
+      btn.onclick = () => {
+          const counter = btn.parentElement.querySelector('.counter-value');
+          let value = parseInt(counter.textContent);
+          if (btn.classList.contains('minus')) {
+              value = Math.max(0, value - 1);
+          } else {
+              value++;
+          }
+          counter.textContent = value;
+      }
+  });
+
+  // Réinitialiser les filtres
+  clearBtn.onclick = () => {
+      document.querySelectorAll('input[type="number"]').forEach(input => {
+          input.value = input.min;
+      });
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+          checkbox.checked = false;
+      });
+      document.querySelectorAll('.counter-value').forEach(counter => {
+          counter.textContent = '0';
+      });
+      typeButtons[0].click();
+  }
+});
+
 // Fonction pour afficher les messages d'erreur
 function displayError(message) {
     const errorDiv = document.createElement('div');
@@ -573,4 +625,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const filterModal = document.getElementById('filterModal');
+  const applyBtn = filterModal.querySelector('.apply-btn');
+  let filteredCount = 0;
+
+  // Fonction pour compter les résultats filtrés
+  function updateFilteredCount() {
+      // Exemple de logique de filtrage - à adapter selon vos critères
+      const typeSelected = document.querySelector('.type-btn.active').textContent;
+      const minPrice = parseFloat(document.querySelector('.price-input input[type="number"]:first-child').value);
+      const maxPrice = parseFloat(document.querySelector('.price-input input[type="number"]:last-child').value);
+      const rooms = parseInt(document.querySelector('.counter:nth-child(1) .counter-value').textContent);
+      
+      // Comptez les éléments qui correspondent aux critères
+      filteredCount = document.querySelectorAll('.place-card').length; // À adapter avec votre logique de filtrage
+
+      // Mise à jour du texte du bouton
+      applyBtn.textContent = `Afficher ${filteredCount} logement${filteredCount > 1 ? 's' : ''}`;
+  }
+
+  // Ajouter les écouteurs d'événements sur tous les éléments de filtre
+  document.querySelectorAll('.type-btn, .price-input input, .counter-btn').forEach(el => {
+      el.addEventListener('change', updateFilteredCount);
+      el.addEventListener('click', updateFilteredCount);
+  });
+
+  // Lorsqu'on clique sur le bouton
+  applyBtn.addEventListener('click', function() {
+      filterModal.style.display = 'none';
+      // Scroll jusqu'aux résultats
+      document.querySelector('#places-list').scrollIntoView({ behavior: 'smooth' });
+  });
 });
