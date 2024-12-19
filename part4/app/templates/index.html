@@ -19,7 +19,7 @@
 			</ul>
 		</nav>
 		<div class="action-buttons">
-			<a href="#" class="host-button" id="add-place-button">Mettre mon logement sur Hbnb</a>
+			<a href="{{ url_for('main.add_place') }}" class="host-button" id="add-place-button">Mettre mon logement sur Hbnb</a>
 			<a href="{{ url_for('main.login') }}" class="login-button" id="auth-button">Login</a>
 		</div>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -190,7 +190,7 @@
 			<!-- Footer -->
 			<div class="modal-footer">
 				<button class="clear-btn">Tout effacer</button>
-				<button class="apply-btn">Afficher plus de 1 000 logements</button>
+				<button class="apply-btn">Afficher le résultat</button>
 			</div>
 		</div>
 	</div>
@@ -199,6 +199,7 @@
 	<footer>
 		<p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
 	</footer>
+	<!--
 	<div id="add-place-modal" class="modal">
 		<div class="modal-content">
 			<span class="close">&times;</span>
@@ -232,7 +233,9 @@
 				<div class="form-group">
 					<label>Équipements</label>
 					<div class="amenities-list" id="amenities-list">
+						-->
 						<!-- Les équipements seront ajoutés dynamiquement ici -->
+						<!--
 					</div>
 				</div>
 	
@@ -240,6 +243,7 @@
 			</form>
 		</div>
 	</div>
+	-->
 	<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 	<!-- Bouton filtre -->
 <button id="filterButton" class="filter-btn">

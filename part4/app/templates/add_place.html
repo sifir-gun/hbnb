@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un logement - HBnB</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <!-- Header Section -->
@@ -17,69 +18,94 @@
             </ul>
         </nav>
         <div class="action-buttons">
-            <a href="{{ url_for('main.add_place') }}" class="host-button">Mettre mon logement sur Hbnb</a>
-            <a href="{{ url_for('main.login') }}" class="login-button" id="auth-button">Login</a>
-        </div>
+			<a href="{{ url_for('main.index') }}" class="host-button">Retour à l'accueil</a>
+			<a href="{{ url_for('main.login') }}" class="login-button" id="auth-button">Login</a>
+		</div>
     </header>
 
     <!-- Main Content -->
     <main class="add-place-container">
         <div class="add-place-form">
             <h2>Ajouter un logement</h2>
-            <form id="place-form" class="place-form">
+            <!-- Un seul formulaire avec l'attribut enctype correct -->
+            <form id="place-form" class="place-form" enctype="multipart/form-data" method="POST">
+                <!-- Titre -->
                 <div class="form-group">
                     <label for="title">Titre*</label>
-                    <input type="text" id="title" name="title" required>
+                    <input type="text" id="title" name="title" placeholder="Donnez un titre accrocheur à votre logement" required>
                 </div>
 
+                <!-- Description -->
                 <div class="form-group">
                     <label for="description">Description*</label>
-                    <textarea id="description" name="description" required></textarea>
+                    <textarea id="description" name="description" 
+                        placeholder="Décrivez votre logement, son ambiance, ce qui le rend unique..." required></textarea>
                 </div>
 
+                <!-- Prix -->
                 <div class="form-group">
                     <label for="price">Prix par nuit (€)*</label>
-                    <input type="number" id="price" name="price" min="1" required>
+                    <input type="number" id="price" name="price" min="1" step="0.01" required>
                 </div>
 
-				<form id="place-form" class="place-form" enctype="multipart/form-data">
-					<!-- ... autres champs ... -->
-				
-					<div class="form-group">
-						<label for="photos">Photos du logement</label>
-						<input type="file" id="photos" name="photos" multiple>
-					</div>
-				
-					<!-- ... -->
-					<button type="submit" class="submit-button">Ajouter le logement</button>
-				</form>
-
+                <!-- Photos -->
                 <div class="form-group">
-                    <label for="latitude">Latitude</label>
-                    <input type="number" id="latitude" name="latitude" step="0.000001">
+                    <label for="photos">Photos du logement*</label>
+                    <input type="file" id="photos" name="photos" multiple accept="image/*" required>
+                    <p class="file-hint">Formats acceptés : JPG, PNG, GIF. Max 5Mo par image</p>
+                    <div id="preview-container" class="preview-container">
+                        <!-- Les prévisualisations des images seront ajoutées ici -->
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="longitude">Longitude</label>
-                    <input type="number" id="longitude" name="longitude" step="0.000001">
+                <!-- Localisation -->
+                <div class="form-group location-group">
+                    <h3>Localisation</h3>
+                    <div class="coordinates-container">
+                        <div class="coordinate-input">
+                            <label for="latitude">Latitude</label>
+                            <input type="number" id="latitude" name="latitude" step="0.000001" 
+                                placeholder="Ex: 48.8566">
+                        </div>
+                        <div class="coordinate-input">
+                            <label for="longitude">Longitude</label>
+                            <input type="number" id="longitude" name="longitude" step="0.000001" 
+                                placeholder="Ex: 2.3522">
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Équipements</label>
+                <!-- Équipements -->
+                <div class="form-group amenities-group">
+                    <h3>Équipements</h3>
                     <div class="amenities-list" id="amenities-list">
                         <!-- Les équipements seront ajoutés dynamiquement ici -->
                     </div>
                 </div>
 
-                <button type="submit" class="submit-button">Ajouter le logement</button>
+                <!-- Bouton de soumission -->
+                <div class="form-group submit-group">
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-plus-circle"></i>
+                        Ajouter le logement
+                    </button>
+                </div>
             </form>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer>
         <p>&copy; 2024 All rights reserved by Néia, Guney, Xavier</p>
     </footer>
 
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Envoi en cours...</p>
+    </div>
+
+    <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>

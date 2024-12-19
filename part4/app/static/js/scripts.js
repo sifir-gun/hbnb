@@ -365,24 +365,16 @@ async function handlePlaceSubmission(event) {
       return;
   }
 
-  const formData = {
-      title: document.getElementById('title').value,
-      description: document.getElementById('description').value,
-      price: parseFloat(document.getElementById('price').value),
-      latitude: parseFloat(document.getElementById('latitude').value) || null,
-      longitude: parseFloat(document.getElementById('longitude').value) || null,
-      amenities: Array.from(document.querySelectorAll('.amenity-checkbox input:checked'))
-          .map(checkbox => checkbox.value)
-  };
+  const form = event.target;
+  const formData = new FormData(form);
 
   try {
       const response = await fetch('http://127.0.0.1:5001/api/v1/places/', {
           method: 'POST',
           headers: {
-              'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(formData)
+          body: formData
       });
 
       if (response.ok) {
@@ -398,78 +390,51 @@ async function handlePlaceSubmission(event) {
   }
 }
 
-// Initialisation des écouteurs d'événements
+// Ajoutez cette fonction pour la prévisualisation des images
+function setupImagePreviews() {
+  const photosInput = document.getElementById('photos');
+  const previewContainer = document.getElementById('preview-container');
+
+  if (photosInput && previewContainer) {
+      photosInput.addEventListener('change', function(e) {
+          previewContainer.innerHTML = '';
+          
+          Array.from(this.files).forEach((file, index) => {
+              if (file.type.startsWith('image/')) {
+                  const reader = new FileReader();
+                  const preview = document.createElement('div');
+                  preview.className = 'image-preview';
+                  
+                  reader.onload = function(e) {
+                      preview.innerHTML = `
+                          <img src="${e.target.result}" alt="Preview ${index + 1}">
+                          <button type="button" class="remove-preview" data-index="${index}">&times;</button>
+                      `;
+                  };
+                  
+                  reader.readAsDataURL(file);
+                  previewContainer.appendChild(preview);
+              }
+          });
+      });
+
+      // Gérer la suppression des prévisualisations
+      previewContainer.addEventListener('click', function(e) {
+          if (e.target.classList.contains('remove-preview')) {
+              e.target.closest('.image-preview').remove();
+              // Note: Vous devrez gérer la mise à jour de l'input file si nécessaire
+          }
+      });
+  }
+}
+
+// Initialisez les gestionnaires d'événements
 document.addEventListener('DOMContentLoaded', () => {
   const placeForm = document.getElementById('place-form');
   if (placeForm) {
       placeForm.addEventListener('submit', handlePlaceSubmission);
-      loadAmenities();  // Charger les équipements disponibles
-  }
-});
-
-// Gestion de la modal
-document.addEventListener('DOMContentLoaded', function() {
-  const modal = document.getElementById('add-place-modal');
-  const btn = document.getElementById('add-place-button');
-  const span = document.getElementsByClassName('close')[0];
-  const form = document.getElementById('place-form');
-
-  btn.onclick = function(e) {
-      e.preventDefault();
-      const token = getCookie('token');
-      if (!token) {
-          alert('Vous devez être connecté pour ajouter un logement');
-          window.location.href = '/login';
-          return;
-      }
-      modal.style.display = 'block';
-  }
-
-  span.onclick = function() {
-      modal.style.display = 'none';
-  }
-
-  window.onclick = function(event) {
-      if (event.target == modal) {
-          modal.style.display = 'none';
-      }
-  }
-
-  // Gestion du formulaire
-  form.onsubmit = async function(e) {
-      e.preventDefault();
-      const token = getCookie('token');
-
-      const formData = {
-          title: document.getElementById('title').value,
-          description: document.getElementById('description').value,
-          price: parseFloat(document.getElementById('price').value),
-          latitude: parseFloat(document.getElementById('latitude').value) || null,
-          longitude: parseFloat(document.getElementById('longitude').value) || null
-      };
-
-      try {
-          const response = await fetch('http://127.0.0.1:5001/api/v1/places/', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`
-              },
-              body: JSON.stringify(formData)
-          });
-
-          if (response.ok) {
-              alert('Logement ajouté avec succès !');
-              modal.style.display = 'none';
-              window.location.reload();
-          } else {
-              const error = await response.json();
-              alert(`Erreur: ${error.error || 'Une erreur est survenue'}`);
-          }
-      } catch (error) {
-          console.error('Erreur:', error);
-          alert('Une erreur est survenue lors de l\'ajout du logement');
-      }
+      setupImagePreviews();
+      loadAmenities();
   }
 });
 
@@ -659,4 +624,92 @@ document.addEventListener('DOMContentLoaded', function() {
       // Scroll jusqu'aux résultats
       document.querySelector('#places-list').scrollIntoView({ behavior: 'smooth' });
   });
+});
+
+// Add this to your scripts.js file
+
+async function handlePlaceSubmission(event) {
+  event.preventDefault();
+  
+  const form = event.target;
+  const formData = new FormData(form);
+  const token = getCookie('token');
+
+  if (!token) {
+      alert('Vous devez être connecté pour ajouter un logement');
+      window.location.href = '/login';
+      return;
+  }
+
+  // Show loading overlay
+  const loadingOverlay = document.getElementById('loading-overlay');
+  if (loadingOverlay) loadingOverlay.style.display = 'flex';
+
+  try {
+      // Convert coordinates to numbers
+      const latitude = parseFloat(formData.get('latitude'));
+      const longitude = parseFloat(formData.get('longitude'));
+      const price = parseFloat(formData.get('price'));
+
+      // Create place data object
+      const placeData = {
+          title: formData.get('title'),
+          description: formData.get('description'),
+          price: price,
+          latitude: latitude,
+          longitude: longitude,
+          amenities: [] // Add logic to collect amenities if needed
+      };
+
+      // Make API request
+      const response = await fetch('http://127.0.0.1:5001/api/v1/places/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(placeData)
+      });
+
+      if (response.ok) {
+          alert('Logement ajouté avec succès!');
+          window.location.href = '/';
+      } else {
+          const error = await response.json();
+          throw new Error(error.error || 'Une erreur est survenue');
+      }
+  } catch (error) {
+      console.error('Erreur lors de l\'ajout du logement:', error);
+      alert(error.message || 'Une erreur est survenue lors de l\'ajout du logement');
+  } finally {
+      if (loadingOverlay) loadingOverlay.style.display = 'none';
+  }
+}
+
+// Initialize form handler
+document.addEventListener('DOMContentLoaded', () => {
+  const placeForm = document.getElementById('place-form');
+  if (placeForm) {
+      placeForm.addEventListener('submit', handlePlaceSubmission);
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addPlaceButton = document.getElementById('add-place-button');
+    
+    if (addPlaceButton) {
+        addPlaceButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const token = getCookie('token');
+            
+            if (!token) {
+                alert('Vous devez être connecté pour ajouter un logement');
+                window.location.href = '/login';
+                return;
+            }
+            
+            // Rediriger vers la page d'ajout de logement
+            window.location.href = addPlaceButton.href;
+        });
+    }
 });

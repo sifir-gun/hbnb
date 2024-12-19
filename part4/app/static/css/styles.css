@@ -638,7 +638,7 @@ Copy.alert {
   padding: 30px;
   border-radius: 10px;
   width: 90%;
-  max-width: 800px;
+  max-width: 600px;
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -860,7 +860,9 @@ Copy.alert {
 
 .type-buttons {
   display: flex;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
 }
 
 .type-btn {
@@ -872,9 +874,9 @@ Copy.alert {
 }
 
 .type-btn.active {
-  background: black;
+  background: #ff5a5f;
   color: white;
-  border-color: black;
+  border-color: #ff5a5f;
 }
 
 .price-inputs {
@@ -977,7 +979,7 @@ Copy.alert {
 .filter-container {
   padding: 1rem;
   position: relative;
-  max-width: 95%;
+  max-width: 90%;
   margin: 0 auto;
  }
  
@@ -1000,7 +1002,7 @@ Copy.alert {
  }
 
  .apply-btn {
-  background: black;
+  background: #ff5a5f;
   color: white;
   padding: 14px 24px;
   border-radius: 8px;
@@ -1012,6 +1014,46 @@ Copy.alert {
 
 .apply-btn:hover {
   background: #333;
+}
+
+.preview-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.image-preview {
+  position: relative;
+  padding-bottom: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.image-preview img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-preview {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff5a5f;
 }
 
 /* --- Responsive Design --- */
